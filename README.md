@@ -9,9 +9,9 @@ Projekt wykorzystuje języki Java i Python. Celem jest zapoznanie użytkowników
 > Tematy wg [karty przedmiotu](https://wi.umg.edu.pl/sites/default/files/zalaczniki/karty_przedmiotow_informatyka_wi_umg_i_stop_st_2025-26.pdf) "Programowanie obiektowe", strona nr 61.  
 > Każde zagadnienie składa się z dwóch godzin wykładu i dwóch godzin laboratorium.  
 
-1. Paradygmaty obiektowości — zobacz: [01-paradygmaty-obiektowości.md](./01-paradygmaty-obiektowości.md).  
+1. Paradygmaty obiektowości — zobacz: [01-paradygmaty-obiektowości.md](./01-paradygmaty-obiektowości.md) (zawiera diagramy UML w notacji PlantUML z opisami).  
 2. Podstawowe elementy obiektowego środowiska programisty (Java Development Kit, Java Virtual Machine, Python Interpreter, itp.).  
-3. Klasy oraz ich elementy składowe. Metody klasy.  
+3. Klasy oraz ich elementy składowe. Metody klasy. — zobacz: [03-klasy-i-metody.md](./03-klasy-i-metody.md)  
 4. Modułowość. Pakiety. Mechanizm importowania klas.  
 5. Enkapsulacja. Modyfikatory dostępu.  
 6. Podstawowe klasy dostępne w pakietach języka obiektowego.  
