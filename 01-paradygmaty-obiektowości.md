@@ -70,6 +70,8 @@ Shape <|-- Rectangle : extends
 Shape <|-- Circle : extends
 @enduml
 ```
+![diagram klas](Java/images/diagram_klas.png)
+
 Opis:
 - Abstrakcja: Drawable to kontrakt; Shape częściowo implementuje zachowanie wspólne dla figur.
 - Enkapsulacja: pola są prywatne (-), dostęp kontrolowany przez metody publiczne (+).
@@ -95,6 +97,8 @@ Main ->> C : area()
 C -->> Main : PI * r^2
 @enduml
 ```
+![diagram sekwencji](Java/images/diagram_sekwencji.png)
+
 Opis:
 - Polimorfizm dynamiczny: to ten sam kod pętli, ale inne obiekty reagują odmiennie.
 - Wspólne API: interfejs/klasa bazowa pozwalają pisać kod niezależny od konkretnej klasy.
@@ -111,6 +115,7 @@ object CircleInstance as C {
 }
 @enduml
 ```
+![diagram obiektów](Java/images/diagram_obiektow.png)
 Opis:
 - Przykładowe wartości pokazują enkapsulację stanu wewnętrznego każdej instancji.
 
