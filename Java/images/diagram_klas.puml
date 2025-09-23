@@ -1,0 +1,36 @@
+@startuml
+left to right direction
+interface Drawable {
+    +draw() : void
+}
+
+abstract class Shape {
+    - name : String
+    + Shape(name : String)
+    + getName() : String
+    {abstract} + area() : double
+    + draw() : void
+}
+
+class Rectangle {
+    - width : double
+    - height : double
+    + Rectangle(width : double, height : double)
+    + getWidth() : double
+    + getHeight() : double
+    + area() : double
+    + draw() : void
+}
+
+class Circle {
+    - radius : double
+    + Circle(radius : double)
+    + getRadius() : double
+    + area() : double
+    ' odziedziczone: draw() z Shape
+}
+
+Drawable <|.. Shape : implements
+Shape <|-- Rectangle : extends
+Shape <|-- Circle : extends
+@enduml
