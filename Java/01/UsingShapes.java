@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class Main {
+public class UsingShapes {
   public static void main(String[] args) {
     // Przykład filarów OOP w praktyce
     List<Shape> shapes = new ArrayList<>();
