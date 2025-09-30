@@ -1,0 +1,2 @@
+1. Python: https://github.com/realpython/python-basics-exercises
+2. Java: https://github.com/przemyslaw-kruglej/kursjava_przyklady/tree/master
