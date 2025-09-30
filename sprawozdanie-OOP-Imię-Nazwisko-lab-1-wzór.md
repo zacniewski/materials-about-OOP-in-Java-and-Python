@@ -15,27 +15,44 @@ Do zrealizowania były następujące zadania:
 ## VI. Realizacja zadania
 <br>
 
-#### 1. Kod HTML
+#### 1. Kod Javy (lub Pythona)
 W zadaniu wykorzystano .... (krótko opisać, co z HTMLa zostało użyte).
 
 Przykładowy kod HTML do pokazania (taki, który uważamy za ciekawy, warty pokazania):  
 
-```html
-    <html>
-        <head>
-            <title>Test</title>
-        </head>
-        <body>
-            <!-- Site navigation menu -->
-            <ul class="navbar">
-              <li><a href="index.html">Home page</a>
-              <li><a href="letter.html">Letter</a>
-              <li><a href="book.html">Technical book</a>
-              <li><a href="form.html">Form</a>
-            </ul>
-        </body>
+```java
+    public class ObwodPoleKola {
+      public static void main(String[] args) {
+        int promienKola = 8;
+        double pi = 3.14;
+    
+        double poleKola = pi * promienKola * promienKola;
+        double obwodKola = 2 * pi * promienKola;
+    
+        System.out.println("Pole kola wynosi: " + poleKola);
+        System.out.println("Obwod kola wynosi: " + obwodKola);
+      }
+    }
 ```
 <br>
+
+```python
+# Calculate interest to track the growth of an investment
+
+
+def invest(amount, rate, years):
+    """Display year on year growth of an initial investment"""
+    for year in range(1, years + 1):
+        amount = amount * (1 + rate)
+        print(f"year {year}: ${amount:,.2f}")
+
+
+amount = float(input("Enter a principal amount: "))
+rate = float(input("Enter an anual rate of return: "))
+years = int(input("Enter a number of years: "))
+
+invest(amount, rate, years)
+```
 
 #### 2. Zrzuty ekranu pokazujące wynik działania aplikacji/skryptu/strony HTML:  
 ![obrazek ze zrzutu ekranu](images/dandelion.jpg)
@@ -45,32 +62,7 @@ Przykładowy kod HTML do pokazania (taki, który uważamy za ciekawy, warty poka
 
 <br>
 
-#### 3. Kod CSS (taki, który uważamy za ciekawy, warty pokazania). 
-W zadaniu wykorzystano .... (krótko opisać, co z CSSa zostało użyte).
-
-Przykładowy kod CSS do pokazania (taki, który uważamy za ciekawy, warty zaprezentowania):  
-
-```css
-  caption {
-    caption-side: bottom;
-    padding: 10px;
-    font-weight: bold;
-    color: red;
-  }
-```
-<br>
-
-#### 4. Kod Javascript
-W zadaniu wykorzystano .... (krótko opisać, co z JSa zostało użyte).
-
-Przykładowy kod JS do pokazania (taki, który uważamy za ciekawy, warty zaprezentowania):  
-
-```js
-const d = new Date();
-document.getElementById("demo").innerHTML = d.getFullYear();
-```
-
-## VII. Dodatkowe informacje o zadaniu
+## III. Dodatkowe informacje o zadaniu
 Można tu wpisać informację o elementach, które nie zostały wymienione we wcześniejszych punktach.  
 
 #### 1. Tabele w Markdownie
@@ -89,5 +81,5 @@ Można tu wpisać informację o elementach, które nie zostały wymienione we wc
 <br>
   
 #### 3. Inne
-  - wpisujemy informacje dotyczące projektu, które uważamy za istotne,  
+  - wpisujemy informacje dotyczące zadania, które uważamy za istotne,  
   - ...
