@@ -25,6 +25,3 @@ Projekt wykorzystuje języki Java i Python. Celem jest zapoznanie użytkowników
 14. Polimorfizm.  
 15. Mechanizm obsługi wyjątków. Typy wyjątków.  
 
-## ❓ Czy przyjmujemy zadania w języku polskim?
-Tak. Zadania, zgłoszenia Issue oraz Pull Requesty w języku polskim są w pełni akceptowane. Możesz też używać angielskiego, jeżeli wolisz.
-
