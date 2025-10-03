@@ -11,7 +11,7 @@ Projekt wykorzystuje języki Java i Python. Celem jest zapoznanie użytkowników
 
 1. Paradygmaty obiektowości — zobacz: [01-paradygmaty-obiektowości.md](./01-paradygmaty-obiektowości.md), podstawy składni obu języków.  
 2. Podstawowe elementy obiektowego środowiska programisty (Java Development Kit, Java Virtual Machine, Python Interpreter, itp.), podstawy składni obu języków c.d.  
-3. Klasy oraz ich elementy składowe. Metody klasy. — zobacz: [03-klasy-i-metody.md](./03-klasy-i-metody.md)  
+3. Klasy oraz ich elementy składowe, metody klasy — zobacz: [03-klasy-i-metody.md](./03-klasy-i-metody.md)  
 4. Modułowość. Pakiety. Mechanizm importowania klas.  
 5. Enkapsulacja. Modyfikatory dostępu.  
 6. Podstawowe klasy dostępne w pakietach języka obiektowego.  

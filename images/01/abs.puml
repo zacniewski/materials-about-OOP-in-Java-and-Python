@@ -1,0 +1,15 @@
+@startuml
+left to right direction
+interface Vehicle {
+  +start() : void
+  +stop() : void
+}
+
+class Car {
+  -engine : Engine
+  +start() : void
+  +stop() : void
+}
+
+Vehicle <|.. Car
+@enduml

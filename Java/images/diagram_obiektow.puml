@@ -1,9 +1,0 @@
-@startuml
-object RectangleInstance {
-  width : double = 3
-  height : double = 4
-}
-object CircleInstance {
-  radius : double = 2
-}
-@enduml

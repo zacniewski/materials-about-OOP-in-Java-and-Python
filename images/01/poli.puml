@@ -1,0 +1,16 @@
+@startuml
+left to right direction
+interface Notifier {
+  +send(msg : String) : void
+}
+class EmailNotifier {
+  +send(msg : String) : void
+}
+class SmsNotifier {
+  +send(msg : String) : void
+}
+
+Notifier <|.. EmailNotifier
+Notifier <|.. SmsNotifier
+
+@enduml

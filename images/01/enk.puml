@@ -1,0 +1,12 @@
+@startuml
+class BankAccount {
+  - balance : decimal
+  + deposit(amount : decimal) : void
+  + withdraw(amount : decimal) : void
+  + getBalance() : decimal
+}
+
+note right of BankAccount
+Stan (balance) ukryty; dostęp tylko przez metody.
+end note
+@enduml

@@ -1,0 +1,15 @@
+@startuml
+abstract class Animal {
+  + speak() : void
+}
+
+class Dog {
+  + speak() : void
+}
+class Cat {
+  + speak() : void
+}
+
+Animal <|-- Dog
+Animal <|-- Cat
+@enduml
