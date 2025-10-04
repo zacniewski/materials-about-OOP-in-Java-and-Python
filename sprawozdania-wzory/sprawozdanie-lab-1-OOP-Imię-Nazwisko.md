@@ -1,12 +1,12 @@
-## I. Dokumentacja do lab. nr 1 - "Podstawy WWW" <a id="start"></a>
+## I. Dokumentacja do lab. nr 1 - "Klasy oraz ich elementy składowe, metody klasy"
 ## II. Imię i nazwisko - grupa ABC, semestr III
 ## III. Przedmiot - "Programowanie obiektowe"
 
 ## IV. Opis zadania do realizacji
 Do zrealizowania były następujące zadania:  
   - opis zadania nr 1 ...,  
-  - opis zadania nr 1 ...,  
-  - opis zadania nr 1 ...,  
+  - opis zadania nr 2 ...,  
+  - opis zadania nr 3 ...,  
 
 ## V. Technologie wykorzystane w zadaniu
   - Java,  
@@ -16,9 +16,9 @@ Do zrealizowania były następujące zadania:
 <br>
 
 #### 1. Kod Javy (lub Pythona)
-W zadaniu wykorzystano .... (krótko opisać, co z HTMLa zostało użyte).
+W zadaniu wykorzystano .... (krótko opisać, co zostało użyte).
 
-Przykładowy kod HTML do pokazania (taki, który uważamy za ciekawy, warty pokazania):  
+Kod wykorzystany do rozwiązania zadania (zadań):  
 
 ```java
     public class ObwodPoleKola {
@@ -34,7 +34,7 @@ Przykładowy kod HTML do pokazania (taki, który uważamy za ciekawy, warty poka
       }
     }
 ```
-<br>
+- lub można skorzystać z innego języka, np.:  
 
 ```python
 # Calculate interest to track the growth of an investment
@@ -54,16 +54,16 @@ years = int(input("Enter a number of years: "))
 invest(amount, rate, years)
 ```
 
-#### 2. Zrzuty ekranu pokazujące wynik działania aplikacji/skryptu/strony HTML:  
-![obrazek ze zrzutu ekranu](images/dandelion.jpg)
+#### 2. Zrzuty ekranu pokazujące wynik działania aplikacji/skryptu:  
+![dowolny tekst alterntywny](../images/dandelion.jpg)
 
-#### 2a. Struktura projektu:  
-![struktura-projektu](images/struktura.png)
+#### 2a. Struktura projektu/programu:  
+![struktura-projektu](../images/struktura.png)
 
 <br>
 
 ## III. Dodatkowe informacje o zadaniu
-Można tu wpisać informację o elementach, które nie zostały wymienione we wcześniejszych punktach.  
+Można tu wpisać informacje o elementach, które nie zostały wymienione we wcześniejszych punktach.  Mozna też pominąć ten punkt, eśli nie ma potrzeby jeg użycia.  
 
 #### 1. Tabele w Markdownie
 
@@ -76,7 +76,7 @@ Można tu wpisać informację o elementach, które nie zostały wymienione we wc
 #### 2. Linki
   - do stron: What is a [markup language](https://www.semrush.com/blog/markup-language/)?
   - do innych sekcji w dokumencie: 
-      - w miejscu do którego chcemy się przenieść tworzymy znacznik `a` z atrybutem `id`, czyli np. `<a id="start"></a>`,  
+      - w miejscu, do którego chcemy się przenieść tworzymy znacznik `a` z atrybutem `id`, czyli np. `<a id="start"></a>`,  
       - tworzymy link do ww. znacznika za pomocą składni `[tekst linku](#id-w-znaczniku-a)`, w naszym przypadku może to być np. [Link do początku dokumentacji](#start).  
 <br>
   
