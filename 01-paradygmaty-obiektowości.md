@@ -101,8 +101,43 @@ Trudno jest nie zauważyć tych możliwości. Jest to tym ważniejsze, im więks
 
 > W skrócie: w paradygmacie obiektowym program postrzegamy jako sieć współpracujących obiektów, które ukrywają implementację, komunikują się przez metody i mogą być różnie wyspecjalizowane dzięki dziedziczeniu i polimorfizmowi.
 
+
+#### 6.) Dlaczego potrzebujemy OOP?
+
+Dawno, dawno temu była sobie mała firma wysyłkowa. Pracowało tam 5 ludzi. 
+Jedna osoba zajmowała się finansami, druga pracowała w magazynie, trzecia zajmowała się wysyłką, czwarta marketingiem, a piąta zarządzała pracą ich wszystkich.
+Pracowali ciężko i byli w tym dobrzy. Firma miała świetną reputację i zarabiała duże pieniądze. 
+Liczba zamówień rosła z każdym rokiem, więc prezes musiał zatrudnić więcej pracowników. 
+Kilku do magazynu, kilku do wysyłki oraz jeszcze jednego księgowego i marketingowca, aby móc zwiększyć sprzedaż.
+
+Wtedy zaczęły się problemy. **Im więcej było pracowników, tym bardziej sobie oni przeszkadzali.**
+Marketingowiec wydał wszystkie pieniądze na nową kampanię reklamową, przez co nie można było kupić towaru, który miał być szybko dostarczony do klienta.
+Z magazynu wysyłano miesięcznie 10 skrzyń z nowiuteńkimi hipernapędami. Kurier wyleciał, aby dostarczyć klientowi jeden hipernapęd, przez co realizacja zamówienia dla innego klienta, który zamówił 10 hipernapędów naraz, opóźniła się aż o cały miesiąc. 
+Pierwszy kurier zwyczajnie nie wiedział o tym drugim zamówieniu.
+
+Nowy asystent prezesa wysłał statek z kurierem, żeby kupić brakujący towar, a wszystkie inne wysyłki musiały czekać na następny dostępny statek. Było wtedy mnóstwo pilnych zamówień, ale asystent miał przecież zajmować się jedynie zakupami i chciał dobrze wykonywać swoją pracę. Im lepiej jeden pracownik wykonywał swoje obowiązki, tym bardziej przeszkadzał pozostałym.
+Kiedy prezes zaczął analizować tę sytuację, zdał sobie sprawę, że obsługa wszystkich ważnych zasobów, takich jak statek, pieniądze i towar nie była zoptymalizowana – działała raczej w oparciu o zasadę „kto pierwszy, ten lepszy”. Każdy pracownik mógł dowolnie korzystać ze wszystkich zasobów, aby wykonywać swoje obowiązki, zmniejszając tym samym produktywność reszty pracowników firmy.
+Nastał czas, aby coś zmienić. Prezes zdecydował, że **podzieli monolityczną firmę na kilka działów**. 
+Utworzył dział wysyłkowy, dział marketingu, dział zaopatrzenia, dział finansowy i dział magazynowy. 
+Nikt teraz nie mógł tak po prostu wziąć sobie statku. Dyrektor działu wysyłkowego otrzymywał wszystkie informacje związane z wysyłką i wydawał statek temu kurierowi, którego wysyłka była najważniejsza dla firmy. 
+Co więcej, kurierzy nie mogli już ot tak zabierać towaru z magazynu. 
+Cały proces był teraz pod kontrolą. Dział finansowany mógł dofinansowywać marketing dopiero wtedy, kiedy nie przewidywano w najbliższym czasie żadnych zakupów. Każdy dział miał wyznaczonego swojego przedstawiciela: dyrektora działu. Wewnętrzna struktura każdego działu była jego własną sprawą. Jeśli kurier chciał wziąć jakiś towar, to szedł do managera magazynu, a nie do magazynu. Kiedy przychodziło nowe zamówienie, otrzymywał je dyrektor działu wysyłkowego (osoba publiczna), a nie kurier (osoba prywatna).
+
+Innymi słowy, prezes podzielił zasoby i czynności na działy i zabronił im nawzajem ingerować w swoje wewnętrzne struktury. 
+Do kontaktu wyznaczył konkretne osoby.
+
+**W kategoriach programowania obiektowego dokonano podzielenia programu na obiekty**. 
+Jednolity program, składający się z funkcji i zmiennych, został przekonwertowany na program składający się z obiektów. 
+A wszystkie te obiekty zawierają zmienne i funkcje.
+
+– Problemy wzięły się z tego, że każdy pracownik miał nieograniczony dostęp do zasobów i mógł wydawać polecenia wszystkim pozostałym?
+– Tak, dokładnie.
+– Interesujące. Wprowadziliśmy drobne ograniczenia i zaczęliśmy otrzymywać więcej zamówień. Dzięki czemu można było wszystko lepiej kontrolować.
+– Tak. „Dziel i rządź” w najczystszej formie.
+– Dokładnie tak, dziel i rządź. Trzeba o tym pamiętać. 
+
 ## III. Cztery filary – rozwinięcie 
-> opcjonalnie do przejrzenia, będziemy to rozwijać w kolejnych lekcjach
+> Opcjonalnie do przejrzenia, będziemy to rozwijać w kolejnych lekcjach
 ### A) Abstrakcja
 - Cel: skupić się na istotnych cechach obiektu i uprościć interfejs jego użycia.
 - Narzędzia:
