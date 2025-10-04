@@ -187,5 +187,9 @@ Diagram (wywołanie przez typ bazowy/interfejs):
 #### Dobre praktyki (skrót)
 - Zasady SOLID (wysoki poziom): SRP, OCP, LSP, ISP, DIP.
 - Kompozycja > dziedziczenie, gdy to możliwe.
-- Minimalizuj zależności; ujawniaj tylko to, co potrzebne (enkapsulacja).
+- Minimalizuj zależności; ujawniaj tylko to, co potrzebne (enkapsulacja).  
+
+#### Ciekawostka od ByteByteGo
+- link [źródłowy](https://blog.bytebytego.com/p/ep180-design-patterns-cheat-sheet).  
+![obrazek](images/java-vs-python.jpg)
 
