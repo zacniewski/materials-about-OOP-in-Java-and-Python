@@ -8,9 +8,9 @@ aby dało się ją skompilować i uruchomić niezależnie od pozostałych.
 Klasę pomocniczą dla danego zadania tworzymy nad klasą z numerem zadania, bez słowa kluczowego `public`.  
 
 —
-Zadanie 1. Demo metod statycznych
+Zadanie 1. Demo metod statycznych  
 • Utwórz klasę pomocniczą DemoMetod, w której będą wyłącznie publiczne metody statyczne: info(), przywitaj(String imie).  
-• W metodzie main pokaż wywołania obu metod bez tworzenia obiektów.   
+• W metodzie main pokaż wywołania obu metod bez tworzenia obiektów.  
 
 Zadanie 2. Koło – obwód i pole jako funkcje statyczne  
 • Utwórz klasę pomocniczą KoloUtils z publiczną stałą public static final double PI = 3.14159.  
