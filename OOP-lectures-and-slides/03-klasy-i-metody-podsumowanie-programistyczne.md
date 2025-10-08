@@ -69,25 +69,25 @@ Poniższe grafiki ilustrują kluczowe pojęcia obiektowe. Źródła PlantUML zna
 
 - Enkapsulacja
 
-  ![UML – enkapsulacja](images/01/enk.png)
+  ![UML – enkapsulacja](../images/01/enk.png)
 
   (źródło: images/01/enk.puml)
 
 - Dziedziczenie
 
-  ![UML – dziedziczenie](images/01/dzie.png)
+  ![UML – dziedziczenie](../images/01/dzie.png)
 
   (źródło: images/01/dzie.puml)
 
 - Polimorfizm
 
-  ![UML – polimorfizm](images/01/poli.png)
+  ![UML – polimorfizm](../images/01/poli.png)
 
   (źródło: images/01/poli.puml)
 
 - Abstrakcja
 
-  ![UML – abstrakcja](images/01/abs.png)
+  ![UML – abstrakcja](../images/01/abs.png)
 
   (źródło: images/01/abs.puml)
 
