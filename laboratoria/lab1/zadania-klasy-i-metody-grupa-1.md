@@ -20,8 +20,8 @@ można skorzystać z metody [compare](https://www.geeksforgeeks.org/java/double-
 • W metodzie main zademonstruj działanie metod na kilku przykładach.    
 • Można rzucić wyjątek dla niedodatnich promieni:  
 ```java
-        if (b == 0.0) {
-            throw new IllegalArgumentException("Dzielenie przez zero jest niedozwolone");
+        if (promien <= 0.0) {
+            throw new IllegalArgumentException("Promień powinien być dodatni");
         }
 ```  
 

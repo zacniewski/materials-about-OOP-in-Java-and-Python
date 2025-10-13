@@ -5,13 +5,13 @@
     - wyświetli w kolejności alfabetycznej nazwy czterech filarów OOP,  
     - wyświetli w kolejności losowej nazwy czterech filarów OOP,  
     - w obu ww. przypadkach wskazane jest użycie wbudowanych w dany język programowania metod,  
-    - w pliku sprawozdania "wykładowego" proszę umieścić zrzut ekranu z działajacego programu.  
+    - w pliku sprawozdania "wykładowego" proszę umieścić zrzut ekranu z działającego programu.  
 
-#### Zadanie nr 2 - proszę przesłać do 13.10.2025 r.
-1. Czym różni się klasa od obiektu?
-2. Z czego składają się klasy?
-3. Jak utworzyć nowy obiekt klasy?
-4. Czy poniższa klasa jest poprawna?  
+#### Zadanie nr 2 (klsy i obiekty) - proszę przesłać do 13.10.2025 r.
+1). Czym różni się klasa od obiektu?
+2). Z czego składają się klasy?
+3). Jak utworzyć nowy obiekt klasy?
+4). Czy poniższa klasa jest poprawna?  
 
 ```java
 public class Pytanie {
@@ -21,7 +21,7 @@ public class Pytanie {
 }
 ```
 
-5. Co zostanie wypisane na ekran?
+5). Co zostanie wypisane na ekran?
 
 ```java
 public class Punkt {
@@ -52,7 +52,7 @@ public class Punkt {
 }
 ```
 
-6. Napisz klasę `Osoba`, która będzie zawierała:
+6). Napisz klasę `Osoba`, która będzie zawierała:
    1. Trzy pola: `wiek`, `imie`, `nazwisko`. Użyj odpowiednich typów.
    2. Trzy metody, w których będziesz ustawiał wartości pól klasy: `ustawWiek`, `ustawImie`,
        `ustawNazwisko`. Argumenty tych metod powinny nazywać się **wartoscWieku** ,
@@ -63,6 +63,12 @@ public class Punkt {
        za pomocą metod `ustawWiek`, `ustawImie`, oraz `ustawNazwisko`, a następnie, za pomocą
        `System.out.println`, wypiszesz utworzony obiekt typu `Osoba` na ekran.
 
+
+#### Zadanie nr 3 (importy i pakiety) - proszę przesłać do 20.10.2025 r.
+
+1) Dodaj nową klasę w pakiecie `laboratoria.lab2.text`, np. `TextStats` z metodą `countWords(String s)`. Pokaż import i użycie w osobnej klasie demonstracyjnej.  Kod klasy oraz wynik działania programu umieść w sprawozdaniu z wykładu.  
+2) Utwórz dwa pakiety z klasą `Helper` w każdym pakiecie. Pokaż, jak odwołać się do obu bez aliasów (pełne nazwy kwalifikowane). Kody klas oraz wynik działania programu(ów) umieść w sprawozdaniu z wykładu.  
+3) Uruchom zadania od 1 do 5 z folderu `zadania-1_5-do-działu-o-modułach-i-pakietach`, ale przedtem zmień nazwę każdego pliku, aby była w postaci `Zad2_StaticImport_Nazwisko.java`.  Wyniki działania programów umieść w sprawozdaniu z wykładu.  
 
 
 
