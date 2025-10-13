@@ -159,7 +159,7 @@ public class DoubleCounter implements Counter {
 Teraz dodajmy do klasy `CounterApp` następujące pole:
 
 ```java
-    JComboBox<Counter> counters = JComboBox<>(new Counter[]{
+    JComboBox<Counter> counters = new JComboBox<>(new Counter[]{
       new SimpleCounter(), 
       new DoubleCounter(),
     });
