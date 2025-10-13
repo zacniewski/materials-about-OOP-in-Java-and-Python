@@ -7,7 +7,7 @@
     - w obu ww. przypadkach wskazane jest użycie wbudowanych w dany język programowania metod,  
     - w pliku sprawozdania "wykładowego" proszę umieścić zrzut ekranu z działającego programu.  
 
-#### Zadanie nr 2 (klsy i obiekty) - proszę przesłać do 13.10.2025 r.
+#### Zadanie nr 2 (klasy i obiekty) - proszę przesłać do 13.10.2025 r.
 1). Czym różni się klasa od obiektu?
 2). Z czego składają się klasy?
 3). Jak utworzyć nowy obiekt klasy?
