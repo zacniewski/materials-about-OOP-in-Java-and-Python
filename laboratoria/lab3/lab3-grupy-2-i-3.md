@@ -100,7 +100,7 @@ dostępny pod adresem <https://mermaid.live>.
 Dokumentację diagramów klas w Mermaid można zaś znaleźć pod adresem
 <https://docs.mermaidchart.com/mermaid-oss/syntax/classDiagram.html>
 
-## Część pierwsza - dziedziczenie
+## Pojęcie dziedziczenia
 
 Podczas poprzednich zajęć stworzyliśmy 3 implementacje interfejsu
 `Counter`:
