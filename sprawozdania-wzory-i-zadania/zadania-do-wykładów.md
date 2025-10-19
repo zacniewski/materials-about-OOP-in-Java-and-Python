@@ -71,4 +71,111 @@ public class Punkt {
 3) Uruchom zadania od 1 do 5 z folderu `zadania-1_5-do-działu-o-modułach-i-pakietach`, ale przedtem zmień nazwę każdego pliku, aby była w postaci `Zad2_StaticImport_Nazwisko.java`.  Wyniki działania programów umieść w sprawozdaniu z wykładu.  
 
 
+#### Zadanie nr 4 (pola klas, modyfikatory dostępu) - proszę przesłać do 29.10.2025 r.
 
+
+1. Jakie powinny być nazwy getterów i setterów następujących pól?  
+```java
+    String tytul;
+    double mianownik;
+    boolean uzytkownikZalogowany;
+```
+2. Czym jest i do czego służy this?  
+3. Kiedy możemy zobaczyć błąd Null Pointer Exception?
+4. Jak uchronić się przed potencjalnym błędem Null Pointer Exception?
+5. Co zostanie wypisane na ekranie w poniższym programie?
+```java
+    public class PytanieZagadka {
+      private int liczba;
+      
+      public void setLiczba(int liczba) {
+        liczba = liczba;
+      }
+      
+      public int getLiczba() {
+        return liczba;
+      }
+      
+      public static void main(String[] args) {
+        PytanieZagadka o = new PytanieZagadka();
+        o.setLiczba(100);
+        System.out.println("Liczba wynosi: " + o.getLiczba());
+      }
+    }
+```
+6. Jaki będzie efekt próby kompilacji poniższych klas?
+```java
+        public class PytanieMetody {
+          public void setNazwa(String nazwa) {
+            this.nazwa = nazwa;
+          }
+          
+          public String getNazwa() {
+            return nazwa;
+          }
+          
+          private String nazwa;
+        }
+```
+i
+```java
+        
+        public class PytaniePola {
+          private int x = y;
+          private int y = 0;
+        }
+```
+7. Co zostanie wypisane na ekranie w poniższym programie?
+```java
+    public class PytanieObiekty {
+      private String nazwa;
+      public void setNazwa(String nazwa) {
+        this.nazwa = nazwa;
+      }
+      public String getNazwa() {
+        return nazwa;
+      }
+      public static void main(String[] args) {
+        PytanieObiekty o1 = new PytanieObiekty();
+        PytanieObiekty o2 = new PytanieObiekty();
+        o1.setNazwa("Pewna nazwa");
+        o2.setNazwa("Inna nazwa");
+        System.out.println(o1.getNazwa());
+        System.out.println(o2.getNazwa());
+      }
+    }
+```
+8. Co zostanie wypisane na ekranie w poniższym programie?
+```java
+    public class PytanieWartosci {
+      private int liczba;
+      private boolean wartoscLogiczna;
+      private String nazwa;
+      public String toString() {
+        return liczba + " " + wartoscLogiczna + " " + nazwa;
+      }
+      public static void main(String[] args) {
+        PytanieWartosci o = new PytanieWartosci();
+        System.out.println(o);
+      }
+    }
+```
+
+9. Co zostanie wypisane na ekranie w poniższym programie?
+```java
+    public class UzycieWartosci {
+      private int liczba;
+      private String nazwa;
+      private int getLiczba() {
+        return liczba;
+      }
+      private String getNazwa() {
+        return nazwa;
+      }
+      public static void main(String[] args) {
+        UzycieWartosci o = new UzycieWartosci();
+        System.out.println(o.getLiczba());
+        System.out.println(o.getNazwa().toUpperCase());
+      }
+    }
+```

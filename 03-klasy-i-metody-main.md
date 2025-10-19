@@ -1,4 +1,4 @@
-W tym rozdziale rozpoczniemy poznawanie klas i _programowania zorientowanego obiektowo (OOP – Object-Oriented Programming). 
+W tym rozdziale rozpoczniemy poznawanie klas i programowania zorientowanego obiektowo (OOP – Object-Oriented Programming). 
 > Materiał pochodzi z [Kursu Javy](https://kursjava.com/). 
 
 Każdy tworzony przez nas tej pory program składał się z jednej klasy publicznej. Zazwyczaj
