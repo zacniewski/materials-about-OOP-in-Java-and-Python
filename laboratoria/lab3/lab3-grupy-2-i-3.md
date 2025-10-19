@@ -202,6 +202,7 @@ classDiagram
     }
 
     class AbstractCounter {
+		<<abstract>>
 		#counter int
 		+increase()*
         +currentValue() int	
