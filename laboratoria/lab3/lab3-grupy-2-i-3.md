@@ -277,7 +277,7 @@ Które z rozwiązań bardziej Ci się podoba?
 Zdefiniuj nową klasę, `BeepingCounter`, która będzie dziedziczyć po
 klasie `SimpleCounter`, ale przy każdym wywołaniu metody `increase()`
 oprócz zwiększenia licznika (co powinno się odbywac poprzez wywołanie
-metody klasy nadrzędenej) dodatkowo wywołaj
+metody klasy nadrzędnej) dodatkowo wywołaj
 `java.awt.Toolkit.getDefaultToolkit().beep()`
 
 **Wskazówka**: aby z klasy dziedziczącej wywołać w Javie metodę klasy
@@ -323,7 +323,7 @@ new Beeping(new OverflowCounter()),
 i sprawdź czy program działa.
 
 Definicję klasy `Beeping` dodaj do sprawozdania i odpowiedz na
-następujące pytanie: porównując klasę `Beeping` z tecniką rozszerzania
+następujące pytanie: porównując klasę `Beeping` z techniką rozszerzania
 klas opartą na dziedziczeniu z zadań 4 i 5, która z tych technik
 wymaga więcej pracy (i dlaczego)?
 
