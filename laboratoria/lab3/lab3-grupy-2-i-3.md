@@ -92,7 +92,7 @@ classDiagram
     Counter <|.. DoubleCounter
     Counter <|.. OverflowCounter
 
-	```
+```
 
 Edytor pozwalający na podglądanie diagramów Mermaid na bieżąco jest
 dostępny pod adresem <https://mermaid.live>.
@@ -100,7 +100,7 @@ dostępny pod adresem <https://mermaid.live>.
 Dokumentację diagramów klas w Mermaid można zaś znaleźć pod adresem
 <https://docs.mermaidchart.com/mermaid-oss/syntax/classDiagram.html>
 
-## Część pierwsza - dziedziczenie
+## Pojęcie dziedziczenia
 
 Podczas poprzednich zajęć stworzyliśmy 3 implementacje interfejsu
 `Counter`:
@@ -163,7 +163,7 @@ Możliwych jest wiele schematów dziedziczenia, ale my rozważymy dwa:
 - pierwszy, w którym `DoubleCounter` i `OverflowCounter` dziedziczą
   po klasie `SimpleClass` (uznanej za modelową implementację licznika)
   
-  ```mermaid
+```mermaid
 classDiagram
     class Counter {
         <<interface>>
@@ -188,13 +188,12 @@ classDiagram
     Counter <|.. SimpleCounter
     SimpleCounter <|-- DoubleCounter
     SimpleCounter <|-- OverflowCounter
-  
-  ```
+```
   
 - drugi, w którym wprowadzimy *klasę abstrakcyjną* `AbstractCounter`,
   z których dziedzczyć będą wszystkie nasze klasy
 
-  ```mermaid
+```mermaid
 classDiagram
     class Counter {
         <<interface>>
@@ -203,6 +202,7 @@ classDiagram
     }
 
     class AbstractCounter {
+		<<abstract>>
 		#counter int
 		+increase()*
         +currentValue() int	
@@ -224,7 +224,7 @@ classDiagram
     AbstractCounter <|-- SimpleCounter
     AbstractCounter <|-- DoubleCounter
     AbstractCounter <|-- OverflowCounter
-  ```
+```
 
 ### Zadanie 1: zaimplementuj pierwszy z powyższych schematów dziedziczenia.
 
