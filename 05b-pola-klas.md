@@ -1,4 +1,4 @@
-Źródło inspiracji: https://kursjava.com/klasy/pola-klas/
+Źródło: https://kursjava.com/klasy/pola-klas/
 
 Jak już wiemy, pola klas to pewne właściwości, które opisują obiekty danej klasy. Dla przykładu, klasa `Ksiazka` miała pola tytul, autor, oraz cena, a klasa Samochod – pola kolor i predkosc.
 
