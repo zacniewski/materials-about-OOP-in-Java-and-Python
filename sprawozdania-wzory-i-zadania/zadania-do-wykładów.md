@@ -68,7 +68,7 @@ public class Punkt {
 
 1) Dodaj nową klasę w pakiecie `laboratoria.lab2.text`, np. `TextStats` z metodą `countWords(String s)`. Pokaż import i użycie w osobnej klasie demonstracyjnej.  Kod klasy oraz wynik działania programu umieść w sprawozdaniu z wykładu.  
 2) Utwórz dwa pakiety z klasą `Helper` w każdym pakiecie. Pokaż, jak odwołać się do obu bez aliasów (pełne nazwy kwalifikowane). Kody klas oraz wynik działania programu(ów) umieść w sprawozdaniu z wykładu.  
-3) Uruchom zadania od 1 do 5 z folderu `zadania-1_5-do-działu-o-modułach-i-pakietach`, ale przedtem zmień nazwę każdego pliku, aby była w postaci `Zad2_StaticImport_Nazwisko.java`.  Wyniki działania programów umieść w sprawozdaniu z wykładu.  
+3) Uruchom zadania od 1 do 5 z folderu `laboratoria/lab2/zadania-1_5-do-działu-o-modułach-i-pakietach`, ale przedtem zmień nazwę każdego pliku, aby była w postaci `Zad2_StaticImport_Nazwisko.java`.  Wyniki działania programów umieść w sprawozdaniu z wykładu.  
 
 
 #### Zadanie nr 4 (pola klas, modyfikatory dostępu) - proszę przesłać do 29.10.2025 r.
