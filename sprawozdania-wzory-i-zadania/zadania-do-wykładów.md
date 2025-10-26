@@ -178,4 +178,169 @@ i
         System.out.println(o.getNazwa().toUpperCase());
       }
     }
+```  
+
+
+#### Zadanie nr 5 (konstruktory) - proszę przesłać do 05.11.2025 r.
+1. Do czego służą konstruktory?
+2. Czy każda klasa posiada konstruktor?
+3. Jak zdefiniować konstruktor?
+4. Czym jest konstruktor domyślny i kiedy jest definiowany?
+5. Czy klasa może mieć wiele konstruktorów?
+6. Jak z jednego konstruktora wywołać inny konstruktor?
+7. Jaki warunek musi spełniać wywołanie jednego konstruktora z drugiego konstruktora?
+8. Jaki będzie wynik kompilacji i uruchomienia poniższego kodu?
+
+```java
+public class PytanieKonstruktor {
+  private int x;
+  public PytanieKonstruktor(int x) {
+    this.x = x;
+  }
+  public void setX(int x) {
+    this.x = x;
+  }
+  public String toString() {
+    return "x = " + x;
+  }
+  public static void main(String[] args) {
+    PytanieKonstruktor o = new PytanieKonstruktor();
+    System.out.println(o);
+  }
+}
+```
+
+9. Ile konstruktorów posiada poniższa klasa?
+
+```java
+public class PytanieKonstruktor {
+  private int pewnePole;
+}
+```
+
+10. Czy poniższa klasa ma domyślny konstruktor?
+
+```java
+public class PytanieKonstruktor {
+  private int pewnePole;
+    
+  public PytanieKonstruktor() {
+  }
+}
+```
+
+11. Jaki będzie wynik kompilacji i uruchomienia poniższej klasy?
+
+```java
+public class PytanieKonstruktor {
+  private final int liczba;
+  private final String nazwa;
+  public PytanieKonstruktor(int liczba) {
+    this.liczba = liczba;
+  }
+  public PytanieKonstruktor(int liczba, String nazwa) {
+    this.liczba = liczba;
+    this.nazwa = nazwa;
+  }
+  public static void main(String[] args) {
+    PytanieKonstruktor o = new PytanieKonstruktor(10, "Tekst");
+  }
+}
+```
+
+12. Jaki będzie wynik kompilacji i uruchomienia poniższej klasy?
+
+```java
+public class PytanieKonstruktor {
+  private final int liczba;
+  public PytanieKonstruktor() {
+    System.out.println("Wywolano konstruktor bez argumentow.");
+    this(0);
+  }
+  public PytanieKonstruktor(int liczba) {
+    this.liczba = liczba;
+  }
+  public static void main(String[] args) {
+    PytanieKonstruktor o = new PytanieKonstruktor(10);
+  }
+}
+```
+
+13. Jaki będzie wynik kompilacji i uruchomienia poniższej klasy?
+
+```java
+public class PytanieKonstruktor {
+  private final int liczba;
+  private final String nazwa;
+  public PytanieKonstruktor(int liczba) {
+    this(liczba, "brak nazwy");
+    this.liczba = liczba;
+  }
+  public PytanieKonstruktor(int liczba, String nazwa) {
+    this.liczba = liczba;
+    this.nazwa = nazwa;
+  }
+  public static void main(String[] args) {
+    PytanieKonstruktor o = new PytanieKonstruktor(10, "Tekst");
+  }
+}
+```
+
+14. Jaki będzie wynik kompilacji i uruchomienia poniższej klasy?
+
+```java
+public class PytanieKonstruktor {
+  private int x;
+  public void PytanieKonstruktor(int x) {
+    this.x = x;
+  }
+  public String toString() {
+    return "x = " + x;
+  }
+  public static void main(String[] args) {
+    PytanieKonstruktor o = new PytanieKonstruktor();
+    System.out.println(o);
+  }
+}
+```
+
+15. Jaki będzie wynik kompilacji i uruchomienia poniższej klasy?
+
+```java
+public class PytanieKonstruktor {
+  private int x;
+  public Pytaniekonstruktor(int x) {
+    this.x = x;
+  }
+  public String toString() {
+    return "x = " + x;
+  }
+  public static void main(String[] args) {
+    PytanieKonstruktor o = new PytanieKonstruktor();
+    System.out.println(o);
+  }
+}
+```
+
+16. Jaki będzie wynik kompilacji i uruchomienia poniższej klasy?
+
+```java
+public class PytanieKonstruktor {
+  private int x;
+  public PytanieKonstruktor() {
+    x = 10;
+  }
+  public PytanieKonstruktor(int x) {
+    x = x;
+  }
+  public String toString() {
+    return "x = " + x;
+  }
+  public static void main(String[] args) {
+    PytanieKonstruktor o1 = new PytanieKonstruktor();
+    PytanieKonstruktor o2 = new PytanieKonstruktor(20);
+    System.out.println(o1);
+    System.out.println(o2);
+  }
+}
 ```
