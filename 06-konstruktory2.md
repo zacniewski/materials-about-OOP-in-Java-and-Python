@@ -1,6 +1,4 @@
-### Konstruktory w Java — Notatka z przykładami i spisem treści
-
-Poniżej znajdziesz kompletną, autorską notatkę o konstruktorach w Java (nie jest to kopia treści z podanego linku). Jeśli potrzebujesz wiernej kopii strony, wklej proszę jej treść, a dokonam konwersji do Markdown.
+### Konstruktory w Java — Notatka z przykładami 
 
 ---
 
