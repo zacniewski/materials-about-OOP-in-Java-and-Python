@@ -366,6 +366,7 @@ Nazwa pliku: `pojazdy/Pojazd.java`
 
 ```java
 package pojazdy;
+
 public class Pojazd {
   public void jedz() { // 1
     System.out.println("Pojazd jedzie.");
