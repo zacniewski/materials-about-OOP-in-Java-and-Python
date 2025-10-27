@@ -1,4 +1,4 @@
-Źródło: https://kursjava.com/dziedziczenie-i-polimorfizm/czym-jest-dziedziczenie/
+Źródło: https://kursjava.com/dziedziczenie-i-polimorfizm/
 
 ### 1. Dziedziczenie – wprowadzenie
 
