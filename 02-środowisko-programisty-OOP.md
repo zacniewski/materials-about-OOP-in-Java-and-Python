@@ -1,6 +1,6 @@
 # 02 — Środowisko programisty OOP oraz podstawy składni (Java i Python)
 
-Ten wykład wprowadza podstawowe elementy środowiska programisty obiektowego oraz pokazuje najważniejsze elementy składni języków Java i Python w kontekście programowania obiektowego.
+Podstawowe elementy środowiska programisty obiektowego oraz pokazuje najważniejsze elementy składni języków Java i Python w kontekście programowania obiektowego.
 
 ## 1. Ekosystem Javy: JDK, JRE, JVM
 
@@ -444,7 +444,7 @@ Rozszerzenie (praktyka i checklisty):
     - [ ] `README` opisuje komendy build/uruchomienia
   - Python:
     - [ ] Utworzone i aktywne `venv`
-    - [ ] Zaległości zainstalowane z `requirements.txt` lub `pyproject.toml`
+    - [ ] Zależności zainstalowane z `requirements.txt` lub `pyproject.toml`
     - [ ] `black`/`ruff`/`mypy` skonfigurowane, testy `pytest` działają
     - [ ] `README` opisuje komendy uruchomienia i aktywację `venv`
 
