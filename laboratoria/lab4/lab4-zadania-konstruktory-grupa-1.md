@@ -90,7 +90,7 @@ Stwórz jedną klasę: `Zad5_Employee_Nazwisko`.
 
 `Zad5_Employee_Nazwisko`:
 - Pole prywatne: `name` (String).
-- Inicjalizator instancyjny (blok `{ ... }`) wypisujący np. `Inicjalizacja: Pracownik`, czyli zwykły `println()`.
+- Blok informacyjny (blok `{ ... }`) wypisujący np. `Inicjalizacja: Pracownik`, czyli zwykły `println()`.
 - Konstruktor parametryczny `Employee(String name)` wypisujący np. `Konstruktor: Pracownik(name)` i ustawiający pole `name`.
 - Metoda `describe()` zwraca `Pracownik{imię='...'}`.
 
