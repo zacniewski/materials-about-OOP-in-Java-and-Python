@@ -20,8 +20,8 @@ Napisz klasę `Zad1_Person_Nazwisko`, która reprezentuje osobę.
   - `describe()` zwraca czytelny opis, np. `Person{firstName='Ala', lastName='Kowalska', age=21}`.
 
 W `main`:
-- Utwórz obiekt przez konstruktor domyślny i wypisz `describe()`.
-- Utwórz obiekt przez konstruktor parametryczny i wypisz `describe()`.
+- Utwórz obiekt przy pomocy konstruktora domyślnego i wypisz `describe()`.
+- Utwórz obiekt przy pomocy konstruktora parametrycznego i wypisz `describe()`.
 - Krótko skomentuj (w komentarzach w kodzie), kiedy i dlaczego użyć którego konstruktora.
 
 Wskazówki: Pokaż różnicę między inicjalizacją „z góry” (default) i „na wejściu” (parametry).
@@ -46,21 +46,24 @@ Wskazówki: Pamiętaj o kolejności wywołań – `this(...)` musi być pierwsz�
 
 ---
 
-## Zadanie 3. Walidacja w konstruktorze + `IllegalArgumentException` – klasa `BankAccount`
+## Zadanie 3. Walidacja w konstruktorze BEZ wyjątków – klasa `BankAccount`
 
 Napisz klasę `Zad3_BankAccount_Nazwisko`.
 - Pola prywatne: `owner` (String), `balance` (double).
 - Konstruktor parametryczny: `BankAccount(String owner, double initialBalance)`.
-  - Walidacje w konstruktorze:
-    - `owner` nie może być `null`/pusty – w przeciwnym razie rzuć `IllegalArgumentException` z czytelnym komunikatem;
-    - `initialBalance` nie może być ujemny – w przeciwnym razie rzuć `IllegalArgumentException`.
-- Metody: `deposit(double amount)`, `withdraw(double amount)` z podstawową walidacją, `describe()`.
+  - Walidacje w konstruktorze (bez rzucania wyjątków):
+    - jeśli `owner` jest `null`/pusty/whitespace → ustaw domyślnie `"Unknown"`;
+    - jeśli `initialBalance` jest ujemny → ustaw `0.0`.
+- Metody: `deposit(double amount)`, `withdraw(double amount)` z podstawową walidacją BEZ wyjątków:
+  - `deposit`: dodaj środki tylko gdy `amount > 0`, w przeciwnym razie zignoruj;
+  - `withdraw`: wykonaj wypłatę tylko gdy `amount > 0` i `amount <= balance`, w przeciwnym razie zignoruj.
+- `describe()` zwraca czytelny opis stanu konta.
 
 W `main`:
 - Pokaż poprawną inicjalizację i kilka operacji.
-- Spróbuj utworzyć konto z niepoprawnymi danymi w bloku `try/catch` i wypisz przechwycony komunikat błędu.
+- Zademonstruj sanitację błędnych danych wejściowych bez wyjątków oraz zignorowane niepoprawne operacje (`deposit(-10)`, `withdraw(9999)`).
 
-Wskazówki: Konstruktor to dobre miejsce na zapewnienie niezmienników obiektu od pierwszej chwili życia.
+Wskazówki: Zamiast przerywać działanie wyjątkami, zabezpiecz niezmienniki przez ustawienie wartości domyślnych i ignorowanie błędnych operacji.
 
 ---
 
@@ -81,27 +84,21 @@ Wskazówki: Pokaż różnicę między „kopią przez referencję” a bezpieczn
 
 ---
 
-## Zadanie 5. Łańcuch inicjalizacji: pola, inicjalizatory, konstruktor, `super(...)` – hierarchia `Employee`
+## Zadanie 5. Łańcuch inicjalizacji: pola, inicjalizatory, konstruktor – klasa `Employee` (bez dziedziczenia)
 
-Stwórz dwie klasy: `Zad5_Employee_Nazwisko` (klasa bazowa) i `Zad5_Manager_Nazwisko` (podklasa).
+Stwórz jedną klasę: `Zad5_Employee_Nazwisko`.
 
 `Zad5_Employee_Nazwisko`:
 - Pole prywatne: `name` (String).
-- Inicjalizator instancyjny (blok `{ ... }`) wypisujący np. `Init: Employee`.
-- Konstruktor parametryczny `Employee(String name)` wypisujący np. `Ctor: Employee(name)` i ustawiający pole `name`.
-- `describe()` zwraca `Employee{name='...'}`.
-
-`Zad5_Manager_Nazwisko` dziedziczy po `Zad5_Employee_Nazwisko`:
-- Dodatkowe pole prywatne: `teamSize` (int).
-- Inicjalizator instancyjny wypisujący `Init: Manager`.
-- Konstruktor `Manager(String name, int teamSize)` wywołujący `super(name)`, wypisujący `Ctor: Manager(name, teamSize)` i ustawiający `teamSize`.
-- Nadpisane `describe()` zwracające `Manager{name='...', teamSize=...}`.
+- Blok informacyjny (blok `{ ... }`) wypisujący np. `Inicjalizacja: Pracownik`, czyli zwykły `println()`.
+- Konstruktor parametryczny `Employee(String name)` wypisujący np. `Konstruktor: Pracownik(name)` i ustawiający pole `name`.
+- Metoda `describe()` zwraca `Pracownik{imię='...'}`.
 
 W `main`:
-- Utwórz obiekt `Manager` i zaobserwuj (na podstawie wypisów), w jakiej kolejności wykonywane są: inicjalizatory i konstruktory w klasie bazowej i pochodnej.
+- Utwórz obiekt `Zad5_Employee_Nazwisko` i zaobserwuj (na podstawie wypisów), w jakiej kolejności wykonywane są: inicjalizator instancyjny oraz konstruktor.
 - Wypisz wynik `describe()`.
 
-Wskazówki: Zademonstruj kolejność: najpierw inicjalizacja pól i bloki inicjalizujące klasy bazowej, potem konstruktor bazowy (`super(...)`), następnie inicjalizacja i konstruktor klasy pochodnej.
+Wskazówki: Zademonstruj kolejność: najpierw inicjalizacja pól i bloki inicjalizujące, następnie konstruktor. Nie używaj dziedziczenia, klas bazowych, słowa kluczowego `extends` ani wywołań `super(...)`. 
 
 ---
 
