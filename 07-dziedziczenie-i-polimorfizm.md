@@ -458,3 +458,367 @@ Error:(8, 9) java: rejestracja has private access in pojazdy.Pojazd
 ```
 
 > Jeżeli klasa pochodna jest w tym samym pakiecie, co jej klasa bazowa, to będzie mimo wszystko miała dostęp do pól i metod z domyślnym modyfikatorem dostępu – w końcu takie właśnie zastosowanie ma ten modyfikator.
+
+
+---
+
+### 8. Rozszerzone wyjaśnienia z przykładami i diagramami UML (Mermaid)
+
+Poniżej zebrano kluczowe pojęcia dotyczące dziedziczenia i polimorfizmu wraz z krótkimi przykładami w Javie oraz diagramami UML przygotowanymi w Mermaid.
+
+#### 8.1. Czym są dziedziczenie, polimorfizm i method overriding
+- Dziedziczenie: mechanizm pozwalający tworzyć nowe klasy na podstawie istniejących, przejmując ich pola i metody oraz dodając/zmieniając własne.
+- Polimorfizm: możliwość traktowania obiektów klas pochodnych jak obiekty klasy bazowej oraz dynamiczne wybieranie właściwej implementacji metod w czasie działania.
+- Method overriding (nadpisywanie): ponowne zdefiniowanie metody z klasy bazowej w klasie pochodnej (taka sama sygnatura), aby zmienić jej zachowanie.
+
+Przykład:
+
+```java
+class Zwierze {
+  public String dzwiek() { return "?"; }
+}
+class Pies extends Zwierze {
+  @Override public String dzwiek() { return "hau"; }
+}
+class Kot extends Zwierze {
+  @Override public String dzwiek() { return "miau"; }
+}
+class Demo {
+  static void wydajDzwiek(Zwierze z) { System.out.println(z.dzwiek()); }
+  public static void main(String[] args) {
+    wydajDzwiek(new Pies()); // hau
+    wydajDzwiek(new Kot());  // miau
+  }
+}
+```
+
+Diagram UML (Mermaid):
+
+```mermaid
+classDiagram
+  class Zwierze {
+    +String dzwiek()
+  }
+  class Pies {
+    +String dzwiek()
+  }
+  class Kot {
+    +String dzwiek()
+  }
+  Zwierze <|-- Pies
+  Zwierze <|-- Kot
+```
+
+#### 8.2. Jak rozszerzać klasy i limit liczby rozszerzanych klas
+W Javie używamy słowa kluczowego `extends` i możemy rozszerzać tylko jedną klasę (pojedyncze dziedziczenie).
+
+```java
+class Osoba {}
+class Pracownik extends Osoba {}      // OK
+// class Kierownik extends Osoba, Inna {} // BŁĄD: wielokrotne dziedziczenie klas jest zabronione
+```
+
+Diagram UML:
+```mermaid
+classDiagram
+  class Osoba
+  class Pracownik
+  Osoba <|-- Pracownik
+```
+
+#### 8.3. Które pola i metody się dziedziczy, a których nie
+- Dziedziczone: elementy `public` i `protected` oraz elementy z dostępem domyślnym (package‑private) jeśli klasa pochodna jest w tym samym pakiecie.
+- Niedziedziczone: elementy `private` (zawsze) oraz package‑private z innego pakietu.
+- Statyczne składowe są dziedziczone „nazwą”, ale nie podlegają polimorfizmowi (ukrywanie, nie overriding).
+
+```java
+package a;
+public class Bazowa {
+  public int pub;
+  protected int prot;
+  int pkg;        // domyślny (package‑private)
+  private int priv;
+  public void f() {}
+}
+
+package a;
+public class PochodnaA extends Bazowa {
+  void demo() {
+    pub = 1; prot = 2; pkg = 3; // OK
+    // priv = 4; // BŁĄD: private
+  }
+}
+
+package b;
+import a.Bazowa;
+public class PochodnaB extends Bazowa {
+  void demo() {
+    pub = 1; prot = 2;   // OK (protected dziedziczone)
+    // pkg = 3;          // BŁĄD: inny pakiet
+    // priv = 4;         // BŁĄD: private
+  }
+}
+```
+
+Diagram UML (z widocznością):
+```mermaid
+classDiagram
+  class Bazowa {
+    +int pub
+    #int prot
+    ~int pkg
+    -int priv
+    +void f()
+  }
+  class PochodnaA
+  class PochodnaB
+  Bazowa <|-- PochodnaA
+  Bazowa <|-- PochodnaB
+```
+
+#### 8.4. Modyfikator `protected` vs dostęp domyślny (package‑private)
+- `protected`: dostęp w tym samym pakiecie oraz w klasach pochodnych (także w innych pakietach).
+- Domyślny (brak modyfikatora): dostęp tylko w tym samym pakiecie (brak dostępu w podklasach z innego pakietu).
+
+```java
+package lib;
+public class Rzecz {
+  protected String nazwa;
+  String opis; // package‑private
+}
+
+package app;
+import lib.Rzecz;
+class SpecRzecz extends Rzecz {
+  void demo() {
+    this.nazwa = "OK";  // protected: dostępne w podklasie z innego pakietu
+    // this.opis = "NIE"; // package‑private: niedostępne poza pakietem lib
+  }
+}
+```
+
+Diagram:
+```mermaid
+classDiagram
+  class Rzecz {
+    #String nazwa
+    ~String opis
+  }
+  class SpecRzecz
+  Rzecz <|-- SpecRzecz
+```
+
+#### 8.5. Wpływ modyfikatorów dostępu na dziedziczenie i użycie
+Podsumowanie:
+- `public`: dziedziczone i dostępne wszędzie.
+- `protected`: dziedziczone; dostępne w tym samym pakiecie oraz w podklasach (również z innych pakietów).
+- Domyślny: dziedziczone tylko w tym samym pakiecie; brak dostępu w podklasach z innych pakietów.
+- `private`: nie są dziedziczone (niedostępne bezpośrednio); dostęp tylko wewnątrz tej samej klasy.
+
+#### 8.6. Korzystanie z konstruktorów klas bazowych
+Konstruktor klasy pochodnej może (i często powinien) wywołać konstruktor bazowy za pomocą `super(...)`.
+
+```java
+class Osoba {
+  protected final String imie;
+  protected final String nazwisko;
+  public Osoba(String imie, String nazwisko) {
+    this.imie = imie; this.nazwisko = nazwisko;
+  }
+}
+class Pracownik extends Osoba {
+  private final int id;
+  public Pracownik(String imie, String nazwisko, int id) {
+    super(imie, nazwisko); // wywołanie konstruktora bazowego
+    this.id = id;
+  }
+}
+```
+
+Diagram:
+```mermaid
+classDiagram
+  class Osoba {
+    +Osoba(String imie, String nazwisko)
+  }
+  class Pracownik {
+    +Pracownik(String imie, String nazwisko, int id)
+  }
+  Osoba <|-- Pracownik
+```
+
+#### 8.7. Słowo kluczowe `super`
+- `super(...)` wywołuje konstruktor klasy bazowej (musi być pierwszą instrukcją w konstruktorze).
+- `super.metoda()` odwołuje się do metody z klasy bazowej (np. w celu rozszerzenia, a nie całkowitego zastąpienia implementacji).
+
+```java
+class Logger {
+  public void log(String msg) { System.out.println("LOG: " + msg); }
+}
+class FileLogger extends Logger {
+  @Override public void log(String msg) {
+    super.log(msg); // użyj bazowej logiki i dodaj coś swojego
+    System.out.println("(zapisano do pliku)");
+  }
+}
+```
+
+Diagram:
+```mermaid
+classDiagram
+  class Logger {
+    +void log(String msg)
+  }
+  class FileLogger {
+    +void log(String msg)
+  }
+  Logger <|-- FileLogger
+```
+
+#### 8.8. Rzutowanie typów (casting) i jak z niego korzystać
+- Upcasting: przypisanie obiektu podklasy do referencji nadklasy – bezpieczne i automatyczne.
+- Downcasting: rzutowanie referencji nadklasy do podklasy – wymaga jawnego rzutowania i jest bezpieczne tylko, gdy obiekt faktycznie jest instancją podklasy.
+
+```java
+Osoba o = new Pracownik("Jan", "Kowalski", 1); // upcasting OK
+// o.id; // niedostępne przez referencję Osoba
+Pracownik p = (Pracownik) o; // downcasting – jeśli o faktycznie jest Pracownikiem
+int id = p.getClass().getSimpleName().length(); // przykładowe użycie
+```
+
+Diagram:
+```mermaid
+classDiagram
+  class Osoba
+  class Pracownik
+  Osoba <|-- Pracownik
+```
+
+#### 8.9. Adnotacja `@Override` – po co jej używać
+`@Override` mówi kompilatorowi: „ta metoda ma nadpisywać metodę z klasy bazowej lub interfejsu”. Dzięki temu:
+- Kompilator wykryje literówki lub złą sygnaturę.
+- Kod jest czytelniejszy.
+
+```java
+class A { public void f(int x) {} }
+class B extends A {
+  @Override public void f(int x) {} // OK – poprawnie nadpisano
+  // @Override public void f(long x) {} // BŁĄD – to przeciążenie, nie overriding
+}
+```
+
+#### 8.10. Overloading vs overriding – różnice
+- Overloading (przeładowanie): ta sama nazwa metody, różne listy parametrów (w obrębie tej samej klasy). Wybór wersji następuje w czasie kompilacji.
+- Overriding (nadpisanie): ta sama sygnatura w klasie pochodnej; wybór implementacji następuje w czasie działania na podstawie rzeczywistego typu obiektu.
+
+```java
+class Kalkulator {
+  public int dodaj(int a, int b) { return a + b; }        // overloading 1
+  public double dodaj(double a, double b) { return a + b; } // overloading 2
+}
+class SmartKalkulator extends Kalkulator {
+  @Override public int dodaj(int a, int b) { return Math.addExact(a, b); } // overriding
+}
+```
+
+Diagram:
+```mermaid
+classDiagram
+  class Kalkulator {
+    +int dodaj(int,int)
+    +double dodaj(double,double)
+  }
+  class SmartKalkulator {
+    +int dodaj(int,int)
+  }
+  Kalkulator <|-- SmartKalkulator
+```
+
+#### 8.11. Specjalna klasa `Object`
+Wszystkie klasy w Javie bezpośrednio lub pośrednio dziedziczą po `java.lang.Object`. Dostarcza ona m.in. metody: `toString`, `equals`, `hashCode`, `getClass`, `clone` (chroniona), `finalize` (przestarzała).
+
+```java
+class Punkt { // nie podajemy extends, więc extends Object
+  int x, y;
+  @Override public String toString() { return "("+x+","+y+")"; }
+}
+```
+
+Diagram:
+```mermaid
+classDiagram
+  class Object
+  class Punkt
+  Object <|-- Punkt
+```
+
+#### 8.12. Klasy i metody abstrakcyjne – do czego służą
+Klasa abstrakcyjna może zawierać metody abstrakcyjne (bez implementacji) oraz zwykłe. Nie można tworzyć jej instancji – trzeba ją rozszerzyć.
+
+```java
+abstract class Figura {
+  public abstract double pole();
+  public String opis() { return "Jestem figurą"; }
+}
+class Kolo extends Figura {
+  private final double r;
+  public Kolo(double r) { this.r = r; }
+  @Override public double pole() { return Math.PI * r * r; }
+}
+```
+
+Diagram:
+```mermaid
+classDiagram
+  class Figura {
+    <<abstract>>
+    +double pole()*
+    +String opis()
+  }
+  class Kolo {
+    +Kolo(double)
+    +double pole()
+  }
+  Figura <|-- Kolo
+```
+
+#### 8.13. `final` – właściwości klas i metod
+- `final` klasa: nie można jej rozszerzyć.
+- `final` metoda: nie można jej nadpisać w podklasie.
+- `final` pola: można przypisać tylko raz (stałe lub niemutowalne referencje).
+
+```java
+final class NieDziedziczalna {}
+class Podstawowa {
+  public final void nieNadpisuj() {}
+}
+class Pochodna extends Podstawowa {
+  // @Override void nieNadpisuj() {} // BŁĄD
+}
+```
+
+Diagram:
+```mermaid
+classDiagram
+  class NieDziedziczalna {
+    <<final>>
+  }
+  class Podstawowa {
+    +void nieNadpisuj()
+  }
+  class Pochodna
+  Podstawowa <|-- Pochodna
+```
+
+#### 8.14. Wady i zalety dziedziczenia
+Zalety:
+- Reużywalność kodu i zmniejszenie duplikacji.
+- Polimorfizm i czytelne modelowanie hierarchii „jest‑tym”.
+- Możliwość współdzielenia wspólnych kontraktów i zachowań.
+
+Wady:
+- Zbyt głębokie hierarchie zwiększają złożoność i sprzężenie.
+- Dziedziczenie bywa nadużywane tam, gdzie lepsza jest kompozycja.
+- Zmiany w klasie bazowej mogą mieć nieoczywisty wpływ na wiele podklas.
+
+Wskazówka projektowa: preferuj kompozycję nad dziedziczeniem, jeśli relacja nie jest naturalnym „jest‑tym” (is‑a), lecz raczej „ma‑to” (has‑a).
