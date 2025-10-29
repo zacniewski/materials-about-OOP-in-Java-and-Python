@@ -782,6 +782,133 @@ classDiagram
   Figura <|-- Kolo
 ```
 
+#### 8.12a. Interfejsy w Javie – definicja i zastosowanie
+Interfejs definiuje kontrakt (zestaw metod), który klasy mogą implementować. Słowa kluczowe: `interface` do definiowania interfejsu i `implements` do jego implementacji przez klasę. Klasa może implementować wiele interfejsów (w przeciwieństwie do dziedziczenia klas, które jest pojedyncze).
+
+Przykład – podstawowy interfejs i implementacja:
+
+```java
+interface Drukowalne {
+  String drukuj(); // domyślnie public abstract
+}
+class Raport implements Drukowalne {
+  private final String tytul;
+  public Raport(String tytul) { this.tytul = tytul; }
+  @Override public String drukuj() { return "Raport: " + tytul; }
+  public static void main(String[] args) {
+    Drukowalne d = new Raport("Sprzedaż Q3"); // polimorfizm przez interfejs
+    System.out.println(d.drukuj());
+  }
+}
+```
+
+Diagram UML (Mermaid):
+
+```mermaid
+classDiagram
+  class Drukowalne {
+    <<interface>>
+    +String drukuj()
+  }
+  class Raport {
+    +Raport(String)
+    +String drukuj()
+  }
+  Drukowalne <|.. Raport
+```
+
+Interfejsy a wielokrotna implementacja przez klasę:
+
+```java
+interface Latajace { void lec(); }
+interface Plywajace { void plywaj(); }
+class Kaczka implements Latajace, Plywajace {
+  @Override public void lec() { System.out.println("Kaczka leci"); }
+  @Override public void plywaj() { System.out.println("Kaczka plywa"); }
+}
+```
+
+Diagram:
+```mermaid
+classDiagram
+  class Latajace { <<interface>> +void lec() }
+  class Plywajace { <<interface>> +void plywaj() }
+  class Kaczka { +void lec() +void plywaj() }
+  Latajace <|.. Kaczka
+  Plywajace <|.. Kaczka
+```
+
+Metody `default` i `static` w interfejsach:
+- `default` dostarcza domyślną implementację metody w interfejsie; klasa może ją nadpisać.
+- `static` to metoda statyczna interfejsu, wywoływana przez nazwę interfejsu.
+
+```java
+interface Nazewalne {
+  default String pelnaNazwa(String imie, String nazwisko) {
+    return imie + " " + nazwisko;
+  }
+  static boolean niePuste(String s) { return s != null && !s.isBlank(); }
+}
+class OsobaNazwana implements Nazewalne {
+  @Override public String pelnaNazwa(String imie, String nazwisko) {
+    return (Nazewalne.niePuste(imie) ? imie : "?") + " " + nazwisko;
+  }
+}
+```
+
+Uwaga: przy konflikcie dwóch takich samych metod `default` pochodzących z różnych interfejsów, klasa musi jednoznacznie wskazać implementację lub dostarczyć własną. Można też użyć `NazwaInterfejsu.super.metoda()`:
+
+```java
+interface A { default void f(){ System.out.println("A"); } }
+interface B { default void f(){ System.out.println("B"); } }
+class C implements A, B {
+  @Override public void f() {
+    A.super.f(); // jawny wybór lub własna implementacja
+    B.super.f();
+  }
+}
+```
+
+Stałe w interfejsie:
+- Pola w interfejsie są niejawnie `public static final` (stałe), a metody – `public abstract` (chyba że `default`/`static`).
+
+```java
+interface Statusy {
+  int OK = 200;        // public static final
+  int NOT_FOUND = 404; // public static final
+}
+class HttpDemo implements Statusy {
+  int status = OK; // odwołanie do stałej z interfejsu
+}
+```
+
+Dziedziczenie interfejsów i implementacja przez klasę:
+
+```java
+interface Rysowalne { void rysuj(); }
+interface Skalowalne extends Rysowalne { void skaluj(double factor); }
+class Prostokat implements Skalowalne {
+  @Override public void rysuj() { System.out.println("rysuje prostokat"); }
+  @Override public void skaluj(double f) { System.out.println("skaluje x"+f); }
+}
+```
+
+Diagram:
+```mermaid
+classDiagram
+  class Rysowalne { <<interface>> +void rysuj() }
+  class Skalowalne { <<interface>> +void skaluj(double) }
+  Rysowalne <|-- Skalowalne
+  class Prostokat { +void rysuj() +void skaluj(double) }
+  Skalowalne <|.. Prostokat
+```
+
+Interfejs vs klasa abstrakcyjna – kiedy używać?
+- Użyj interfejsu, gdy chcesz zdefiniować czysty kontrakt zachowań, który może być współdzielony przez klasy z różnych hierarchii (wielokrotna implementacja, brak pól stanu – poza stałymi).
+- Użyj klasy abstrakcyjnej, gdy chcesz współdzielić część implementacji i stanu oraz narzucić wspólną bazę w jednej hierarchii (pojedyncze dziedziczenie klas).
+
+> Praktyka: często łączymy oba podejścia – interfejs definiuje kontrakt (`List`), a abstrakcyjna klasa bazowa dostarcza część domyślnej implementacji (`AbstractList`).
+
 #### 8.13. `final` – właściwości klas i metod
 - `final` klasa: nie można jej rozszerzyć.
 - `final` metoda: nie można jej nadpisać w podklasie.
