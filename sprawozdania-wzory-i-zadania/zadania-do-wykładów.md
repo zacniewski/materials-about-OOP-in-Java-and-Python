@@ -344,3 +344,199 @@ public class PytanieKonstruktor {
   }
 }
 ```
+
+#### Zadanie nr 6 (dziedziczenie i polimorfizm) - proszę przesłać do 14.11.2025 r.
+
+1) Wyjaśnij pojęcia: klasa bazowa (nadrzędna), klasa pochodna (podrzędna), słowo kluczowe `extends`. Podaj własny przykład zdania typu „X jest Y”, które ilustruje relację dziedziczenia.
+
+2) Co zostanie wypisane na ekranie?
+```java
+class Osoba {
+  public String imie;
+  public String nazwisko;
+  public String toString() {
+    return "Osoba " + imie + " " + nazwisko;
+  }
+}
+
+class Pracownik extends Osoba {
+  public int numerId;
+}
+
+public class PytanieDziedziczenie1 {
+  public static void main(String[] args) {
+    Pracownik p = new Pracownik();
+    p.imie = "Anna";
+    p.nazwisko = "Nowak";
+    p.numerId = 42;
+    System.out.println(p);
+  }
+}
+```
+
+3) Czy poniższy kod skompiluje się? Jeśli tak, co wypisze program? Zwróć uwagę na polimorfizm (upcasting).
+```java
+class Osoba {
+  public String imie, nazwisko;
+  public String toString() { return imie + " " + nazwisko; }
+}
+
+class Pracownik extends Osoba { public int nr; }
+
+public class PytaniePolimorfizm1 {
+  static void przywitaj(Osoba o) {
+    System.out.println("Witaj, " + o);
+  }
+  
+  public static void main(String[] args) {
+    Pracownik p = new Pracownik();
+    p.imie = "Jan"; p.nazwisko = "Kowalski"; p.nr = 7;
+    przywitaj(p); // przekazujemy Pracownika tam, gdzie oczekiwana jest Osoba
+  }
+}
+```
+
+4) Nadpisywanie metod a `super`: jaki będzie wynik uruchomienia?
+```java
+class Osoba {
+  public String imie, nazwisko;
+  public String toString() { 
+  return "Osoba(" + imie + " " + nazwisko + ")"; 
+  }
+}
+
+class Pracownik extends Osoba {
+  public int id;
+  public String toString() {
+    return super.toString() + ", id=" + id;
+  }
+}
+
+public class PytanieOverride1 {
+  public static void main(String[] args) {
+    Pracownik p = new Pracownik();
+    p.imie = "Ola"; p.nazwisko = "Lis"; p.id = 101;
+    System.out.println(p);
+  }
+}
+```
+
+5) Kolejność wywołań konstruktorów w dziedziczeniu – co zostanie wypisane?
+```java
+class Baza {
+  Baza() { 
+  System.out.println("konstruktor Baza"); 
+  }
+}
+
+class Pochodna extends Baza {
+  Pochodna() { System.out.println("konstruktor Pochodna"); }
+}
+
+public class PytanieKonstruktory1 {
+  public static void main(String[] args) {
+    new Pochodna();
+  }
+}
+```
+
+6) Czy poniższy kod się skompiluje? Jeśli nie – dlaczego? Jak naprawić?
+```java
+class Baza {
+  private final int x;
+  Baza(int x) { 
+  this.x = x; 
+  }
+}
+
+class Pochodna extends Baza {
+  Pochodna() { /* domyślnie wołane jest super() */ }
+}
+
+public class PytanieKonstruktory2 { 
+  public static void main(String[] args) { 
+    new Pochodna(); } 
+}
+```
+
+7) Dostęp do pól prywatnych a dziedziczenie: jaki będzie wynik kompilacji?
+```java
+class Baza {
+  private int sekretny = 123;
+}
+
+class Pochodna extends Baza {
+  public void pokaz() {
+    // System.out.println(sekretny); // próbujemy odwołać się do pola z Baza
+  }
+}
+public class PytanieDostep1 { 
+public static void main(String[] args) { 
+  new Pochodna().pokaz(); 
+  } 
+}
+```
+Czy odkomentowanie linii spowoduje błąd? Wyjaśnij różnicę między `private`, `protected` i `public` w kontekście dziedziczenia.
+
+8) `final` w dziedziczeniu: oceń poprawność i wyjaśnij.
+```java
+class Baza { 
+  public final void f() {} 
+}
+
+class Pochodna extends Baza {
+  // public void f() {} // próba
+}
+
+final class NieDoDziedziczenia {}
+// class X extends NieDoDziedziczenia {} // próba
+```
+Czy zakomentowane linie można odkomentować, by kod się kompilował? Dlaczego?
+
+9) Klasy i metody abstrakcyjne: co jest nie tak? Jak to naprawić?
+```java
+abstract class Zwierze { 
+  abstract void dajGlos(); 
+}
+
+class Kot extends Zwierze { /* brak dajGlos */ }
+
+public class PytanieAbstrakcja1 {
+  public static void main(String[] args) {
+    // Zwierze z = new Zwierze();
+    Zwierze k = new Kot();
+    // k.dajGlos();
+  }
+}
+```
+Wskaż, które linie powodują błąd kompilacji i dlaczego. Zaproponuj poprawną implementację.
+
+10) Rzutowanie (downcasting) i `instanceof`: co zostanie wypisane, a czy dojdzie do wyjątku?
+```java
+class Osoba { 
+  public String toString(){ 
+    return "Osoba"; 
+  } 
+}
+
+class Pracownik extends Osoba { 
+  public String toString(){ 
+  return "Pracownik"; 
+  } 
+}
+
+public class PytanieRzutowanie1 {
+  public static void main(String[] args) {
+    Osoba a = new Pracownik();
+    System.out.println(a); // A
+    if (a instanceof Pracownik) {
+      Pracownik p = (Pracownik) a;
+      System.out.println(p); // B
+    }
+    Osoba b = new Osoba();
+    Pracownik q = (Pracownik) b; // C
+    System.out.println(q);
+  }
+}
+```
+Oznacz linie A, B, C i opisz: co zostanie wypisane, a gdzie (jeśli w ogóle) wystąpi wyjątek i jaki.
