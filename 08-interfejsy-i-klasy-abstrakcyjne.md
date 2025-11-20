@@ -189,143 +189,196 @@ Dzięki temu `Samochod` może współpracować z dowolną implementacją `Silnik
 
 ---
 
-#### 6. Interfejsy funkcyjne i wyrażenia lambda (Java 8+)
+#### 6. Kompozycja obiektów – teoria, praktyka i porównanie
 
-Interfejs funkcyjny to interfejs z dokładnie jedną metodą abstrakcyjną (SAM – Single Abstract Method). Może mieć dowolną liczbę metod domyślnych i statycznych. Przykłady z JDK: `Runnable`, `Callable<T>`, `Comparator<T>`, a także rodzina `java.util.function`: `Supplier<T>`, `Consumer<T>`, `Function<T,R>`, `Predicate<T>`, `UnaryOperator<T>`, `BinaryOperator<T>`.
+Kompozycja to tworzenie obiektów z innych obiektów poprzez „składanie” ich razem. Zamiast dziedziczyć zachowanie („is-a”), klasa posiada referencje do innych obiektów i deleguje im część pracy („has-a”). Zasada często powtarzana w projektowaniu: „Preferuj kompozycję nad dziedziczeniem”.
 
-Adnotacja `@FunctionalInterface` nie jest wymagana, ale zalecana – kompilator sprawdzi, że interfejs ma dokładnie jedną metodę abstrakcyjną i zasygnalizuje niezamierzone zmiany.
+6.1. Kompozycja vs agregacja vs dziedziczenie
 
-Przykład własnego interfejsu funkcyjnego i użycia lambdy:
+- Kompozycja: silny związek całości i części. Część zwykle nie żyje poza całością, a cykl życia jest współdzielony. W UML oznaczana wypełnionym rombem. Przykład: `Zamówienie` zawiera pozycje `PozycjaZamówienia` – usunięcie zamówienia zwykle usuwa jego pozycje.
+- Agregacja: słabszy związek całości i części. Części mogą istnieć niezależnie. W UML oznaczana pustym rombem. Przykład: `Zespół` agreguje `Pracownik` – pracownik może zmienić zespół lub istnieć poza nim.
+- Dziedziczenie: relacja „jest-typem” („is-a”), silne powiązanie hierarchiczne. Używaj, gdy naturalnie zachodzi relacja specjalizacji, a klasa bazowa zapewnia wspólny szkielet lub kontrakt.
+
+Checklist – kiedy wybrać co?
+
+- Wybierz kompozycję, gdy chcesz zmienialnie konfigurować zachowania w czasie tworzenia/wykonania, uniknąć ciasnego związania hierarchią, ukrywać szczegóły implementacji i promować testowalność przez wstrzykiwanie zależności.
+- Wybierz agregację, gdy całość zarządza zbiorem współdzielonych bytów, które mogą mieć własny cykl życia.
+- Wybierz dziedziczenie, gdy istnieje silna relacja „jest-typem”, a klasa bazowa dostarcza wspólny szkielet (np. Template Method) lub kontrakt plus część implementacji.
+
+6.2. Przykład: `Samochod` kompozytuje `Silnik` (programowanie do interfejsu)
 
 ```java
-@FunctionalInterface
-public interface Transformacja<T> {
-    T zastosuj(T wartosc);
+public interface Silnik {
+    void uruchom();
+    void zatrzymaj();
 }
 
-Transformacja<String> upper = s -> s.toUpperCase();
-System.out.println(upper.zastosuj("java")); // JAVA
-```
-
-6.1. Składnia lambd i inferencja typów
-
-- Ogólny kształt: `(parametry) -> wyrażenie` lub `(parametry) -> { blok; return ...; }`
-- Gdy jest jeden parametr, nawiasy można pominąć: `s -> s.length()`
-- Typy parametrów zwykle są wnioskowane (target typing) na podstawie typu interfejsu funkcyjnego po lewej stronie przypisania.
-- Gdy ciało zwraca pojedyncze wyrażenie, `return` i klamry można pominąć.
-
-```java
-Predicate<String> niepuste = s -> s != null && !s.isBlank();
-Function<String, Integer> dlugosc = s -> s.length();
-BiFunction<String, String, Integer> porownajDlugosc = (a, b) -> Integer.compare(a.length(), b.length());
-```
-
-6.2. Najważniejsze interfejsy z `java.util.function`
-
-- `Supplier<T>` – dostarcza wartość: `Supplier<Double> rnd = Math::random;`
-- `Consumer<T>` – konsumuje wartość: `Consumer<String> log = System.out::println;`
-- `Predicate<T>` – zwraca `boolean`: `Predicate<String> niepuste = s -> !s.isBlank();`
-- `Function<T,R>` – przekształca `T` na `R`: `Function<String,Integer> len = String::length;`
-- `UnaryOperator<T>` – `Function<T,T>`: `UnaryOperator<String> upper = String::toUpperCase;`
-- `BinaryOperator<T>` – łączy dwie wartości `T`: `BinaryOperator<Integer> suma = Integer::sum;`
-
-Przykłady kompozycji:
-
-```java
-Function<String, String> trim = String::trim;
-Function<String, String> upper = String::toUpperCase;
-Function<String, String> trimUpper = trim.andThen(upper);
-System.out.println(trimUpper.apply("  java  ")); // JAVA
-
-Predicate<String> niepuste = s -> s != null && !s.isBlank();
-Predicate<String> maLitereA = s -> s.contains("a");
-Predicate<String> zlozony = niepuste.and(maLitereA).negate();
-```
-
-6.3. Referencje do metod (`::`)
-
-- Do metody instancyjnej konkretnego obiektu: `printer::drukuj`
-- Do metody statycznej: `Math::max`
-- Do metody instancyjnej nieokreślonego obiektu danego typu: `String::toUpperCase`
-- Do konstruktora: `ArrayList::new`
-
-```java
-List<String> names = List.of("Anna", "Ola", "Jan");
-List<String> kopia = names.stream().map(String::toUpperCase).toList();
-Supplier<List<String>> nowaLista = ArrayList::new;
-```
-
-6.4. Zasięg i przechwytywanie zmiennych (capturing)
-
-- Lambda może używać zmiennych z zewnętrznego zakresu, ale muszą być one „efektywnie finalne” (niezmieniane po przypisaniu).
-- W lambdzie `this` odnosi się do instancji klasy otaczającej (nie do obiektu anonimowego, jak w klasach anonimowych).
-
-```java
-int prog = 10; // efektywnie finalny
-Predicate<Integer> wieksze = x -> x > prog; // OK
-// prog++; // spowodowałoby błąd kompilacji
-```
-
-6.5. Comparator i łańcuchy porównań
-
-```java
-List<String> nazwy = new ArrayList<>(List.of("Anna", "Jan", "Ala", "Ola"));
-nazwy.sort(Comparator
-    .comparingInt(String::length)
-    .thenComparing(Comparator.naturalOrder()));
-System.out.println(nazwy); // [Ala, Jan, Ola, Anna]
-```
-
-6.6. Stream API – praktyczne zastosowania lambd
-
-```java
-List<String> wejscie = List.of("  java ", "", "lambda", "  OOP");
-List<String> wynik = wejscie.stream()
-    .map(String::trim)
-    .filter(s -> !s.isEmpty())
-    .map(String::toUpperCase)
-    .sorted()
-    .toList();
-System.out.println(wynik); // [JAVA, LAMBDA, OOP]
-
-int sumaDlugosci = wejscie.stream()
-    .map(String::trim)
-    .mapToInt(String::length)
-    .sum();
-```
-
-6.7. Wyjątki w lambdach (checked exceptions)
-
-- Interfejsy z `java.util.function` nie deklarują wyjątków sprawdzanych (checked), więc trzeba je obsłużyć wewnątrz lambdy lub owinąć w wyjątek niekontrolowany.
-- Alternatywnie, zdefiniuj własny interfejs funkcyjny z deklaracją `throws`.
-
-```java
-@FunctionalInterface
-interface ThrowingFunction<T,R> {
-    R apply(T t) throws Exception;
+public class SilnikSpalinowy implements Silnik {
+    public void uruchom() { System.out.println("Vroom!"); }
+    public void zatrzymaj() { System.out.println("Stop"); }
 }
 
-static <T,R> Function<T,R> wrap(ThrowingFunction<T,R> f) {
-    return t -> {
-        try { return f.apply(t); }
-        catch (Exception e) { throw new RuntimeException(e); }
-    };
+public class SilnikElektryczny implements Silnik {
+    public void uruchom() { System.out.println("Bzzzt!"); }
+    public void zatrzymaj() { System.out.println("Cisza"); }
 }
 
-List<String> lines = List.of("a.txt", "b.txt");
-List<String> contents = lines.stream()
-    .map(wrap(path -> java.nio.file.Files.readString(java.nio.file.Path.of(path))))
-    .toList();
+public class Samochod {
+    private Silnik silnik; // kompozycja: Samochod "ma" Silnik
+
+    public Samochod(Silnik silnik) {
+        this.silnik = silnik; // wstrzyknięcie zależności
+    }
+
+    public void ustawSilnik(Silnik nowy) { // możliwość wymiany części
+        this.silnik = nowy;
+    }
+
+    public void jedz() {
+        silnik.uruchom();
+        System.out.println("Jadę...");
+    }
+}
+
+// Użycie:
+Samochod s = new Samochod(new SilnikSpalinowy());
+s.jedz();
+s.ustawSilnik(new SilnikElektryczny()); // wymiana silnika bez zmiany klasy Samochod
+s.jedz();
 ```
 
-6.8. Wydajność i dobre praktyki
+6.3. Dekorator przez kompozycję (dodawanie zachowania bez dziedziczenia)
 
-- Unikaj zbędnego autoboxingu w strumieniach – rozważ prymitywne strumienie (`IntStream`, `LongStream`, `DoubleStream`).
-- Preferuj małe, czyste lambdy bez efektów ubocznych; gdy logika rośnie, wyodrębnij nazwane metody.
-- Nie nadużywaj lambd w miejscach, gdzie prosta pętla jest czytelniejsza.
-- Dbaj o niezmienność danych wejściowych w operacjach równoległych (`parallel()`), aby uniknąć warunków wyścigu.
+```java
+public interface Notifier {
+    void notify(String message);
+}
+
+public class EmailNotifier implements Notifier {
+    public void notify(String message) {
+        System.out.println("Email: " + message);
+    }
+}
+
+// Dekorator: opakowuje inny Notifier i dodaje funkcjonalność
+public class SmsDecorator implements Notifier {
+    private final Notifier delegate;
+
+    public SmsDecorator(Notifier delegate) {
+        this.delegate = delegate;
+    }
+
+    public void notify(String message) {
+        delegate.notify(message); // delegacja do oryginalnego zachowania
+        System.out.println("SMS: " + message); // rozszerzenie przez kompozycję
+    }
+}
+
+Notifier n = new SmsDecorator(new EmailNotifier());
+n.notify("Twoje zamówienie zostało wysłane");
+```
+
+6.4. Kompozycja obiektów wartościowych (Value Object) i kopie defensywne
+
+```java
+public final class Adres {
+    private final String ulica;
+    private final String miasto;
+    public Adres(String ulica, String miasto) {
+        this.ulica = ulica; this.miasto = miasto;
+    }
+    public String ulica() { return ulica; }
+    public String miasto() { return miasto; }
+}
+
+public class Klient {
+    private Adres adres;
+
+    public Klient(Adres adres) {
+        // Adres jest niemutowalny, więc bezpiecznie przechwycić referencję
+        this.adres = adres;
+    }
+
+    public Adres adres() { return adres; }
+
+    public void zmienAdres(Adres nowy) {
+        this.adres = nowy;
+    }
+}
+```
+
+Jeśli część jest mutowalna i ujawniasz ją na zewnątrz, rozważ zwracanie kopii defensywnej, aby nie naruszyć enkapsulacji.
+
+6.5. Kompozycja polityk – strategia podatku i rabatu
+
+```java
+public interface DiscountPolicy { double apply(double amount); }
+public interface TaxPolicy { double apply(double amount); }
+
+public class NoDiscount implements DiscountPolicy { public double apply(double a) { return a; } }
+public class TenPercent implements DiscountPolicy { public double apply(double a) { return a * 0.9; } }
+public class Vat23 implements TaxPolicy { public double apply(double a) { return a * 1.23; } }
+
+public class OrderService {
+    private final DiscountPolicy discount;
+    private final TaxPolicy tax;
+
+    public OrderService(DiscountPolicy discount, TaxPolicy tax) {
+        this.discount = discount;
+        this.tax = tax;
+    }
+
+    public double finalize(double net) {
+        double afterDiscount = discount.apply(net);
+        return tax.apply(afterDiscount);
+    }
+}
+
+OrderService os = new OrderService(new TenPercent(), new Vat23());
+double total = os.finalize(100.0); // 100 -> 90 -> 110.7
+```
+
+6.6. Diagramy UML (Mermaid)
+
+Kompozycja (`*--`) i agregacja (`o--`):
+
+```mermaid
+classDiagram
+    class Samochod { -silnik : Silnik }
+    class Silnik { <<interface>> }
+    class SilnikSpalinowy
+    class Zespol
+    class Pracownik
+
+    Samochod *-- Silnik
+    Silnik <|.. SilnikSpalinowy
+    Zespol o-- Pracownik
+```
+
+Dekorator przez kompozycję:
+
+```mermaid
+classDiagram
+    class Notifier { <<interface>> +notify(msg) }
+    class EmailNotifier { +notify(msg) }
+    class SmsDecorator { -delegate : Notifier +notify(msg) }
+
+    Notifier <|.. EmailNotifier
+    Notifier <|.. SmsDecorator
+    SmsDecorator --> Notifier : deleguje
+```
+
+6.7. Dobre praktyki i pułapki kompozycji
+
+- Nie wyciekaj wewnętrznych, mutowalnych części – stosuj enkapsulację i kopie defensywne.
+- Uważaj na płytkie vs głębokie kopiowanie obiektów złożonych; określ semantykę `equals`/`hashCode` uwzględniając części.
+- Unikaj cykli zależności (A ma B, B ma A) bez jasnych reguł własności – może to utrudnić sprzątanie zasobów i testy.
+- Dokumentuj kontrakt własności i cyklu życia części (kto tworzy, kto niszczy, kto może wymienić części).
+- Kompozycja ułatwia testy: w testach podstawiaj „duble” (moki/stuby) zamiast realnych części.
 
 ---
+
+<!-- Sekcja o lambdach przeniesiona do pliku 09-lambda.md -->
 
 #### 7. Wielodziedziczenie zachowania przez `default` – konflikt metod
 
@@ -514,114 +567,24 @@ public class KontoOszczednosciowe extends KontoBankowe {
 }
 ```
 
-Interfejs funkcyjny i użycie z `Comparator`:
-
-```java
-List<String> nazwy = List.of("Anna", "Jan", "Ola");
-List<String> posortowane = new ArrayList<>(nazwy);
-posortowane.sort((a, b) -> Integer.compare(a.length(), b.length()));
-System.out.println(posortowane); // [Jan, Ola, Anna]
-```
+<!-- Przykład lambdy przeniesiony do 09-lambda.md -->
 
 ---
 
-#### 12. Zadania – od podstaw do zaawansowanych
+#### 12. Zadania
 
-Poniżej zestaw zadań do samodzielnego wykonania. Dołączono podpowiedzi i diagramy, aby ułatwić start. Rozwiązania możesz umieścić w dowolnym katalogu roboczym projektu.
+Zestaw zadań został przeniesiony i zaktualizowany w pliku laboratorium:
 
-Zadanie 1 (podstawowe): Drukowalne
-
-- Stwórz interfejs `Drukowalne` z metodą `void drukuj()`.
-- Zaimplementuj w klasach `Raport` i `Faktura` (przykładowe pola: `tresc`, `kwota`).
-- Stwórz metodę, która przyjmuje listę `Drukowalne` i wywołuje `drukuj()` na każdym.
-
-Diagram (Mermaid):
-
-```mermaid
-classDiagram
-    class Drukowalne { <<interface>> +drukuj() }
-    class Raport { +drukuj() -tresc : String }
-    class Faktura { +drukuj() -kwota : double }
-    Drukowalne <|.. Raport
-    Drukowalne <|.. Faktura
-```
-
-Zadanie 2 (podstawowe): Eksportowalne z `default`
-
-- Dodaj interfejs `Eksportowalne` z metodą `String eksportuj()` i domyślną `default void zapiszDo(String sciezka)` wypisującą treść na ekran z prefiksem ścieżki.
-- Zaimplementuj `Eksportowalne` w `Raport` i `Faktura`.
-
-Zadanie 3 (średnie): Figura – klasa abstrakcyjna
-
-- Utwórz abstrakcyjną klasę `Figura` z metodą abstrakcyjną `double pole()` i opcjonalnie `double obwod()`.
-- Zaimplementuj `Kolo`, `Prostokat` i `TrojkatRownoboczny`.
-- Napisz metodę, która przyjmuje listę figur i zwraca sumę pól.
-
-Diagram (Mermaid):
-
-```mermaid
-classDiagram
-    class Figura { <<abstract>> +pole() double }
-    class Kolo { -r: double +pole() double }
-    class Prostokat { -a: double -b: double +pole() double }
-    class TrojkatRownoboczny { -a: double +pole() double }
-    Figura <|-- Kolo
-    Figura <|-- Prostokat
-    Figura <|-- TrojkatRownoboczny
-```
-
-Zadanie 4 (średnie): Strategia płatności
-
-- Zaprojektuj interfejs `Platnosc` z metodą `boolean zaplac(double kwota)`.
-- Zaimplementuj `KartaKredytowa`, `BLIK`, `Przelew` jako strategie.
-- Klasa `Sklep` powinna przyjmować `Platnosc` w konstruktorze i wywoływać `zaplac` podczas zakupów.
-
-Zadanie 5 (średnio-zaawansowane): Szablon raportu
-
-- Zaimplementuj klasę abstrakcyjną `RaportGenerator` z metodą szablonową `final void generuj()` i abstrakcjami `przygotujDane`, `zbudujTresc`.
-- Dodaj dwie implementacje: `RaportCSV` i `RaportJSON`.
-
-Zadanie 6 (zaawansowane): Konflikt `default`
-
-- Utwórz interfejsy `A` i `B` z metodą `default void m()`. Klasa `C` ma implementować oba, rozwiązać konflikt oraz dodać własne zachowanie.
-
-Zadanie 7 (zaawansowane): Interfejs funkcyjny i lambda
-
-- Zdefiniuj `@FunctionalInterface` o nazwie `Walidator<T>` z metodą `boolean test(T t)`.
-- Napisz funkcję, która filtruje listę elementów na podstawie `Walidator<T>`, użyj lambd i metod referencyjnych.
-
-Zadanie 8 (zaawansowane): Hybryda – abstrakcja + interfejs
-
-- Zbuduj abstrakcyjną klasę `Pojazd` z częściową implementacją (`jedz`, `zatrzymaj`).
-- Zdefiniuj interfejs `Zasilany`, który opisuje dostarczanie energii (`tankuj()` / `laduj()`).
-- Zaimplementuj `SamochodSpalinowy` oraz `SamochodElektryczny`, które dziedziczą po `Pojazd` i implementują `Zasilany`.
-
-Zadanie 9 (lambda): `java.util.function` w praktyce
-
-- Napisz funkcję `przetworz(List<T> in, Function<T,R> f) -> List<R>`, a następnie użyj jej do: przycięcia białych znaków w liście `String`, podniesienia do kwadratu elementów `Integer`, oraz zmapowania osób na ich nazwiska.
-- Dodaj funkcję `filtruj(List<T> in, Predicate<T> p) -> List<T>` i przetestuj kombinacje predykatów (`and`, `or`, `negate`).
-
-Zadanie 10 (lambda): Method references i konstruktor
-
-- Użyj referencji do metody do przekształcenia `List<String>` na `List<Integer>` z długościami (`String::length`).
-- Użyj referencji do konstruktora, aby przekształcić `Stream<String>` w `List<StringBuilder>` (`StringBuilder::new`), a następnie dodaj sufiks wszystkim elementom, wykorzystując `map` i `forEach` z `Consumer`.
-
-Zadanie 11 (lambda): Obsługa wyjątków w lambdach
-
-- Zaimplementuj interfejs funkcyjny `ThrowingFunction<T,R>` deklarujący `throws Exception` oraz pomocniczą metodę `wrap`, która zamienia go na zwykły `Function<T,R>` owijający wyjątki w `RuntimeException`.
-- Wykorzystaj to do wczytania treści wielu plików zwracanych z `List<Path>` i zmapowania na ich długości.
-
----
+- laboratoria/lab6/lab6-interfejsy-i-klasy-abstrakcyjne-grupa1.md
 
 #### 13. Mini‑quiz (sprawdź się)
 
 1) Czy interfejs może mieć pola inne niż stałe? Dlaczego?  
 2) Czy klasa może dziedziczyć po dwóch klasach jednocześnie?  
 3) Jak rozwiążesz konflikt metody `default` o tej samej sygnaturze z dwóch interfejsów?  
-4) Czym różni się interfejs funkcyjny od „zwykłego” interfejsu?  
-5) Kiedy preferować klasę abstrakcyjną nad interfejsem?
+4) Kiedy preferować klasę abstrakcyjną nad interfejsem?
 
-Odpowiedzi (skrótowo): 1) Nie – pola w interfejsie są `public static final`. 2) Nie – Java ma pojedyncze dziedziczenie klas. 3) Nadpisując metodę w klasie i wybierając `A.super.m()` lub `B.super.m()` (lub własna implementacja). 4) Ma dokładnie jedną metodę abstrakcyjną i wspiera lambdy. 5) Gdy potrzebny jest wspólny stan/częściowa implementacja i silniejszy związek w hierarchii.
+Odpowiedzi (skrótowo): 1) Nie – pola w interfejsie są `public static final`. 2) Nie – Java ma pojedyncze dziedziczenie klas. 3) Nadpisując metodę w klasie i wybierając `A.super.m()` lub `B.super.m()` (lub własna implementacja). 4) Gdy potrzebny jest wspólny stan/częściowa implementacja i silniejszy związek w hierarchii.
 
 ---
 
