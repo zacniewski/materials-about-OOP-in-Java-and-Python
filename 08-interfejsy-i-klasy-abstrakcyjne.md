@@ -571,13 +571,7 @@ public class KontoOszczednosciowe extends KontoBankowe {
 
 ---
 
-#### 12. Zadania
-
-Zestaw zadań został przeniesiony i zaktualizowany w pliku laboratorium:
-
-- laboratoria/lab6/lab6-interfejsy-i-klasy-abstrakcyjne-grupa1.md
-
-#### 13. Mini‑quiz (sprawdź się)
+#### 12. Mini‑quiz (sprawdź się)
 
 1) Czy interfejs może mieć pola inne niż stałe? Dlaczego?  
 2) Czy klasa może dziedziczyć po dwóch klasach jednocześnie?  
@@ -588,6 +582,6 @@ Odpowiedzi (skrótowo): 1) Nie – pola w interfejsie są `public static final`.
 
 ---
 
-#### 14. Podsumowanie
+#### 13. Podsumowanie
 
 Interfejsy definiują kontrakty i ułatwiają luźne powiązanie komponentów, klasy abstrakcyjne dostarczają wspólny kod i stan. Świadome łączenie obu mechanizmów prowadzi do elastycznych, testowalnych i czytelnych projektów. Programuj „do interfejsu”, stosuj kompozycję, a abstrakcję wybieraj tam, gdzie naturalnie występuje wspólny szkielet zachowania.
