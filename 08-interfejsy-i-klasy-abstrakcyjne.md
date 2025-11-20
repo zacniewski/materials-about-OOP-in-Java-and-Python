@@ -4,6 +4,10 @@
 
 #### 1. Wprowadzenie i motywacja
 
+Zanim użyjemy słowa „kontrakt”, zdefiniujmy je precyzyjnie:
+
+- Kontrakt (umowa programistyczna) to jasno określony zestaw wymagań dotyczących zachowania obiektu: sygnatur metod, ich znaczenia i oczekiwanych efektów (pre‑ i post‑warunków), a także ewentualnych wyjątków i gwarancji. Kod, który „spełnia kontrakt”, dostarcza metody o ustalonych nazwach i parametrach oraz zachowuje się zgodnie z tym opisem.
+
 W programowaniu obiektowym często chcemy:
 
 - Zdefiniować wspólny kontrakt dla różnych klas, bez narzucania szczegółów implementacyjnych.
@@ -187,7 +191,11 @@ Dzięki temu `Samochod` może współpracować z dowolną implementacją `Silnik
 
 #### 6. Interfejsy funkcyjne i wyrażenia lambda (Java 8+)
 
-Interfejs funkcyjny to interfejs z dokładnie jedną metodą abstrakcyjną (SAM – Single Abstract Method). Może mieć dowolną liczbę metod domyślnych i statycznych. Przykłady z JDK: `Runnable`, `Callable<T>`, `Comparator<T>`, `Function<T,R>`.
+Interfejs funkcyjny to interfejs z dokładnie jedną metodą abstrakcyjną (SAM – Single Abstract Method). Może mieć dowolną liczbę metod domyślnych i statycznych. Przykłady z JDK: `Runnable`, `Callable<T>`, `Comparator<T>`, a także rodzina `java.util.function`: `Supplier<T>`, `Consumer<T>`, `Function<T,R>`, `Predicate<T>`, `UnaryOperator<T>`, `BinaryOperator<T>`.
+
+Adnotacja `@FunctionalInterface` nie jest wymagana, ale zalecana – kompilator sprawdzi, że interfejs ma dokładnie jedną metodę abstrakcyjną i zasygnalizuje niezamierzone zmiany.
+
+Przykład własnego interfejsu funkcyjnego i użycia lambdy:
 
 ```java
 @FunctionalInterface
@@ -195,12 +203,127 @@ public interface Transformacja<T> {
     T zastosuj(T wartosc);
 }
 
-// użycie lambdy
 Transformacja<String> upper = s -> s.toUpperCase();
 System.out.println(upper.zastosuj("java")); // JAVA
 ```
 
-Adnotacja `@FunctionalInterface` nie jest wymagana, ale pomaga kompilatorowi i ludziom – pilnuje, że interfejs zachowuje właściwości interfejsu funkcyjnego.
+6.1. Składnia lambd i inferencja typów
+
+- Ogólny kształt: `(parametry) -> wyrażenie` lub `(parametry) -> { blok; return ...; }`
+- Gdy jest jeden parametr, nawiasy można pominąć: `s -> s.length()`
+- Typy parametrów zwykle są wnioskowane (target typing) na podstawie typu interfejsu funkcyjnego po lewej stronie przypisania.
+- Gdy ciało zwraca pojedyncze wyrażenie, `return` i klamry można pominąć.
+
+```java
+Predicate<String> niepuste = s -> s != null && !s.isBlank();
+Function<String, Integer> dlugosc = s -> s.length();
+BiFunction<String, String, Integer> porownajDlugosc = (a, b) -> Integer.compare(a.length(), b.length());
+```
+
+6.2. Najważniejsze interfejsy z `java.util.function`
+
+- `Supplier<T>` – dostarcza wartość: `Supplier<Double> rnd = Math::random;`
+- `Consumer<T>` – konsumuje wartość: `Consumer<String> log = System.out::println;`
+- `Predicate<T>` – zwraca `boolean`: `Predicate<String> niepuste = s -> !s.isBlank();`
+- `Function<T,R>` – przekształca `T` na `R`: `Function<String,Integer> len = String::length;`
+- `UnaryOperator<T>` – `Function<T,T>`: `UnaryOperator<String> upper = String::toUpperCase;`
+- `BinaryOperator<T>` – łączy dwie wartości `T`: `BinaryOperator<Integer> suma = Integer::sum;`
+
+Przykłady kompozycji:
+
+```java
+Function<String, String> trim = String::trim;
+Function<String, String> upper = String::toUpperCase;
+Function<String, String> trimUpper = trim.andThen(upper);
+System.out.println(trimUpper.apply("  java  ")); // JAVA
+
+Predicate<String> niepuste = s -> s != null && !s.isBlank();
+Predicate<String> maLitereA = s -> s.contains("a");
+Predicate<String> zlozony = niepuste.and(maLitereA).negate();
+```
+
+6.3. Referencje do metod (`::`)
+
+- Do metody instancyjnej konkretnego obiektu: `printer::drukuj`
+- Do metody statycznej: `Math::max`
+- Do metody instancyjnej nieokreślonego obiektu danego typu: `String::toUpperCase`
+- Do konstruktora: `ArrayList::new`
+
+```java
+List<String> names = List.of("Anna", "Ola", "Jan");
+List<String> kopia = names.stream().map(String::toUpperCase).toList();
+Supplier<List<String>> nowaLista = ArrayList::new;
+```
+
+6.4. Zasięg i przechwytywanie zmiennych (capturing)
+
+- Lambda może używać zmiennych z zewnętrznego zakresu, ale muszą być one „efektywnie finalne” (niezmieniane po przypisaniu).
+- W lambdzie `this` odnosi się do instancji klasy otaczającej (nie do obiektu anonimowego, jak w klasach anonimowych).
+
+```java
+int prog = 10; // efektywnie finalny
+Predicate<Integer> wieksze = x -> x > prog; // OK
+// prog++; // spowodowałoby błąd kompilacji
+```
+
+6.5. Comparator i łańcuchy porównań
+
+```java
+List<String> nazwy = new ArrayList<>(List.of("Anna", "Jan", "Ala", "Ola"));
+nazwy.sort(Comparator
+    .comparingInt(String::length)
+    .thenComparing(Comparator.naturalOrder()));
+System.out.println(nazwy); // [Ala, Jan, Ola, Anna]
+```
+
+6.6. Stream API – praktyczne zastosowania lambd
+
+```java
+List<String> wejscie = List.of("  java ", "", "lambda", "  OOP");
+List<String> wynik = wejscie.stream()
+    .map(String::trim)
+    .filter(s -> !s.isEmpty())
+    .map(String::toUpperCase)
+    .sorted()
+    .toList();
+System.out.println(wynik); // [JAVA, LAMBDA, OOP]
+
+int sumaDlugosci = wejscie.stream()
+    .map(String::trim)
+    .mapToInt(String::length)
+    .sum();
+```
+
+6.7. Wyjątki w lambdach (checked exceptions)
+
+- Interfejsy z `java.util.function` nie deklarują wyjątków sprawdzanych (checked), więc trzeba je obsłużyć wewnątrz lambdy lub owinąć w wyjątek niekontrolowany.
+- Alternatywnie, zdefiniuj własny interfejs funkcyjny z deklaracją `throws`.
+
+```java
+@FunctionalInterface
+interface ThrowingFunction<T,R> {
+    R apply(T t) throws Exception;
+}
+
+static <T,R> Function<T,R> wrap(ThrowingFunction<T,R> f) {
+    return t -> {
+        try { return f.apply(t); }
+        catch (Exception e) { throw new RuntimeException(e); }
+    };
+}
+
+List<String> lines = List.of("a.txt", "b.txt");
+List<String> contents = lines.stream()
+    .map(wrap(path -> java.nio.file.Files.readString(java.nio.file.Path.of(path))))
+    .toList();
+```
+
+6.8. Wydajność i dobre praktyki
+
+- Unikaj zbędnego autoboxingu w strumieniach – rozważ prymitywne strumienie (`IntStream`, `LongStream`, `DoubleStream`).
+- Preferuj małe, czyste lambdy bez efektów ubocznych; gdy logika rośnie, wyodrębnij nazwane metody.
+- Nie nadużywaj lambd w miejscach, gdzie prosta pętla jest czytelniejsza.
+- Dbaj o niezmienność danych wejściowych w operacjach równoległych (`parallel()`), aby uniknąć warunków wyścigu.
 
 ---
 
@@ -404,7 +527,7 @@ System.out.println(posortowane); // [Jan, Ola, Anna]
 
 #### 12. Zadania – od podstaw do zaawansowanych
 
-Poniżej zestaw zadań do samodzielnego wykonania. Dołączono podpowiedzi i diagramy, aby ułatwić start. Rozwiązania możesz umieścić w katalogu `laboratoria/lab6/` lub innym roboczym.
+Poniżej zestaw zadań do samodzielnego wykonania. Dołączono podpowiedzi i diagramy, aby ułatwić start. Rozwiązania możesz umieścić w dowolnym katalogu roboczym projektu.
 
 Zadanie 1 (podstawowe): Drukowalne
 
@@ -473,6 +596,21 @@ Zadanie 8 (zaawansowane): Hybryda – abstrakcja + interfejs
 - Zdefiniuj interfejs `Zasilany`, który opisuje dostarczanie energii (`tankuj()` / `laduj()`).
 - Zaimplementuj `SamochodSpalinowy` oraz `SamochodElektryczny`, które dziedziczą po `Pojazd` i implementują `Zasilany`.
 
+Zadanie 9 (lambda): `java.util.function` w praktyce
+
+- Napisz funkcję `przetworz(List<T> in, Function<T,R> f) -> List<R>`, a następnie użyj jej do: przycięcia białych znaków w liście `String`, podniesienia do kwadratu elementów `Integer`, oraz zmapowania osób na ich nazwiska.
+- Dodaj funkcję `filtruj(List<T> in, Predicate<T> p) -> List<T>` i przetestuj kombinacje predykatów (`and`, `or`, `negate`).
+
+Zadanie 10 (lambda): Method references i konstruktor
+
+- Użyj referencji do metody do przekształcenia `List<String>` na `List<Integer>` z długościami (`String::length`).
+- Użyj referencji do konstruktora, aby przekształcić `Stream<String>` w `List<StringBuilder>` (`StringBuilder::new`), a następnie dodaj sufiks wszystkim elementom, wykorzystując `map` i `forEach` z `Consumer`.
+
+Zadanie 11 (lambda): Obsługa wyjątków w lambdach
+
+- Zaimplementuj interfejs funkcyjny `ThrowingFunction<T,R>` deklarujący `throws Exception` oraz pomocniczą metodę `wrap`, która zamienia go na zwykły `Function<T,R>` owijający wyjątki w `RuntimeException`.
+- Wykorzystaj to do wczytania treści wielu plików zwracanych z `List<Path>` i zmapowania na ich długości.
+
 ---
 
 #### 13. Mini‑quiz (sprawdź się)
@@ -487,17 +625,6 @@ Odpowiedzi (skrótowo): 1) Nie – pola w interfejsie są `public static final`.
 
 ---
 
-#### 14. Odniesienia do przykładowych plików w repozytorium
-
-Zobacz także istniejące przykłady w katalogu `laboratoria/lab5/solutions/`:
-
-- `Zad9_InterfacesDemo.java`, `Zad9_Drukowalne.java`, `Zad9_Eksportowalne.java` – proste interfejsy i ich użycie.
-- `Zad6_Zwierze.java`, `Zad6_Pies.java`, `Zad6_Kot.java`, `Zad6_AbstractAndFinal.java` – przykłady z klasami abstrakcyjnymi i `final`.
-
-Te przykłady są dobrym punktem odniesienia oraz bazą do eksperymentów.
-
----
-
-#### 15. Podsumowanie
+#### 14. Podsumowanie
 
 Interfejsy definiują kontrakty i ułatwiają luźne powiązanie komponentów, klasy abstrakcyjne dostarczają wspólny kod i stan. Świadome łączenie obu mechanizmów prowadzi do elastycznych, testowalnych i czytelnych projektów. Programuj „do interfejsu”, stosuj kompozycję, a abstrakcję wybieraj tam, gdzie naturalnie występuje wspólny szkielet zachowania.
