@@ -539,4 +539,62 @@ public class PytanieRzutowanie1 {
   }
 }
 ```
-Oznacz linie A, B, C i opisz: co zostanie wypisane, a gdzie (jeśli w ogóle) wystąpi wyjątek i jaki.
+Oznacz linie A, B, C i opisz: co zostanie wypisane, a gdzie (jeśli w ogóle) wystąpi wyjątek i jaki.  
+
+#### Zadanie nr 7 (interfejsy i klasy abstrakcyjne) - proszę przesłać do 30.11.2025 r.
+
+
+Pytania sprawdzające (odnieś się do materiału „08-interfejsy-i-klasy-abstrakcyjne.md”):
+
+1) Kiedy użyć interfejsu, a kiedy klasy abstrakcyjnej? Podaj po 2–3 typowe przypadki i krótkie uzasadnienie. Wymień co najmniej dwie różnice semantyczne i dwie różnice techniczne między `interface` i `abstract class`.
+
+2) Jakie są domyślne modyfikatory dla pól i metod w interfejsie? Dokończ zdania i wyjaśnij konsekwencje:
+- „Pola w interfejsie są domyślnie … … … i …”
+- „Metody bez ciała w interfejsie są domyślnie … …”
+- „Czy w interfejsie można mieć metody z ciałem? Jeśli tak, to jakie (wymień rodzaje i od której wersji Javy)?”
+
+3) Metody `default`, `static` i `private` w interfejsach:
+- Jaka jest różnica między `default` a `static` w interfejsie?
+- Po co wprowadzono prywatne metody w interfejsach (Java 9)? Podaj przykład sytuacji, w której są pomocne.
+
+4) Konflikt metod domyślnych w wielu interfejsach – jak rozwiązać? Rozważ kod:
+```java
+interface A { default void f() { System.out.println("A.f"); } }
+interface B { default void f() { System.out.println("B.f"); } }
+
+class C implements A, B {
+  // TODO: napraw kompilację i zdecyduj, którą wersję f() wywołać.
+}
+```
+Wyjaśnij, dlaczego kompilator zgłasza konflikt i pokaż poprawną implementację klasy `C`.
+
+5) Czy można tworzyć instancje klas abstrakcyjnych? Jak mimo to można używać typu abstrakcyjnego w kodzie klienta? Podaj przykład.
+
+6) Czy klasa może dziedziczyć po wielu klasach w Javie? A czy może implementować wiele interfejsów? Wyjaśnij pojęcie „wielodziedziczenia typu” na przykładzie.
+
+7) Słowo kluczowe `final` a abstrakcja i interfejsy: czy `final` ma sens na metodach interfejsu? Co oznacza `final` na klasie abstrakcyjnej i dlaczego to rzadkie połączenie? Podaj krótkie uzasadnienie.
+
+8) Słowa kluczowe `abstract` i `private`: czy metoda może być jednocześnie `abstract` i `private`? Uzasadnij odpowiedź. A co z `abstract` i `static`?
+
+
+Zadania programistyczne (wykonaj w Javie, dołącz kod i krótkie wyjaśnienia):
+
+1) Interfejsy „czynności” – drukowanie i eksport
+- Zdefiniuj interfejs `Drukowalne` z metodą `void drukuj()`.
+- Zdefiniuj interfejs `Eksportowalne` z metodą `String eksportuj()` oraz metodą domyślną `default void zapiszDoPliku(String sciezka)`, która wypisze na konsolę symulację zapisu: `Zapis do pliku <sciezka>: <dane>`.
+- Zdefiniuj interfejs `Raportowalne` rozszerzający oba powyższe.
+- Zaimplementuj klasy `Raport` i `Faktura`, które spełniają `Raportowalne`. Pokaż w `main`, że można te obiekty traktować polimorficznie jako `Raportowalne` i wywołać `drukuj()` oraz `zapiszDoPliku()`.
+
+2) Abstrakcyjna hierarchia „Figura” + interfejs „Skalowalne”
+- Utwórz klasę abstrakcyjną `Figura` z polem `nazwa`, metodą abstrakcyjną `double pole()` i nieabstrakcyjną `String opis()` zwracającą np. `Figura(nazwa=...)`.
+- Zaimplementuj klasy `Kolo(r)` i `Prostokat(a,b)`.
+- Zdefiniuj interfejs `Skalowalne` z metodą `void skaluj(double k)`. Niech `Kolo` i `Prostokat` implementują ten interfejs (skalowanie zmienia odpowiednio promień lub boki).
+- W `main` utwórz listę `Figura` z różnymi figurami, wypisz pola przed i po skalowaniu (polimorfizm + interfejs).
+
+3) Konflikt metod domyślnych – rozwiąż świadomie
+- Zdefiniuj `interface Loggable { default void log(String msg){ System.out.println("[LOG] "+msg); } }`
+- Zdefiniuj `interface Auditable { default void log(String msg){ System.out.println("[AUDIT] "+msg); } }`
+- Zaimplementuj klasę `AkcjaSystemowa` implementującą oba interfejsy. Rozwiąż konflikt nadpisując `log` i wybierając jawnie, którą domyślną implementację użyć (lub połącz obie). Pokaż działanie.
+
+
+

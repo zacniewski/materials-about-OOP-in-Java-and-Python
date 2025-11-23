@@ -585,3 +585,200 @@ Odpowiedzi (skrótowo): 1) Nie – pola w interfejsie są `public static final`.
 #### 13. Podsumowanie
 
 Interfejsy definiują kontrakty i ułatwiają luźne powiązanie komponentów, klasy abstrakcyjne dostarczają wspólny kod i stan. Świadome łączenie obu mechanizmów prowadzi do elastycznych, testowalnych i czytelnych projektów. Programuj „do interfejsu”, stosuj kompozycję, a abstrakcję wybieraj tam, gdzie naturalnie występuje wspólny szkielet zachowania.
+
+---
+
+#### 14. Porównawcze przykłady: to samo zadanie rozwiązane interfejsem i klasą abstrakcyjną (plusy/minusy)
+
+Poniżej kilka krótkich, praktycznych par przykładów. Każda para pokazuje dwa podejścia do tego samego problemu: najpierw interfejs (luźny kontrakt), a potem klasa abstrakcyjna (kontrakt + częściowa implementacja i/lub stan). Pod każdą parą znajdują się plusy i minusy obu opcji.
+
+14.1. Przetwarzanie płatności (PaymentProcessor)
+
+Wariant A – interfejs (maksimum elastyczności):
+
+```java
+public interface PaymentProcessor {
+    PaymentResult charge(String customerId, double amount);
+}
+
+public final class StripeProcessor implements PaymentProcessor {
+    public PaymentResult charge(String customerId, double amount) {
+        // wywołanie zewnętrznego API Stripe
+        return PaymentResult.success("stripe-tx-123");
+    }
+}
+
+public final class PayPalProcessor implements PaymentProcessor {
+    public PaymentResult charge(String customerId, double amount) {
+        // wywołanie zewnętrznego API PayPal
+        return PaymentResult.success("paypal-tx-987");
+    }
+}
+
+public record PaymentResult(boolean ok, String transactionId, String error) {
+    public static PaymentResult success(String tx) { return new PaymentResult(true, tx, null); }
+    public static PaymentResult failure(String err) { return new PaymentResult(false, null, err); }
+}
+```
+
+Wariant B – klasa abstrakcyjna (wspólne logowanie, walidacja i retry):
+
+```java
+public abstract class AbstractPaymentProcessor {
+    public final PaymentResult charge(String customerId, double amount) {
+        validate(customerId, amount);
+        try {
+            PaymentResult res = doCharge(customerId, amount);
+            log("OK: " + res.transactionId());
+            return res;
+        } catch (RuntimeException ex) {
+            log("ERROR: " + ex.getMessage());
+            if (shouldRetry(ex)) {
+                return doCharge(customerId, amount); // prosta próba ponowna – tylko przykład
+            }
+            return PaymentResult.failure(ex.getMessage());
+        }
+    }
+
+    protected void validate(String customerId, double amount) {
+        if (customerId == null || customerId.isBlank()) throw new IllegalArgumentException("customerId");
+        if (amount <= 0) throw new IllegalArgumentException("amount");
+    }
+
+    protected void log(String msg) { System.out.println("[PAY] " + msg); }
+    protected boolean shouldRetry(Exception ex) { return false; }
+
+    protected abstract PaymentResult doCharge(String customerId, double amount);
+}
+
+public final class StripeProcessor2 extends AbstractPaymentProcessor {
+    protected PaymentResult doCharge(String customerId, double amount) {
+        return PaymentResult.success("stripe-tx-abc");
+    }
+}
+```
+
+Plusy/minusy:
+
+- Interfejs:
+  - Plusy: maksymalna swoboda implementacji; wiele implementacji z różnych hierarchii; łatwe testy/mocki.
+  - Minusy: brak wspólnej, wymuszonej infrastruktury – ryzyko duplikacji (walidacja, logowanie, retry).
+- Klasa abstrakcyjna:
+  - Plusy: centralne miejsce na wspólne kroki (Template Method); mniej duplikacji; spójność zachowania.
+  - Minusy: pojedyncze dziedziczenie ogranicza możliwość rozszerzeń; ryzyko rozrastania się „szkieletu”.
+
+---
+
+14.2. Logger/transport (np. konsola vs plik)
+
+Wariant A – interfejs (strategia transportu):
+
+```java
+public interface Logger {
+    void info(String msg);
+    void error(String msg, Throwable t);
+}
+
+public class ConsoleLogger implements Logger {
+    public void info(String msg) { System.out.println(msg); }
+    public void error(String msg, Throwable t) { t.printStackTrace(System.err); }
+}
+
+public class FileLogger implements Logger {
+    private final java.nio.file.Path path;
+    public FileLogger(java.nio.file.Path path) { this.path = path; }
+    public void info(String msg) { write("INFO: " + msg + "\n"); }
+    public void error(String msg, Throwable t) { write("ERROR: " + msg + ": " + t + "\n"); }
+    private void write(String s) { /* zapis uproszczony */ }
+}
+```
+
+Wariant B – klasa abstrakcyjna (wspólne formatowanie i stempel czasu):
+
+```java
+public abstract class AbstractLogger {
+    public final void info(String msg) { write(format("INFO", msg, null)); }
+    public final void error(String msg, Throwable t) { write(format("ERROR", msg, t)); }
+
+    protected String format(String level, String msg, Throwable t) {
+        String base = java.time.Instant.now() + " [" + level + "] " + msg;
+        return t == null ? base : base + " :: " + t;
+    }
+
+    protected abstract void write(String formatted);
+}
+
+public final class ConsoleLogger2 extends AbstractLogger {
+    protected void write(String formatted) { System.out.println(formatted); }
+}
+```
+
+Plusy/minusy:
+
+- Interfejs:
+  - Plusy: pełna swoboda formatu i transportu; możliwość dekorowania (np. kompresja, bufory) przez dodatkowe interfejsy.
+  - Minusy: każda implementacja musi sama dbać o spójne formatowanie – łatwo o rozjazdy.
+- Klasa abstrakcyjna:
+  - Plusy: spójne formatowanie w jednym miejscu; mniejsza liczba błędów; łatwiejsza ewolucja protokołu logowania.
+  - Minusy: mniej elastyczna jeśli ktoś chce całkowicie inny cykl życia lub API; wiąże implementacje z określonym szkieletem.
+
+---
+
+14.3. Walidatory danych (np. rejestracja użytkownika)
+
+Wariant A – interfejs (różne polityki walidacji):
+
+```java
+public interface Validator<T> {
+    ValidationResult validate(T value);
+}
+
+public record ValidationResult(boolean ok, java.util.List<String> errors) {
+    public static ValidationResult ok() { return new ValidationResult(true, java.util.List.of()); }
+    public static ValidationResult fail(String... errs) { return new ValidationResult(false, java.util.List.of(errs)); }
+}
+
+public class EmailValidator implements Validator<String> {
+    public ValidationResult validate(String value) {
+        return value != null && value.contains("@") ? ValidationResult.ok()
+                : ValidationResult.fail("Nieprawidłowy email");
+    }
+}
+```
+
+Wariant B – klasa abstrakcyjna (wspólne łączenie reguł i raportowanie):
+
+```java
+public abstract class AbstractValidator<T> {
+    public final ValidationResult validate(T value) {
+        java.util.List<String> errors = new java.util.ArrayList<>();
+        preCheck(value, errors);
+        doValidate(value, errors);
+        postCheck(value, errors);
+        return errors.isEmpty() ? ValidationResult.ok() : new ValidationResult(false, errors);
+    }
+
+    protected void preCheck(T value, java.util.List<String> errors) { /* np. null-check */ }
+    protected void postCheck(T value, java.util.List<String> errors) { /* np. deduplikacja błędów */ }
+    protected abstract void doValidate(T value, java.util.List<String> errors);
+}
+
+public final class EmailValidator2 extends AbstractValidator<String> {
+    protected void doValidate(String value, java.util.List<String> errors) {
+        if (value == null || !value.contains("@")) errors.add("Nieprawidłowy email");
+    }
+}
+```
+
+Plusy/minusy:
+
+- Interfejs:
+  - Plusy: prosty kontrakt; łatwe budowanie kompozycji (listy walidatorów); brak narzutu.
+  - Minusy: brak wspólnych haków przed/po; powtarzalny kod łączenia błędów w każdym walidatorze.
+- Klasa abstrakcyjna:
+  - Plusy: szablon walidacji z etapami; łatwe dodawanie wspólnych aspektów (metryki, i18n, deduplikacja błędów).
+  - Minusy: trudniej łączyć wiele różnych abstrakcji (pojedyncze dziedziczenie); może być „za ciężka” dla prostych reguł.
+
+---
+
+Wniosek: Jeśli wiele implementacji dzieli ten sam szkielet/cykl życia – zacznij od klasy abstrakcyjnej. Jeśli zależy Ci na maksymalnej wymienności i luźnym wiązaniu – preferuj interfejsy. Często oba podejścia można łączyć: interfejs jako kontrakt + klasa abstrakcyjna jako domyślna, częściowa implementacja tego kontraktu.
