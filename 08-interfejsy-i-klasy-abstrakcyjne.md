@@ -1,7 +1,171 @@
 ### 08. Interfejsy i klasy abstrakcyjne w Javie
 
 ---
+---
 
+#### 0. Dodatkowe materiały: List, ArrayList, Map, StringBuilder i inne użyte w zadaniach
+
+Poniżej krótkie przypomnienie najczęściej używanych typów pomocniczych w Javie, które pojawiają się w zadaniach tego laboratorium, wraz z przykładami bez użycia lambd/Stream API.
+
+##### List<T> i ArrayList<T>
+- `List<T>` to interfejs, a `ArrayList<T>` to jedna z jego popularnych implementacji (tablica dynamiczna).
+- Najczęstsze operacje: `add`, `get`, `set`, `remove`, `size`, iteracja pętlą `for-each`.
+
+Przykład (Zadanie 1 — lista elementów `Drukowalne`):
+
+```java
+import java.util.List;
+import java.util.ArrayList;
+
+List<Drukowalne> lista = new ArrayList<Drukowalne>(); // można też: new ArrayList<>()
+lista.add(new Raport("Wyniki kwartalne"));
+lista.add(new Faktura(1234.56));
+
+for (Drukowalne d : lista) {
+    d.drukuj();
+}
+```
+
+Przykład (Zadanie 3 — sumowanie pól figur):
+
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+List<Figura> figury = new ArrayList<Figura>();
+figury.add(new Kolo(2.0));
+figury.add(new Prostokat(3.0, 4.0));
+
+double sumaPol = 0.0;
+for (Figura f : figury) {
+    sumaPol += f.pole();
+}
+System.out.println("Suma pól = " + sumaPol);
+```
+
+Kilka uwag:
+- Operator diamentowy `<>` może być użyty po prawej stronie: `new ArrayList<>()` — typ wynikowy jest wywnioskowany.
+- `ArrayList` zachowuje kolejność dodawania elementów i pozwala na szybki dostęp przez indeks (`get`).
+- Jeśli potrzebujesz kolejki/dwukierunkowej listy, alternatywą bywa `LinkedList<T>` (nie jest wymagana w tym labie, ale warto wiedzieć).
+
+##### Map<K, V> (np. HashMap)
+- `Map<K, V>` przechowuje pary klucz–wartość. Najczęściej używana implementacja to `HashMap<K, V>`.
+- Operacje: `put`, `get`, `containsKey`, `remove`, iteracja po `entrySet()`.
+
+Przykład (Zadanie 4 — przechowywanie cen produktów w sklepie):
+
+```java
+import java.util.HashMap;
+import java.util.Map;
+
+Map<String, Double> ceny = new HashMap<String, Double>();
+ceny.put("jabłko", 1.99);
+ceny.put("gruszka", 2.49);
+
+if (ceny.containsKey("jabłko")) {
+    double cena = ceny.get("jabłko");
+    System.out.println("Cena jabłka: " + cena);
+}
+
+// Iteracja po parach klucz–wartość
+for (Map.Entry<String, Double> e : ceny.entrySet()) {
+    String nazwa = e.getKey();
+    Double cena = e.getValue();
+    System.out.println(nazwa + " -> " + cena);
+}
+```
+
+Uwagi:
+- `HashMap` nie gwarantuje kolejności. Jeśli kolejność ma znaczenie, można użyć `LinkedHashMap` (kolejność wstawiania) lub `TreeMap` (kolejność naturalna kluczy).
+- Klucze w `Map` powinny mieć dobrze zdefiniowane `equals` i `hashCode` (dla `HashMap`). Dla typów wbudowanych (`String`, `Integer`) jest już to gotowe.
+
+##### StringBuilder
+- Służy do wydajnego budowania łańcuchów znaków w pętli lub przy wielu konkatenacjach.
+- Metody: `append`, `toString`. Zazwyczaj szybszy niż wielokrotne użycie operatora `+` w pętli.
+
+Przykład (Zadanie 5 — budowanie treści raportu CSV/JSON):
+
+```java
+public class RaportCSV /* extends RaportGenerator */ {
+    // ...
+    public String zbudujTresc() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("kol1");
+        sb.append(',');
+        sb.append("kol2");
+        sb.append('\n');
+        sb.append("1");
+        sb.append(',');
+        sb.append("2");
+        return sb.toString();
+    }
+}
+```
+
+Prosty przykład łączenia linii:
+
+```java
+StringBuilder sb = new StringBuilder();
+for (int i = 0; i < 3; i++) {
+    sb.append("linia ");
+    sb.append(i);
+    sb.append('\n');
+}
+String wynik = sb.toString();
+System.out.println(wynik);
+```
+
+##### Arrays i Collections — przydatne narzędzia
+- `java.util.Arrays` zawiera metody pomocnicze do pracy z tablicami (np. `Arrays.asList`, `Arrays.sort`).
+- `java.util.Collections` zawiera metody narzędziowe dla kolekcji (`Collections.sort`, `Collections.shuffle`, `Collections.unmodifiableList`, itp.).
+
+Przykład tworzenia listy startowej i sortowania (bez lambd):
+
+```java
+import java.util.*;
+
+List<Integer> liczby = new ArrayList<Integer>(Arrays.asList(3, 1, 2));
+Collections.sort(liczby); // naturalny porządek rosnący
+System.out.println(liczby); // [1, 2, 3]
+```
+
+Jeśli potrzebujesz własnego kryterium sortowania bez lambd, możesz użyć anonimowego `Comparator`:
+
+```java
+import java.util.*;
+
+List<String> slowa = new ArrayList<String>();
+slowa.add("bbb");
+slowa.add("a");
+slowa.add("cc");
+
+Collections.sort(slowa, new Comparator<String>() {
+    public int compare(String s1, String s2) {
+        return s1.length() - s2.length(); // sortuj po długości
+    }
+});
+System.out.println(slowa); // [a, cc, bbb]
+```
+
+##### Typy opakowujące (wrappery) i generics
+- W kolekcjach używamy typów referencyjnych (np. `Integer`, `Double`) zamiast prymitywów (`int`, `double`). Autoboxing/auto-unboxing dzieje się automatycznie.
+- `List<Double>` oznacza listę obiektów `Double`. Zapisy typu „surowego” (`List lista = ...`) unikamy — tracimy wtedy bezpieczeństwo typów.
+
+##### Iteracja: for-each i iterator
+- Najprostsza iteracja: pętla `for-each` jak w przykładach powyżej.
+- Dostępny jest też jawny `Iterator<T>`:
+
+```java
+import java.util.Iterator;
+
+Iterator<Figura> it = figury.iterator();
+while (it.hasNext()) {
+    Figura f = it.next();
+    System.out.println(f.pole());
+}
+```
+
+---
 #### 1. Wprowadzenie i motywacja
 
 Zanim użyjemy słowa „kontrakt”, zdefiniujmy je precyzyjnie:
