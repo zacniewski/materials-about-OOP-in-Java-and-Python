@@ -1,4 +1,4 @@
-# Laboratorium 6 — Interfejsy i klasy abstrakcyjne (Java), grupa 1
+# Laboratorium 6 — Interfejsy i klasy abstrakcyjne (Java), grupa nr 1
 
 W tym laboratorium ćwiczymy wyłącznie interfejsy i klasy abstrakcyjne. Zadania odnoszą się do materiału z pliku `08-interfejsy-i-klasy-abstrakcyjne.md` (bez zagadnień lambd/Stream API).
 
