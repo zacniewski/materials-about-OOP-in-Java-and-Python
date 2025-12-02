@@ -128,6 +128,40 @@ Co ćwiczysz: hierarchie klas i kontrakty (07–08), konstrukcję i walidację o
 
 ---
 
+## Publikacja na GitHubie — lista kontrolna (dla obu pomysłów)
+
+1. Przygotuj repozytorium Git [02]
+   - Zainicjalizuj repozytorium: `git init` w katalogu projektu. [02]
+   - Dodaj `.gitignore` dla Javy (np. ignoruj `target/`/`out/`, `.idea/`, `.classpath`, `.project`, `.settings/`, pliki systemowe). [02]
+   - Ustaw nazwę i e‑mail w Git (globalnie lub lokalnie), jeżeli nie są skonfigurowane. [02]
+
+2. Dokumentacja projektu [02][03][04]
+   - Dodaj `README.md` z krótkim opisem, wymaganiami (np. wersja JDK), sposobem uruchomienia (`citybike.app.App` lub `shop.app.Main`). [03]
+   - Opisz strukturę pakietów zgodnie z przyjętym podziałem (`domain`, `service`, `payment`, `invoice`, `app`, itp.). [04]
+   - (Opcjonalnie) Dodaj `LICENSE` (np. MIT/Apache‑2.0) i `CONTRIBUTING.md`. [02]
+
+3. Historia zmian i jakość commitów [02]
+   - Rób częste, małe commity z opisowymi wiadomościami (np. konwencja `feat:`, `fix:`, `docs:`). [02]
+   - W opisie commitów nawiązuj do realizowanych punktów checklisty (np. „Pomysł 1 — pkt 3: Bike/EBike”). [02]
+
+4. Zdalne repozytorium i pierwszy push [02]
+   - Utwórz puste repo na GitHubie i dodaj jako `origin`: `git remote add origin <URL>`. [02]
+   - Wypchnij gałąź główną: `git branch -M main` oraz `git push -u origin main` (lub `master`). [02]
+
+5. Praca na gałęziach (zalecane) [02]
+   - Twórz gałęzie funkcjonalne dla większych kroków (np. `feature/rental-service`, `feature/payment-service`). [02]
+   - Otwieraj Pull Requesty do `main`, opisując zmiany i odnosząc się do checklisty/kroków. [02]
+
+6. Automatyzacja (opcjonalnie) [02]
+   - Dodaj GitHub Actions do budowania projektu (np. Maven/Gradle) i (jeśli są) uruchamiania testów. [02]
+
+7. Wydania i tagi (opcjonalnie) [02]
+   - Oznaczaj kamienie milowe tagami (`v0.1`, `v0.2`) i twórz GitHub Releases z krótkim opisem zmian. [02]
+
+8. Prezentacja efektów (rekomendowane)
+   - W `README.md` dodaj sekcję „Przykład użycia” z fragmentem kodu i przykładowym wyjściem (np. raport CSV, wydruk faktury). [03][08]
+   - Dołącz diagram klas/zrzuty ekranu w katalogu `docs/` lub `images/` i podlinkuj je w `README.md`. [01]
+
 ## Wskazówki ogólne do obu projektów
 - Zanim zaczniesz pisać kod, narysuj prosty diagram klas i interfejsów; pomoże zachować spójność kontraktów. [01]
 - Zadbaj o spójne pakiety i minimalny „leak” szczegółów implementacyjnych poza API publiczne. [04][05]
