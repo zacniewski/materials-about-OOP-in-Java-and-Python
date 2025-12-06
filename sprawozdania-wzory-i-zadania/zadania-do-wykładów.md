@@ -597,4 +597,28 @@ Zadania programistyczne (wykonaj w Javie, dołącz kod i krótkie wyjaśnienia):
 - Zaimplementuj klasę `AkcjaSystemowa` implementującą oba interfejsy. Rozwiąż konflikt nadpisując `log` i wybierając jawnie, którą domyślną implementację użyć (lub połącz obie). Pokaż działanie.
 
 
+#### Zadanie nr 8 (testowanie kodu) - proszę przesłać do 14.12.2025 r.
+
+1. Napisz testy oraz metodę, która odpowiada na pytanie, czy podana liczba jest parzysta.
+
+2. Napisz testy oraz metodę, która przyjmuje liczbę całkowitą jako argument i zwraca:
+
+    -1, jeżeli podana liczba jest ujemna,
+    0, jeżeli podana liczba jest równa 0,
+    1, jeżeli podana liczba jest dodatnia.
+
+
+3. Napisz testy oraz metodę, która przyjmuje jako argument tablicę liczb oraz liczbę i zwraca indeks w tej tablicy, pod którym znajduje się liczba podana jako drugi argument. Jeżeli podanej liczby nie ma w tablicy, metoda powinna zwrócić liczbę -1. Przykłady:
+
+    Dla argumentów { 1, 10, 200, 1000 }, 200 – metoda powinna zwrócić 2, ponieważ liczba 200 jest trzecim elementem podanej tablicy, a jej indeks to 2 (bo, jak na pewno pamiętamy, indeksy zaczynamy liczyć od 0).
+    Dla argumentów { 1, 10, 200, 1000 }, 500 – metoda powinna zwrócić -1, ponieważ liczby 500 nie ma w podanej tablicy.
+
+
+> Pisząc testy w poniższych zadaniach, pamiętaj o:
+
+    - wzięciu pod uwagę różnych przypadków testowych i rozdzieleniu ich na osobne metody testujące,
+    - odpowiednim nazewnictwie metod testujących,
+    - ustrukturyzowaniu metod testujących w taki sposób, by były czytelne i jasno przekazywały, na jakim przypadku testowym działają,
+    - napisaniu metody, którą będziesz testował, w taki sposób, by była testowalna.
+
 
