@@ -137,6 +137,82 @@ class RegistrationService:
         self.m.send_welcome(user)
 ```
 
+Przykład matematyczny (SRP) — rozdzielenie: obliczenia, formatowanie, zapis
+```mermaid
+classDiagram
+MathReport --> VectorCalculator
+MathReport --> TextFormatter
+MathReport --> FileSaver
+
+class MathReport { +generate(xs, path) }
+class VectorCalculator { +mean(xs) +variance(xs) }
+class TextFormatter { +format(mean, var) }
+class FileSaver { +save(text, path) }
+```
+
+Java (anty‑przykład): jedna klasa liczy, formatuje i zapisuje
+```java
+class MathReportBad {
+    public void generate(double[] xs, String path) {
+        // obliczenia
+        double sum = 0; for (double x : xs) sum += x;
+        double mean = xs.length == 0 ? 0 : sum / xs.length;
+        double var = 0; for (double x : xs) var += (x - mean) * (x - mean);
+        var = xs.length == 0 ? 0 : var / xs.length;
+        // formatowanie
+        String text = "mean=" + mean + ", var=" + var + "\n";
+        // zapis
+        try (java.io.FileWriter fw = new java.io.FileWriter(path)) {
+            fw.write(text);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+}
+```
+
+Java (poprawa): separacja odpowiedzialności
+```java
+class VectorCalculator {
+    double mean(double[] xs){ double s=0; for(double x:xs) s+=x; return xs.length==0?0:s/xs.length; }
+    double variance(double[] xs){ double m=mean(xs), v=0; for(double x:xs) v+=(x-m)*(x-m); return xs.length==0?0:v/xs.length; }
+}
+class TextFormatter { String format(double mean, double var){ return "mean="+mean+", var="+var+"\n"; } }
+class FileSaver { void save(String text, String path){ try(var fw=new java.io.FileWriter(path)){ fw.write(text);} catch(Exception e){ throw new RuntimeException(e);} } }
+
+class MathReport {
+    private final VectorCalculator calc; private final TextFormatter fmt; private final FileSaver saver;
+    MathReport(VectorCalculator c, TextFormatter f, FileSaver s){ this.calc=c; this.fmt=f; this.saver=s; }
+    public void generate(double[] xs, String path){ double m=calc.mean(xs); double v=calc.variance(xs); saver.save(fmt.format(m,v), path); }
+}
+```
+
+Python (poprawa):
+```python
+class VectorCalculator:
+    def mean(self, xs: list[float]) -> float:
+        return 0.0 if not xs else sum(xs) / len(xs)
+    def variance(self, xs: list[float]) -> float:
+        m = self.mean(xs)
+        return 0.0 if not xs else sum((x - m) ** 2 for x in xs) / len(xs)
+
+class TextFormatter:
+    def format(self, mean: float, var: float) -> str:
+        return f"mean={mean}, var={var}\n"
+
+class FileSaver:
+    def save(self, text: str, path: str) -> None:
+        with open(path, "w") as f:
+            f.write(text)
+
+class MathReport:
+    def __init__(self, calc: VectorCalculator, fmt: TextFormatter, saver: FileSaver):
+        self.c, self.f, self.s = calc, fmt, saver
+    def generate(self, xs: list[float], path: str) -> None:
+        m = self.c.mean(xs); v = self.c.variance(xs)
+        self.s.save(self.f.format(m, v), path)
+```
+
 Checklist SRP:
 - Czy klasa ma jedną odpowiedzialność biznesową? Czy nazwa jest spójna z zawartością?
 - Czy test zmiany formatu danych wymaga edycji logiki lub zapisu? Jeśli tak — naruszenie SRP.
@@ -224,6 +300,55 @@ def discount(price, kind):
     return DISCOUNTS[kind].apply(price)
 ```
 
+Przykład matematyczny (OCP) — strategie liczenia normy wektora
+```mermaid
+classDiagram
+VectorNorm <|.. L1Norm
+VectorNorm <|.. L2Norm
+VectorNorm <|.. LInfNorm
+VectorLength --> VectorNorm
+
+class VectorNorm { <<interface>> +norm(xs) }
+class L1Norm { +norm(xs) }
+class L2Norm { +norm(xs) }
+class LInfNorm { +norm(xs) }
+class VectorLength { +length(xs) }
+```
+
+Java: bez kaskady if‑ów, łatwo dodać kolejną normę
+```java
+interface VectorNorm { double norm(double[] xs); }
+final class L1Norm implements VectorNorm { public double norm(double[] xs){ double s=0; for(double x:xs) s+=Math.abs(x); return s; } }
+final class L2Norm implements VectorNorm { public double norm(double[] xs){ double s=0; for(double x:xs) s+=x*x; return Math.sqrt(s); } }
+final class LInfNorm implements VectorNorm { public double norm(double[] xs){ double m=0; for(double x:xs) m=Math.max(m, Math.abs(x)); return m; } }
+
+final class VectorLength {
+    private final VectorNorm norm;
+    VectorLength(VectorNorm n){ this.norm = n; }
+    public double length(double[] xs){ return norm.norm(xs); }
+}
+```
+
+Python: rejestr strategii
+```python
+class VectorNorm:
+    def norm(self, xs: list[float]) -> float: raise NotImplementedError
+
+class L1Norm(VectorNorm):
+    def norm(self, xs: list[float]) -> float: return sum(abs(x) for x in xs)
+
+class L2Norm(VectorNorm):
+    def norm(self, xs: list[float]) -> float: return (sum(x*x for x in xs)) ** 0.5
+
+class LInfNorm(VectorNorm):
+    def norm(self, xs: list[float]) -> float: return max((abs(x) for x in xs), default=0.0)
+
+NORMS = {"l1": L1Norm(), "l2": L2Norm(), "linf": LInfNorm()}
+
+def vector_length(xs: list[float], kind: str = "l2") -> float:
+    return NORMS[kind].norm(xs)
+```
+
 Checklist OCP:
 - Czy dodanie nowego wariantu wymaga modyfikacji istniejących klas, czy tylko dodania nowej implementacji/interpretera/strategii?
 
@@ -288,6 +413,62 @@ class SafeFileWriter(FileWriter):
         if len(text) > 100:
             raise ValueError("Too long")  # nowe ograniczenie łamie LSP
         super().write(text)
+```
+
+Przykład matematyczny (LSP) — „NonNegativeVector” jako podklasa, która zaostrza kontrakt
+```java
+class Vector {
+    protected final double[] xs;
+    Vector(double[] xs){ this.xs = xs; }
+    public double at(int i){ return xs[i]; }
+    public void set(int i, double v){ xs[i] = v; }
+}
+
+// Anty‑przykład: podklasa wprowadza dodatkowe ograniczenie (tylko >= 0)
+class NonNegativeVector extends Vector {
+    NonNegativeVector(double[] xs){ super(xs); }
+    @Override public void set(int i, double v){
+        if (v < 0) throw new IllegalArgumentException("negatives not allowed"); // zawężenie kontraktu
+        super.set(i, v);
+    }
+}
+```
+
+Lepsze podejście: kompozycja i walidacja jako osobna odpowiedzialność
+```java
+final class NonNegativeConstraint {
+    void check(double v){ if (v < 0) throw new IllegalArgumentException(); }
+}
+final class ConstrainedVector {
+    private final Vector inner; private final NonNegativeConstraint c;
+    ConstrainedVector(Vector inner, NonNegativeConstraint c){ this.inner=inner; this.c=c; }
+    public void set(int i, double v){ c.check(v); inner.set(i, v); }
+    public double at(int i){ return inner.at(i); }
+}
+```
+
+Python (alternatywa z kompozycją):
+```python
+class Vector:
+    def __init__(self, xs: list[float]):
+        self.xs = xs
+    def at(self, i: int) -> float:
+        return self.xs[i]
+    def set(self, i: int, v: float) -> None:
+        self.xs[i] = v
+
+class NonNegativeConstraint:
+    def check(self, v: float) -> None:
+        if v < 0:
+            raise ValueError("negatives not allowed")
+
+class ConstrainedVector:
+    def __init__(self, inner: Vector, constraint: NonNegativeConstraint):
+        self.inner, self.c = inner, constraint
+    def set(self, i: int, v: float) -> None:
+        self.c.check(v); self.inner.set(i, v)
+    def at(self, i: int) -> float:
+        return self.inner.at(i)
 ```
 
 Lepszy przykład 2 (Python): wprowadź nowy typ/kontrakt
@@ -386,6 +567,65 @@ class FileStorage(Saver, Loader):
     def load(self, key): ...
 ```
 
+Przykład matematyczny (ISP) — unikamy „tłustego” interfejsu narzędzia
+```mermaid
+classDiagram
+class MathTool { <<interface>> +differentiate() +integrate() +dot() +norm() }
+class Differentiable { <<interface>> +differentiate(f,x) }
+class Integrable { <<interface>> +integrate(f,a,b) }
+class DotProduct { <<interface>> +dot(a,b) }
+class NormComputable { <<interface>> +norm(xs) }
+MathTool <.. SimpleTool : forced methods
+Differentiable <.. NumericDifferentiator
+Integrable <.. TrapezoidalIntegrator
+DotProduct <.. SimpleDot
+NormComputable <.. L2
+```
+
+Java (anty‑przykład):
+```java
+interface MathTool {
+    double differentiate(java.util.function.DoubleUnaryOperator f, double x);
+    double integrate(java.util.function.DoubleUnaryOperator f, double a, double b);
+    double dot(double[] a, double[] b);
+    double norm(double[] xs);
+}
+class SimpleTool implements MathTool {
+    public double differentiate(java.util.function.DoubleUnaryOperator f, double x){ throw new UnsupportedOperationException(); }
+    public double integrate(java.util.function.DoubleUnaryOperator f, double a, double b){ throw new UnsupportedOperationException(); }
+    public double dot(double[] a, double[] b){ double s=0; for(int i=0;i<a.length;i++) s+=a[i]*b[i]; return s; }
+    public double norm(double[] xs){ double s=0; for(double x:xs) s+=x*x; return Math.sqrt(s); }
+}
+```
+
+Java (poprawa): małe, wyspecjalizowane interfejsy
+```java
+interface DotProduct { double dot(double[] a, double[] b); }
+interface NormComputable { double norm(double[] xs); }
+
+final class SimpleDot implements DotProduct { public double dot(double[] a, double[] b){ double s=0; for(int i=0;i<a.length;i++) s+=a[i]*b[i]; return s; } }
+final class L2 implements NormComputable { public double norm(double[] xs){ double s=0; for(double x:xs) s+=x*x; return Math.sqrt(s); } }
+```
+
+Python (poprawa z protokołami):
+```python
+from typing import Protocol
+
+class DotProduct(Protocol):
+    def dot(self, a: list[float], b: list[float]) -> float: ...
+
+class NormComputable(Protocol):
+    def norm(self, xs: list[float]) -> float: ...
+
+class SimpleDot:
+    def dot(self, a: list[float], b: list[float]) -> float:
+        return sum(x*y for x, y in zip(a, b))
+
+class L2:
+    def norm(self, xs: list[float]) -> float:
+        return (sum(x*x for x in xs)) ** 0.5
+```
+
 Checklist ISP:
 - Czy implementacje nie muszą rzucać `UnsupportedOperation` dla metod z interfejsu?
 - Czy interfejsy odzwierciedlają rzeczywiste role/zdolności?
@@ -453,6 +693,77 @@ class ReportService:
         self.s = serializer
     def export(self, data):
         return self.s.dumps(data)
+```
+
+Przykład matematyczny (DIP) — solver równań zależny od abstrakcji metody
+```mermaid
+classDiagram
+EquationSolver --> RootFindingMethod
+RootFindingMethod <|.. Bisection
+RootFindingMethod <|.. Newton
+
+class EquationSolver { +solve(f, a, b) }
+class RootFindingMethod { <<interface>> +solve(f, a, b) }
+class Bisection { +solve(f, a, b) }
+class Newton { +solve(f, a, b) }
+```
+
+Java:
+```java
+import java.util.function.DoubleUnaryOperator;
+
+interface RootFindingMethod { double solve(DoubleUnaryOperator f, double a, double b); }
+final class Bisection implements RootFindingMethod {
+    public double solve(DoubleUnaryOperator f, double a, double b){
+        for(int i=0;i<50;i++){ double m=(a+b)/2, fm=f.applyAsDouble(m); if(f.applyAsDouble(a)*fm<=0) b=m; else a=m; }
+        return (a+b)/2;
+    }
+}
+final class Newton implements RootFindingMethod {
+    public double solve(DoubleUnaryOperator f, double a, double b){
+        double x=(a+b)/2; for(int i=0;i<20;i++){ double fx=f.applyAsDouble(x); double d=(f.applyAsDouble(x+1e-6)-f.applyAsDouble(x))/1e-6; x = x - fx/d; }
+        return x;
+    }
+}
+
+final class EquationSolver {
+    private final RootFindingMethod method;
+    EquationSolver(RootFindingMethod m){ this.method = m; }
+    public double solve(DoubleUnaryOperator f, double a, double b){ return method.solve(f, a, b); }
+}
+```
+
+Python:
+```python
+from typing import Protocol, Callable
+
+class RootFindingMethod(Protocol):
+    def solve(self, f: Callable[[float], float], a: float, b: float) -> float: ...
+
+class Bisection:
+    def solve(self, f: Callable[[float], float], a: float, b: float) -> float:
+        for _ in range(50):
+            m = (a + b) / 2
+            if f(a) * f(m) <= 0:
+                b = m
+            else:
+                a = m
+        return (a + b) / 2
+
+class Newton:
+    def solve(self, f: Callable[[float], float], a: float, b: float) -> float:
+        x = (a + b) / 2
+        for _ in range(20):
+            fx = f(x)
+            d = (f(x + 1e-6) - fx) / 1e-6
+            x = x - fx / d
+        return x
+
+class EquationSolver:
+    def __init__(self, method: RootFindingMethod):
+        self.m = method
+    def solve(self, f: Callable[[float], float], a: float, b: float) -> float:
+        return self.m.solve(f, a, b)
 ```
 
 Checklist DIP:
@@ -591,6 +902,64 @@ class ReportService {
 - B. Meyer: Object-Oriented Software Construction (Design by Contract).
 - Sandi Metz: Practical Object-Oriented Design (POODR).
 - Artykuły: „The Principles of OOD” (Uncle Bob), katalog refaktoryzacji (refactoring.guru), dokumentacja `typing.Protocol` (Python), Spring Framework Reference (DI).
+
+#### Krótka oś czasu i geneza (timeline)
+- 1988–1997 — Bertrand Meyer formułuje Design by Contract (pre/postwarunki, niezmienniki) i promuje silne kontrakty typów — fundament LSP i myślenia o poprawności.
+- 1994 — GoF „Design Patterns”: polimorfizm, kompozycja ponad dziedziczenie — paliwo dla OCP/ISP/DIP.
+- 1999–2003 — Ekstremalne Programowanie (Kent Beck), Refactoring (Martin Fowler), testy automatyczne stają się normą — SRP/DIP zyskują praktyczny sens (testowalność).
+- 2000–2003 — Robert C. Martin systematyzuje „zasady OOD”, akronim „SOLID” popularyzuje się w społeczności.
+- 2010+ — Clean Architecture, Hexagonal/Onion, DDD w mainstreamie — DIP jako główna oś separacji domeny i infrastruktury.
+
+#### Krótka historia i intuicja każdej zasady
+- SRP: intuicja „jedna odpowiedzialność = jedna przyczyna zmiany” wywodzi się z dążenia do wysokiej kohezji modułu. Gdy różne decyzje biznesowe dotykają jednego pliku — cierpi przewidywalność zmian.
+- OCP: obserwacja, że stabilne API + polimorfizm pozwalają dodawać nowe warianty bez ruszania starego kodu, co ogranicza regresje.
+- LSP: ukonkretnienie myśli Meyera o kontraktach — jeśli typ B jest A, to musi respektować jego kontrakty, aby kod kliencki był nieświadomy różnicy.
+- ISP: wynik doświadczeń z „tłustymi” interfejsami — konsumenci nie powinni być zmuszani do metod, których nie użyją; interfejs ma odzwierciedlać rolę, nie wszystko, co „możliwe”.
+- DIP: odwrócenie zależności stabilizuje architekturę — moduły wyżej nie zależą od szczegółów technologii niżej; to umożliwia testy i wymienialność.
+
+#### Sens stosowania i kiedy nie stosować (praktyka)
+- SRP
+  - Stosuj, gdy: zmiana jednego aspektu domeny wymusza dotykanie wielu miejsc w tej samej klasie (Divergent Change), gdy klasa łączy IO, formatowanie i logikę.
+  - Uważaj, gdy: za drobna granulacja utrudnia ogarnięcie przepływu (zbyt wiele małych klas); łącz związane operacje w moduł o jednej odpowiedzialności.
+  - Checklista: Czy istnieje jedna dominująca rola? Czy zmiana formatu danych wymaga zmiany logiki? Czy nazwa klasy precyzyjnie opisuje zawartość?
+- OCP
+  - Stosuj, gdy: często dodajesz warianty (np. strategie, adaptery, polityki), a stary kod powinien pozostać nietknięty.
+  - Uważaj, gdy: nie ma realnych wariantów (YAGNI). Wczesna generalizacja utrudnia proste zmiany.
+  - Checklista: Czy nowe zachowanie możesz dostarczyć przez nową implementację interfejsu? Czy unikasz edycji stabilnych klas?
+- LSP
+  - Stosuj, gdy: masz hierarchie typów i chcesz gwarantować zamienność (testy kontraktów, brak zaostrzania prewarunków).
+  - Uważaj, gdy: dziedziczenie wymusza zbyt silne związki — wybierz kompozycję.
+  - Checklista: Czy podklasa nie rzuca nowych wyjątków dla danych akceptowanych przez bazę? Czy nie zawęża zwracanych wartości/efektów ubocznych?
+- ISP
+  - Stosuj, gdy: konsumenci używają rozłącznych podzbiorów metod; mockowanie jest trudne przez „grube” interfejsy.
+  - Uważaj, gdy: rozdzielając, tworzysz zbyt wiele podobnych interfejsów — grupuj naturalne role.
+  - Checklista: Czy klient implementacji potrzebuje wszystkich metod? Czy istnieją naturalne role (Saver/Loader itd.)?
+- DIP
+  - Stosuj, gdy: warstwy wyższego poziomu zależą od technologii (HTTP/DB/filesystem); chcesz testować w izolacji.
+  - Uważaj, gdy: prosta aplikacja o małej skali — nadmiar DI/abstrakcji może spowolnić rozwój.
+  - Checklista: Czy moduł zna tylko interfejs? Czy konkret dostarczany jest z zewnątrz (konstruktor/parametr)?
+
+#### SOLID a GRASP (krótko)
+- GRASP (General Responsibility Assignment Software Patterns) to zbiór wzorców przydziału odpowiedzialności (m.in. Information Expert, Creator, Controller, Low Coupling, High Cohesion, Polymorphism, Pure Fabrication, Indirection, Protected Variations).
+- Relacje:
+  - SRP ≈ High Cohesion (GRASP) — jedna odpowiedzialność sprzyja spójności.
+  - OCP ≈ Protected Variations — izolujemy zmienne elementy za stabilnym interfejsem.
+  - DIP ≈ Indirection — wprowadzamy pośrednictwo (abstrakcje/porty), by odsprzęgnąć warstwy.
+  - ISP wspiera Low Coupling — konsumenci widzą tylko potrzebne role.
+  - LSP wzmacnia Polymorphism — zamienność bez łamania kontraktu.
+
+#### Metryki i wskaźniki wspierające decyzje
+- Kohezja/coupling: staraj się o wysoką kohezję (SRP/ISP) i niskie sprzężenie (DIP/OCP).
+- Testowalność: możliwość podmiany zależności (DIP) i mockowania małych interfejsów (ISP) to szybkie testy jednostkowe.
+- Stabilność pakietów (Robert C. Martin): zależności powinny kierować się ku stabilniejszym modułom (abstrakcje częściej są stabilne).
+
+#### Krótki przewodnik decyzyjny (cheatsheet)
+1) Czy ból zmiany wynika z duplikacji? — DRY (wyodrębnij, ujednolić).
+2) Czy ból zmiany wynika z „instrukcji po typie”? — OCP (Strategy/State/Registry).
+3) Czy ból zmiany wynika z niezamiennych podklas? — LSP (kompozycja, kontrakty, testy).
+4) Czy implementacje są zmuszane do „pustych metod”? — ISP (segregacja interfejsów).
+5) Czy warstwa aplikacji zna szczegóły infrastruktury? — DIP (interfejsy/porty + wstrzyknięcie).
+6) Czy rozwiązanie jest za ciężkie jak na problem? — KISS/YAGNI (uprość; odłóż generalizację).
 
 ---
 
