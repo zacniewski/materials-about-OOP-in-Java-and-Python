@@ -214,7 +214,7 @@ Fragment pliku: Gora.java
 W zmienionej metodzie `main` z klasy `Gora`, po wypisaniu domyślnych wartości pól obiektu `pewnaGora`, przypisujemy do tej zmiennej `null` (1) – od tej pory, `pewnaGora` nie wskazuje już na żaden obiekt, a do obiektu typu `Gora`, który utworzyliśmy na początku metody `main`, tracimy dostęp! 
 Nic już na ten obiekt nie wskazuje:  
 
-![null](images/przypisanie_null.png)  
+![null](../images/przypisanie_null.png)  
 
 ### Przypisanie wartosci null do zmiennej
 

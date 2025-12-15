@@ -6,7 +6,7 @@ Dziedziczenie w językach obiektowych to tworzenie hierarchii klas. Kolejne klas
 
 Przykładowa hierarchia klas reprezentujących zwierzęta mogłaby wyglądać następująco:
 
-![hier](images/hierarchia_dziedziczenia.png) 
+![hier](../images/hierarchia_dziedziczenia.png) 
 
 Strzałka na rysunku oznacza, że jedna klasa dziedziczy po drugiej – po stronie grotu strzałki znajduje się klasa nadrzędna. Na przykład: klasa `Kot` dziedziczy (jest klasą‑dzieckiem) po klasie `Ssak`, a klasa `Ssak` dziedziczy po klasie `Zwierzę`.
 

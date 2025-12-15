@@ -24,7 +24,7 @@ Możesz także łączyć obowiązki i na przykład scalić stanowisko kierownika
 
 Załóżmy, że najpierw wymyśliłeś/aś nazwy stanowisk w Twojej firmie, a dopiero później przydzielasz obowiązki do każdego z nich. 
 **To właśnie jest abstrakcja – rozdzielanie czegoś dużego i monolitycznego na wiele małych części.**  
-![abs](images/abstrakcja.webp)  
+![abs](../images/abstrakcja.webp)  
 Z perspektywy programistycznej abstrakcja odpowiednio dzieli program na obiekty.
 
 Duży program zazwyczaj można przedstawić jako **obiekty** oddziaływające na siebie na jeden z wielu różnych sposobów. 
@@ -42,10 +42,10 @@ Abstrakcja jest jak strategia militarna. Jeśli wybierzesz niewłaściwą, probl
 
 #### 2.) Enkapsulacja (hermetyzacja)
 Enkapsulacja ma zadanie poprawiać interakcję między obiektami poprzez ich uproszczenie.  
-![enk](images/enkapsulacja.webp)
+![enk](../images/enkapsulacja.webp)
 Najlepszym sposobem na uproszczenie czegoś jest ukrycie tej skomplikowanej części przed tymi, którzy nie chcą o niej słyszeć. 
 Na przykład, jeśli usiądziesz za sterami w Boeingu, to bardzo dużo czasu zajmie Ci zrozumienie, w jaki sposób kieruje się samolotem:
-![pilots](images/pilots.webp)
+![pilots](../images/pilots.webp)
 
 Z drugiej strony są jeszcze pasażerowie na pokładzie, dla których wszystko wydaje się prostsze: kupują bilet, wsiadają na pokład, startują, lądują i koniec. 
 Możesz bez problemu przemieszczać się między kontynentami, wiedząc jedynie, jak «kupić bilet» i «wsiąść na pokład». 
@@ -149,7 +149,7 @@ A wszystkie te obiekty zawierają zmienne i funkcje.
 - Pułapki: zbyt wczesna lub zbyt agresywna abstrakcja prowadzi do nadmiaru poziomów pośrednich.
 
 Diagram (kontrakt a implementacja):  
-![abs](images/01/abs.png)
+![abs](../images/01/abs.png)
 
 ### B) Enkapsulacja (hermetyzacja)
 - Cel: ukryć stan i szczegóły implementacji; wystawić stabilne API.
@@ -162,7 +162,7 @@ Diagram (kontrakt a implementacja):
 - Pułapki: „przecieki” szczegółów przez zbyt rozbudowane gettery/settery.
 
 Diagram (ukryty stan, kontrolowany dostęp):  
-![enk](images/01/enk.png)
+![enk](../images/01/enk.png)
 
 
 ### C) Dziedziczenie
@@ -173,7 +173,7 @@ Diagram (ukryty stan, kontrolowany dostęp):
 - Pułapki: kruche podstawy (zmiany w bazie łamią potomków), „diamencik” w wielodziedziczeniu (Python).
 
 Diagram (relacja is-a):  
-![dzie](images/01/dzie.png)
+![dzie](../images/01/dzie.png)
 
 
 ### D) Polimorfizm
@@ -182,7 +182,7 @@ Diagram (relacja is-a):
 - Korzyści: kod działający na poziomie abstrakcji, mniejsza liczba instrukcji warunkowych.
 
 Diagram (wywołanie przez typ bazowy/interfejs):  
-![poli](images/01/poli.png)
+![poli](../images/01/poli.png)
 
 #### Dobre praktyki (skrót)
 - Zasady SOLID (wysoki poziom): SRP, OCP, LSP, ISP, DIP.
@@ -191,5 +191,5 @@ Diagram (wywołanie przez typ bazowy/interfejs):
 
 #### Ciekawostka od ByteByteGo
 - link [źródłowy](https://blog.bytebytego.com/p/ep180-design-patterns-cheat-sheet).  
-![obrazek](images/java-vs-python.jpg)
+![obrazek](../images/java-vs-python.jpg)
 

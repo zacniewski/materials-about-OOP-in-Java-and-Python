@@ -201,7 +201,7 @@ Z drugiej jednak strony, wszystkie obiekty współdzielą metody, które został
 Metody te operują na stanie (polach) tego obiektu, na rzecz którego zostały wywołane. 
 To dlatego wywołanie metody `wypiszInformacje` na różnych obiektach powoduje wypisanie innych danych na ekran – wypisywane są wartości pól obiektu, 
 na rzecz którego metoda została wywołana:  
-![obiekt](images/obiekty_osobny_stan.png)  
+![obiekt](../images/obiekty_osobny_stan.png)  
 
 Obiekty `samochod1` i `samochod2` mają własne egzemplarze pól predkosc oraz kolor. Wywołanie
 metody `wypiszInformacje` na każdym z obiektów powoduje, że metoda ta za pierwszym razem
@@ -474,7 +474,7 @@ ma wpływu na obiektsamochod1, który ma własny "zestaw" pól kolor oraz predko
     metody `wypiszInformacje`, którą zdefiniowaliśmy w klasie `Samochod`, która wypisuje
     wartości pól obiektu, powoduje, że wypisane zostają wartości pól tego obiektu, na rzecz
     którego ją wywołaliśmy – zagadnienie to opisuje poniższy obrazek:  
-![obraz](images/obiekty_osobny_stan.png)  
+![obraz](../images/obiekty_osobny_stan.png)  
 
 - W klasach możemy zdefiniować specjalną metodę `toString`, której zadaniem będzie
     zwracanie tekstowej reprezentacji naszych obiektów:
