@@ -270,11 +270,3 @@ public class Employee{
 
 ---
 
-### Jak wyeksportować do PDF jako slajdy (przykład z Pandoc)
-
-- Reveal.js (HTML -> PDF):
-  - `pandoc -t revealjs -s "11-SOLID-shorter examples.md" -o slides.html`
-  - Drukuj do PDF z przeglądarki lub użyj narzędzi typu Decktape.
-- Beamer (LaTeX -> PDF):
-  - `pandoc -t beamer -V theme:metropolis -o slides.pdf "11-SOLID-shorter examples.md"`
-- Uwaga: separatory `---` wyznaczają kolejne slajdy.
