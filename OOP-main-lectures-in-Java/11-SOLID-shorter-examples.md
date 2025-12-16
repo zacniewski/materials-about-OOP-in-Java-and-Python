@@ -41,6 +41,17 @@ public class Employee{
   ale także metodę `sendMail`, która wykracza poza jej odpowiedzialność.
 - Rozwiązanie: przenieść wysyłanie wiadomości do osobnej klasy/usługi.
 
+Diagram UML (Mermaid) — przed (naruszenie SRP):
+
+```mermaid
+classDiagram
+  class Employee {
+    +getDesignation(employeeID)
+    +updateSalary(employeeID)
+    +sendMail()
+  }
+```
+
 ```java
 public class Employee{
   public String getDesignation(int employeeID){ // }
@@ -50,6 +61,20 @@ public class Employee{
 public class NotificationService {
     public void sendMail() { // }
 }
+```
+
+Diagram UML (Mermaid) — po (zgodne z SRP):
+
+```mermaid
+classDiagram
+  class Employee {
+    +getDesignation(employeeID)
+    +updateSalary(employeeID)
+  }
+  class NotificationService {
+    +sendMail()
+  }
+  Employee ..> NotificationService : uses
 ```
 
 ---
@@ -71,6 +96,19 @@ public class AreaCalculator(){
     return areaOfShape;
   }
 }
+```
+
+Diagram UML (Mermaid) — przed (naruszenie OCP):
+
+```mermaid
+classDiagram
+  class AreaCalculator {
+    +area(shape)
+  }
+  class Square
+  class Circle
+  AreaCalculator ..> Square : if/else
+  AreaCalculator ..> Circle : if/else
 ```
 
 - Gdy dojdzie nowy `Shape`, musimy modyfikować kod — łamie to OCP.
@@ -98,6 +136,24 @@ class Circle implements IAreaCalculator{
 }
 ```
 
+Diagram UML (Mermaid) — po (zgodne z OCP):
+
+```mermaid
+classDiagram
+  class IAreaCalculator {
+    <<interface>>
+    +area() double
+  }
+  class Square {
+    +area() double
+  }
+  class Circle {
+    +area() double
+  }
+  IAreaCalculator <|.. Square
+  IAreaCalculator <|.. Circle
+```
+
 ---
 
 ## LSP — Liskov Substitution Principle
@@ -123,6 +179,24 @@ class Ostrich extends Bird {
 }
 ```
 
+Diagram UML (Mermaid) — przed (naruszenie LSP):
+
+```mermaid
+classDiagram
+  class Bird {
+    <<abstract>>
+    +fly()
+  }
+  class Eagle {
+    +fly()
+  }
+  class Ostrich {
+    +fly() // dummy
+  }
+  Bird <|-- Eagle
+  Bird <|-- Ostrich
+```
+
 - `Ostrich` (struś) nie potrafi latać, więc jest zmuszony do „atrapy” metody `fly()` — łamie to LSP.
 - Rozwiązanie: rozdzielić hierarchię na ptaki latające i nielatające.
 
@@ -146,6 +220,28 @@ class Ostrich extends NonFlyingBird {
 }
 ```
 
+Diagram UML (Mermaid) — po (zgodne z LSP):
+
+```mermaid
+classDiagram
+  class FlyingBird {
+    <<abstract>>
+    +fly()
+  }
+  class NonFlyingBird {
+    <<abstract>>
+    +doSomething()
+  }
+  class Eagle {
+    +fly()
+  }
+  class Ostrich {
+    +doSomething()
+  }
+  FlyingBird <|-- Eagle
+  NonFlyingBird <|-- Ostrich
+```
+
 ---
 
 ## ISP — Interface Segregation Principle
@@ -164,6 +260,22 @@ class Square implements IShapeAreaCalculator{
   double calculateArea(){ // calculate the area }
   double calculateVolume(){ // dummy implementation }
 }
+```
+
+Diagram UML (Mermaid) — przed (naruszenie ISP):
+
+```mermaid
+classDiagram
+  class IShapeAreaCalculator {
+    <<interface>>
+    +calculateArea() double
+    +calculateVolume() double
+  }
+  class Square {
+    +calculateArea() double
+    +calculateVolume() double // dummy
+  }
+  IShapeAreaCalculator <|.. Square
 ```
 
 - `Square` nie ma objętości, a jednak musi implementować `calculateVolume()`.
@@ -190,6 +302,30 @@ class Cube implements IAreaCalculator, IVolumeCalculator {
     @Override
     public double calculateVolume() {// calculate the volume }
 }
+```
+
+Diagram UML (Mermaid) — po (zgodne z ISP):
+
+```mermaid
+classDiagram
+  class IAreaCalculator {
+    <<interface>>
+    +calculateArea() double
+  }
+  class IVolumeCalculator {
+    <<interface>>
+    +calculateVolume() double
+  }
+  class Square {
+    +calculateArea() double
+  }
+  class Cube {
+    +calculateArea() double
+    +calculateVolume() double
+  }
+  IAreaCalculator <|.. Square
+  IAreaCalculator <|.. Cube
+  IVolumeCalculator <|.. Cube
 ```
 
 ---
@@ -223,6 +359,20 @@ public class Employee {
 }
 ```
 
+Diagram UML (Mermaid) — przed (naruszenie DIP):
+
+```mermaid
+classDiagram
+  class Employee {
+    - emailNotification: EmailNotification
+    +notifyUser()
+  }
+  class EmailNotification {
+    +notify()
+  }
+  Employee *-- EmailNotification
+```
+
 - `Employee` zależy bezpośrednio od `EmailNotification` (szczegół) — to łamie DIP.
 
 Rozwiązanie: zależeć od abstrakcji:
@@ -253,6 +403,25 @@ public class Employee{
     Employee employee = new Employee(notification);
     employee.notifyUser();
  }
+```
+
+Diagram UML (Mermaid) — po (zgodne z DIP):
+
+```mermaid
+classDiagram
+  class Notification {
+    <<interface>>
+    +notify()
+  }
+  class EmailNotification {
+    +notify()
+  }
+  class Employee {
+    - notification: Notification
+    +notifyUser()
+  }
+  Notification <|.. EmailNotification
+  Employee *-- Notification
 ```
 
 - Teraz mamy luźne powiązanie: `Employee` zależy od interfejsu, a nie od konkretnej implementacji.

@@ -51,6 +51,17 @@ Przykład w Javie: Rozważmy podobny scenariusz w języku Java. Mamy klasę User
  }
 ```
 
+Diagram UML (Mermaid) — przed (naruszenie SRP):
+
+```mermaid
+classDiagram
+  class UserManager {
+    +createUser(name, email)
+    +deleteUser(userId)
+    -sendWelcomeEmail(email)
+  }
+```
+
 Klasa UserManager powyżej łamie SRP – odpowiada zarówno za logikę użytkowników, jak i za komunikację e-mail. Aby zastosować SRP, rozdzielimy te funkcje na dwie klasy: UserManager zajmie się wyłącznie operacjami na użytkownikach, a nowa klasa (np. EmailService) będzie odpowiedzialna za wysyłanie wiadomości email:
 
 ```java
@@ -84,6 +95,21 @@ Klasa UserManager powyżej łamie SRP – odpowiada zarówno za logikę użytkow
         // ... rzeczywista logika wysyłania e-mail
     }
  }
+```
+
+Diagram UML (Mermaid) — po (zgodne z SRP):
+
+```mermaid
+classDiagram
+  class UserManager {
+    +createUser(name, email)
+    +deleteUser(userId)
+    -emailService: EmailService
+  }
+  class EmailService {
+    +sendWelcomeEmail(email)
+  }
+  UserManager *-- EmailService
 ```
 
 W poprawionej wersji dla Javy, logika biznesowa została oddzielona od logiki powiadamiania. UserManager korzysta z usług EmailService (np. poprzez wstrzyknięcie zależności w konstruktorze), zamiast samodzielnie wysyłać e-maile. Teraz modyfikacja sposobu wysyłania wiadomości (np. zmiana treści maila albo zastąpienie e-maili innym kanałem komunikacji) nie wymaga zmiany UserManager – wystarczy zmodyfikować lub podmienić klasę EmailService. Klasy są wężej wyspecjalizowane i spełniają SRP: mają pojedyncze jasno określone zadania, co przekłada się na lepszą modularność i łatwiejsze testowanie (np. UserManager można testować niezależnie, zastępując EmailService atrapą).
@@ -135,7 +161,20 @@ Przykład w Javie: Użyjemy analogicznego przykładu w języku Java. Najpierw we
         System.out.println(calc.calculate(new Rectangle(4, 5)));
         System.out.println(calc.calculate(new Circle(3)));
     }
- }
+}
+```
+
+Diagram UML (Mermaid) — przed (naruszenie OCP):
+
+```mermaid
+classDiagram
+  class AreaCalculator {
+    +calculate(shape) double
+  }
+  class Rectangle
+  class Circle
+  AreaCalculator ..> Rectangle : instanceof
+  AreaCalculator ..> Circle : instanceof
 ```
 
 Ta implementacja w Javie wymaga modyfikacji metody calculate przy wprowadzeniu nowego typu figury. Zgodnie z OCP refaktoryzujemy kod, wprowadzając interfejs Shape z metodą area():
@@ -176,10 +215,32 @@ Ta implementacja w Javie wymaga modyfikacji metody calculate przy wprowadzeniu n
         System.out.println(calc.calculate(new Circle(3)));
         // Jeśli dodamy klasę Triangle implements Shape, calc.calculate od razu ją obsłuży
     }
- }
+}
 ```
 
 Dzięki zastosowaniu interfejsu Shape i polimorfizmu, rozszerzenie systemu o nowy typ figury (np. Triangle) nie narusza istnienia zasady OCP – nie trzeba zmieniać kodu AreaCalculator ani żadnej innej istniejącej klasy, wystarczy dodać nową klasę implementującą Shape. Kod staje się łatwiej skalowalny. W praktyce takie podejście sprzyja używaniu wzorców projektowych: np. zamiast dużych instrukcji warunkowych wybierających działanie w zależności od typu, często korzysta się z wirtualnych metod lub wzorca Strategy, co zapewnia otwartość na rozszerzenia. Należy zauważyć, że OCP nie oznacza, iż nigdy nie modyfikujemy kodu – oznacza, że staramy się tak zaprojektować moduły, by większość nowych wymagań dało się zrealizować przez dodanie nowego kodu, a nie zmianę starego. W praktyce osiągnięcie pełnego OCP bywa trudne, ale jest to ideał, do którego dążymy w dobrze zaprojektowanych systemach.
+
+Diagram UML (Mermaid) — po (zgodne z OCP):
+
+```mermaid
+classDiagram
+  class Shape {
+    <<interface>>
+    +area() double
+  }
+  class Rectangle {
+    +area() double
+  }
+  class Circle {
+    +area() double
+  }
+  class AreaCalculator {
+    +calculate(shape: Shape) double
+  }
+  Shape <|.. Rectangle
+  Shape <|.. Circle
+  AreaCalculator ..> Shape
+```
 
 ### III. Zasada podstawienia Liskov (Liskov Substitution Principle)
 Teoretyczne wyjaśnienie zasady
@@ -239,10 +300,27 @@ Przykład w Javie: Kod naruszający LSP:
         resizeRectangle(r);  // OK: expected area 50, got 50
         resizeRectangle(s);  // Błąd LSP: expected area 50, got 25 (5x5)
     }
- }
+}
 ```
 
 Wywołanie resizeRectangle(s) pokazuje naruszenie LSP – funkcja oczekująca Rectangle nie działa poprawnie dla obiektu Square (otrzymujemy pole 25 zamiast 50, bo Square zmienił oba wymiary na 5). Jak wcześniej omówiono, rozwiązaniem jest zmiana hierarchii. W Javie również możemy zastosować interfejs lub klasę bazową Shape:
+
+Diagram UML (Mermaid) — przed (naruszenie LSP):
+
+```mermaid
+classDiagram
+  class Rectangle {
+    +setWidth(w)
+    +setHeight(h)
+    +getArea() int
+  }
+  class Square {
+    +setWidth(w)
+    +setHeight(h)
+    +getArea() int
+  }
+  Rectangle <|-- Square
+```
 ```java
   // Poprawiona hierarchia zgodna z LSP:
  interface Shape {
@@ -273,9 +351,27 @@ Wywołanie resizeRectangle(s) pokazuje naruszenie LSP – funkcja oczekująca Re
         printArea(rect);    // Area = 50
         printArea(square);  // Area = 25
     }
- }
+}
 ```
 W powyższym kodzie printArea przyjmuje dowolny Shape i po prostu wypisuje pole. Podstawienie SquareShape i RectangleShape jest w pełni bezpieczne i przewidywalne – zasada LSP została zachowana. Nie musieliśmy zmieniać żadnego istniejącego kodu przy wprowadzaniu nowych figur, a co najważniejsze – żaden klient nie musi wiedzieć o specjalnych przypadkach (np. nie ma już potrzeby specjalnego traktowania Square w kodzie, by uniknąć błędu). W ten sposób LSP dopełnia OCP: rozszerzamy system o nowe klasy (SquareShape) bez psucia istniejącej logiki.
+
+Diagram UML (Mermaid) — po (zgodne z LSP):
+
+```mermaid
+classDiagram
+  class Shape {
+    <<interface>>
+    +getArea() int
+  }
+  class RectangleShape {
+    +getArea() int
+  }
+  class SquareShape {
+    +getArea() int
+  }
+  Shape <|.. RectangleShape
+  Shape <|.. SquareShape
+```
 
 Należy zauważyć, że gdy mamy już istniejącą hierarchię, testem na LSP jest zidentyfikowanie, czy gdziekolwiek w kodzie konieczne jest sprawdzanie typu obiektu potomnego lub obsługa wyjątków z nim związanych. Jeśli tak – to często sygnał, że LSP jest złamane (bo właściwa klasa bazowa nie powinna wymagać takich sprawdzeń). W idealnie zaprojektowanym systemie klient operuje na abstrakcjach i wszystkie implementacje tych abstrakcji zachowują się zgodnie z oczekiwaniami.
 
@@ -338,9 +434,35 @@ Przykład w Javie: Tu kompilator od razu wymusza implementację wszystkich metod
         dev.print("file.txt");
         // dev.scan("file.txt"); // runtime exception UnsupportedOperationException
     }
- } 
+} 
 ```
-Tutaj ponownie OldPrinter musi zaimplementować scan i fax – rozwiązał to rzucając wyjątek. Ale wywołanie tych metod jest możliwe w kompilacji (bo typ widziany jest jako MultiFunctionDevice), co sprawia, że błąd pojawi się dopiero w czasie działania programu. Po segregacji interfejsów:
+Tutaj ponownie OldPrinter musi zaimplementować scan i fax – rozwiązał to rzucając wyjątek. Ale wywołanie tych metod jest możliwe w kompilacji (bo typ widziany jest jako MultiFunctionDevice), co sprawia, że błąd pojawi się dopiero w czasie działania programu.
+
+Diagram UML (Mermaid) — przed (naruszenie ISP):
+
+```mermaid
+classDiagram
+  class MultiFunctionDevice {
+    <<interface>>
+    +print(doc)
+    +scan(doc)
+    +fax(doc)
+  }
+  class OldPrinter {
+    +print(doc)
+    +scan(doc) // throws
+    +fax(doc) // throws
+  }
+  class AllInOnePrinter {
+    +print(doc)
+    +scan(doc)
+    +fax(doc)
+  }
+  MultiFunctionDevice <|.. OldPrinter
+  MultiFunctionDevice <|.. AllInOnePrinter
+```
+
+Po segregacji interfejsów:
 ```java
  // Podzielone wąskie interfejsy:
  interface Printer {
@@ -383,8 +505,38 @@ Tutaj ponownie OldPrinter musi zaimplementować scan i fax – rozwiązał to rz
         aio.scan("file.txt");
         aio.fax("file.txt");
     }
- } 
+} 
 ```
+Diagram UML (Mermaid) — po (zgodne z ISP):
+
+```mermaid
+classDiagram
+  class Printer {
+    <<interface>>
+    +print(doc)
+  }
+  class Scanner {
+    <<interface>>
+    +scan(doc)
+  }
+  class Fax {
+    <<interface>>
+    +fax(doc)
+  }
+  class OldPrinterDevice {
+    +print(doc)
+  }
+  class AllInOneDevice {
+    +print(doc)
+    +scan(doc)
+    +fax(doc)
+  }
+  Printer <|.. OldPrinterDevice
+  Printer <|.. AllInOneDevice
+  Scanner <|.. AllInOneDevice
+  Fax <|.. AllInOneDevice
+```
+
 W powyższej, poprawionej wersji, każdy interfejs jest prosty i spójny. Klasy klienckie mogą deklarować zależności w postaci możliwie najwęższego interfejsu – np. jeśli dana funkcja potrzebuje tylko możliwości drukowania, może przyjąć argument typu Printer zamiast dużego MultiFunctionDevice. To ogranicza sprzężenie i zwiększa elastyczność (funkcję taką możemy wywołać zarówno z OldPrinterDevice, jak i AllInOneDevice, bo oba są Printer). Dzięki ISP unikamy również sytuacji, że drobna zmiana jednego aspektu interfejsu wpływa na wiele klas. Gdybyśmy np. chcieli zmienić sygnaturę metody fax lub usunąć ją, w starej wersji trzeba by zmodyfikować wszystkie implementacje MultiFunctionDevice (nawet te, które tego nie używają). Teraz dotyczyłoby to tylko klas implementujących Fax.
 
 Zasada segregacji interfejsów jest szczególnie ważna przy projektowaniu API modułów i bibliotek – oferując innym programistom interfejsy do wykorzystania, lepiej dać kilka wąsko wyspecjalizowanych niż jeden rozbudowany, ponieważ zwiększa to czytelność i łatwość użycia API. W kontekście SOLID, ISP często idzie w parze z DIP (odwróceniem zależności): aplikacja powinna zależeć od abstrakcji, więc projektujemy te abstrakcje (interfejsy) z myślą o konkretnych potrzebach – a DIP wymusza, by były one sensowne i nieprzesadzone (wtedy unikamy niepotrzebnych zależności).
@@ -422,6 +574,22 @@ Przykład w Javie: Pokażemy klasę OrderProcessor wykorzystującą zależność
     }
  }
 ```
+Diagram UML (Mermaid) — przed (naruszenie DIP):
+
+```mermaid
+classDiagram
+  class OrderProcessor {
+    - db: MySqlDatabase
+    +processOrder(order)
+  }
+  class MySqlDatabase {
+    +saveOrderData(orderJson)
+  }
+  class Order
+  OrderProcessor *-- MySqlDatabase
+  OrderProcessor ..> Order
+```
+
 W powyższej implementacji OrderProcessor jest związany z MySqlDatabase. Jeśli chcielibyśmy użyć innej bazy (np. PostgreSQL) albo zapisywać dane do pliku, musielibyśmy zmodyfikować OrderProcessor (zmienić typ db i wywołania). Zastosujmy DIP:
 ```java
  // Interfejs abstrahujący bazę danych:
@@ -471,7 +639,31 @@ W powyższej implementacji OrderProcessor jest związany z MySqlDatabase. Jeśli
         OrderProcessor processor2 = new OrderProcessor(new FileDatabase());
         processor2.processOrder(order);
     }
- }
+}
+```
+Diagram UML (Mermaid) — po (zgodne z DIP):
+
+```mermaid
+classDiagram
+  class Database {
+    <<interface>>
+    +saveData(data)
+  }
+  class MySqlDatabase {
+    +saveData(data)
+  }
+  class FileDatabase {
+    +saveData(data)
+  }
+  class Order
+  class OrderProcessor {
+    - db: Database
+    +processOrder(order)
+  }
+  Database <|.. MySqlDatabase
+  Database <|.. FileDatabase
+  OrderProcessor *-- Database
+  OrderProcessor ..> Order
 ```
 Teraz OrderProcessor nie wie nic o tym, jak dane są zapisywane – zna tylko interfejs Database z metodą saveData(String). W momencie tworzenia instancji OrderProcessor decydujemy, którą implementację przekazać (w powyższym main na dwa sposoby). Moduł wysokopoziomowy “dyktuje” jedynie kontrakt (oczekuje, że ktoś zaimplementuje metodę saveData), a szczegóły są w warstwie niższej. Odwróciliśmy zależność: to konkretne klasy baz danych muszą dostosować się do interfejsu (czyli dependują od abstrakcji Database), a nie odwrotnie.
 
