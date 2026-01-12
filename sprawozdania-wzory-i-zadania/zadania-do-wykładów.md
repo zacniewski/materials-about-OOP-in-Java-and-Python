@@ -623,4 +623,30 @@ Zadania programistyczne (wykonaj w Javie, dołącz kod i krótkie wyjaśnienia):
     - ustrukturyzowaniu metod testujących w taki sposób, by były czytelne i jasno przekazywały, na jakim przypadku testowym działają,
     - napisaniu metody, którą będziesz testował, w taki sposób, by była testowalna.
 
+#### Zadanie nr 9 (wyjątki) - proszę przesłać do 18.01.2026 r.
+
+1. Do czego służą wyjątki?  
+2. W której z metod wymienionych w poniższym stack trace rzucony został wyjątek?  
+```text
+Exception in thread "main" java.lang.IllegalArgumentException
+	at Pytania.innaMetoda(Pytania.java:13)
+	at Pytania.pewnaMetoda(Pytania.java:9)
+	at Pytania.main(Pytania.java:5)
+```
+3. Jak w języku Java obsługuje się wyjątki?
+4. Do czego służy sekcja finally i czy jest wymagana?
+5. Jak rzuca się wyjątki?
+6. Do czego służy słowo kluczowe throws?
+7. Jaką regułę muszą spełniać klasy, aby były klasami wyjątków?
+8. Do czego służy try-with-resources i jak się tego mechanizmu używa?
+9. Napisz program z klasą Adres, która będzie miała podane poniżej pola, które będą ustawiane w konstruktorze klasy Adres. 
+Konstruktor powinien sprawdzić wszystkie podane wartości i rzucić wyjątek NieprawidlowyAdresException rodzaju Checked, jeżeli któraś z wartości będzie nieprawidłowa.  
+Uwaga: komunikat rzucanego wyjątku powinien zawierać informację o wszystkich nieprawidłowych wartościach przekazanych do konstruktora – dla przykładu, jeżeli ulica i miasto będą miały wartość null, to komunikat wyjątku powinien być następujący: "Ulica nie może być nullem. Miasto nie może być nullem".  
+Pola klasy:
+```text
+    String ulica – wartość nieprawidłowa to null,
+    int numerDomu – wartość nieprawidłowa to liczba <= 0,
+    String kodPocztowy – wartość nieprawidłowa to null,
+    String miasto – wartość nieprawidłowa to null.
+```
 
