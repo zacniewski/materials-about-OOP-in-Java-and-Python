@@ -30,8 +30,8 @@
 - [Definiowanie i rzucanie wyjątków](#definiowanie-i-rzucanie-wyjątków)
 - [Sprawdzanie rzucanych wyjątków i ich rodzaju](#sprawdzanie-rzucanych-wyjątków-i-ich-rodzaju)
 
-W rozdziale o wartościach zwracanych przez metody korzystaliśmy z następującego przykładu:
-Nazwa pliku: Rozdzial_07__Metody/WypiszWynikDzielenia.java
+Skorzystajmy z następującego przykładu:
+Nazwa pliku: WypiszWynikDzielenia.java
 
 ```java
 public class WypiszWynikDzielenia {
@@ -79,17 +79,18 @@ Wyjątki (exceptions) to sytuacje, w których coś w programie poszło nie tak. 
 
 Bardzo ważną cechą wyjątków jest to, że są to tak naprawdę klasy – mają one swoją nazwę, konstruktory, pola i metody. Co cechuje klasę, że może być traktowana jako wyjątek? Klasa taka musi rozszerzać klasę Throwable lub jedną z jej pochodnych, o czym wkrótce dokładniej sobie opowiemy. Rzucanie wyjątków sprowadza się do utworzenia słowem kluczowym new obiektu konkretnej klasy wyjątku i "rzucenie" go za pomocą słowa kluczowego throw. Zajmiemy się tymi zagadnieniami w kolejnych rozdziałach.
 
-Z wyjątkami spotkaliśmy się już w poprzednich rozdziałach – widzieliśmy m. in. wyjątki:
+Z wyjątkami można się spotkać w innych sytuacjach:
 
 ```text
-StringIndexOutOfBoundsException – gdy próbowaliśmy odnieść się do znaku w zmiennej typu String za pomocą metody charAt przekazując indeks znaku wychodzący poza zakres stringu,
-ArrayIndexOutOfBoundsException – gdy odnosiliśmy się do nieistniejącego elementu tablicy,
-NullPointerException – gdy próbowaliśmy odnosić się do pól bądź metod niezainicjalizowanego obiektu, tzn. gdy zmienna typu złożonego wskazywała na null.
+StringIndexOutOfBoundsException – gdy próbujemy odnieść się do znaku w zmiennej typu String za pomocą metody charAt przekazując indeks znaku wychodzący poza zakres stringu,
+ArrayIndexOutOfBoundsException – gdy odnosimy się do nieistniejącego elementu tablicy,
+NullPointerException – gdy próbujemy odnosić się do pól bądź metod niezainicjalizowanego obiektu, tzn. gdy zmienna typu złożonego wskazywała na null.
 ```
+
 
 Inne sytuacje, w których moglibyśmy natknąć się na wyjątek, to na przykład:
 
-```java
+```text
 podanie ujemnego wieku podczas tworzenia obiektu typu Osoba,
 próba otwarcia pliku, który nie istnieje,
 zerwanie połączenia z internetem podczas próby wysłania danych na serwer,
@@ -162,7 +163,7 @@ program kończy działanie, a na ekran zostaje wypisany zaistniały błąd: typ 
 
 Zastanówmy się teraz, jak powinien działać nasz program, aby obsłużyć sytuację, gdy przesłany zostanie nieprawidłowy argument. Czy program powinien:
 
-```java
+```text
 kończyć się błędem tak jak do tej pory?
 zwracać 0?
 zwracać jakąś inną wartość, np. najmniejszą z możliwych wartości, jakie może przechowywać zmienna typu int?
@@ -291,6 +292,7 @@ Tym razem nie została wykonana instrukcja (1), która następowała po instrukc
 
 Zwróćmy uwagę, że niezależnie od tego, czy wyjątek wystąpił, czy nie, w obu przykładach wykonany został kod z części finally.
 Kod z bloku finally nie zostanie wykonany w szczególnym przypadku – gdy użyjemy metody exit z klasy System, ponieważ natychmiast kończy ona nasz program.
+
 ## Zakres zmiennych definiowanych w bloku try
 
 Wielokrotnie przy okazji omawiania instrukcji warunkowych, pętli, metod itp. widzieliśmy, że zmienne definiowane wewnątrz bloków kodu są niewidoczne poza tymi blokami, jeżeli nie wskazuje na nie żadna referencja spoza tego bloku. Jeżeli zdefiniujemy zmienną w bloku try, to po zakończeniu tego bloku przestanie ona istnieć – nie będziemy mieli do niej dostępu nawet w sekcjach catch i finally – spójrzmy na przykład:
@@ -307,22 +309,25 @@ try {
 ```
 
 Ten fragment kodu powoduje następujące błędy kompilacji:
+```text
 ZwrocWynikDzieleniaWyjatek.java:36: error: cannot find symbol
   System.out.println("Blad dzielenia, zmienna wynik ma wartosc: " + wynik);
-```text
+
                                                                     ^
-```
+
   symbol:   variable wynik
   location: class ZwrocWynikDzieleniaWyjatek
 ZwrocWynikDzieleniaWyjatek.java:38: error: cannot find symbol
+```
+
 ```text
   System.out.println("Sekcja finally: wynik wynosi " + wynik);
                                                        ^
-```
+
   symbol:   variable wynik
   location: class ZwrocWynikDzieleniaWyjatek
 2 errors
-
+```
 W sekcjach catch i finally próbujemy odnieść się do nieistniejącej zmiennej – zmienna wynik istnieje jedynie w bloku try, bo w nim została zdefiniowana.
 
 W praktyce często zachodzi potrzeba korzystania "na zewnątrz" sekcji try z tworzonych w niej zmiennych, czy też w sekcji finally. W takich przypadkach należy zdefiniować zmienną przed sekcją try:
@@ -421,13 +426,14 @@ W pętli while (3) wykonujemy próbę pobrania liczby od użytkownika (4) tak d�
 Na końcu programu liczymy kwadrat pobranej liczby i wypisujemy wynik.
 
 Przykładowe wykonanie tego programu:
+```text
 Podaj liczbe: kot
 To nie jest liczba!
 Podaj liczbe: pies
 To nie jest liczba!
 Podaj liczbe: 5
 Kwadrat tej liczby wynosi 25
-
+```
 W poprzednich przykładach, wyjątek ArithmeticException rzucany był przez Maszynę Wirtualną Java, jednak nie jest to jedyna możliwość rzucania wyjątków – my, jako programiści, możemy sami rzucać wyjątki z naszych metod.
 
 Rzucanie wyjątków odbywa się poprzez użycie słowa kluczowego throw, po którym następuje tworzenie obiektu wyjątku takiego typu, jaki chcemy rzucić. Spójrzmy na przykład obsługi sytuacji, gdy ktoś poda ujemny wiek podczas tworzenia obiektu typu Osoba:
@@ -645,6 +651,7 @@ public class Osoba {
 Powyższy program używa dwóch nowych typów wyjątków, które rzucane są w konstruktorze klasy Osoba. Wyjątki te obsługiwane są następnie w ciele metody main (1) i (2).
 
 W przypadku obsługi wyjątku typu NieprawidlowaWartoscException, do wypisywanego na ekran komunikatu dodajemy treść błędu, która zawarta jest w wyjątku – umieściliśmy ją tam rzucając wyjątek w konstruktorze klasy Osoba. Wiadomość ta zawiera informację, która wartość jest nieprawidłowa. Ta wiadomość zwracana jest przez metodę getMessage.
+
 ## Przerywanie wykonania bloku kodu przez wyjątki
 
 Chociaż widzieliśmy w poprzednim rozdziale, jak rzucanie wyjątku wpływa na wykonanie bloku kodu, w którym wyjątek wystąpił, to warto jeszcze raz omówić to zagadnienie.
@@ -888,7 +895,9 @@ try {
 ```
 
 Wynik:
+```text
 Wyjatek zawiera komunikat: Co tu sie wyprawia?!
+```
 
 Jeżeli utworzymy wyjątek bez komunikatu, to getMessage zwróci null – zobaczymy to na przykładzie wyjątku WyjatekBezTresciException:
 
@@ -950,14 +959,16 @@ try {
 ```
 
 Wywołanie e.printStackTrace spowoduje pojawienie się na standardowym wyjściu następujących komunikatów:
+```text
 WyjatekZKomunikatemException: Co tu sie wyprawia?!
 	at ZawartoscWyjatkowPrzyklady.main(ZawartoscWyjatkowPrzyklady.java:32)
+```
 
 Stack trace opisywałem na początku rozdziału o wyjątkach. W pierwszej linii znajduje się nazwa klasy wyjątku, po której następuje komunikat wyjątku. Następnie podane są metody i numery linii, który były po kolei wywoływane do momentu, w którym wystąpił wyjątek (te metody posortowane są, patrząc od góry, od ostatniej wywołanej do pierwszej). Umożliwia to prześledzenia wykonania programu aż do zaistnienia błędu i ułatwia analizę okoliczności, w jakich napotkany został problem.
 
 Jak już kilka razy wspominałem, istnieją dwa typy wyjątków:
 
-```java
+```text
 checked exceptions,
 unchecked exceptions.
 ```
@@ -1064,7 +1075,7 @@ Jeżeli korzystamy z IntelliJ IDEA, możemy także sprawdzić wyjątki rzucane p
 
 Wykorzystując powyższy sposób, spójrzmy na metodę charAt z klasy String:
 
-```java
+```text
 /**
  * Returns the {@code char} value at the
  * specified index. An index ranges from {@code 0} to
@@ -1132,9 +1143,10 @@ i korzystając z poniższego fragmentu kodu:
 Osoba o = new Osoba("Jan", "Nowak", -1);
 ```
 
-spowodujemy, że próba kompilacji zakończy się następującym błędem:
+spowoduje, że próba kompilacji zakończy się następującym błędem:
+```text
 Osoba.java:31: error: unreported exception NieprawidlowaWartoscException; must be caught or declared to be thrown
-```java
+
   Osoba o = new Osoba("Jan", "Nowak", -1);
             ^
 ```
@@ -1149,7 +1161,7 @@ Chociaż Throwable to ta właściwa klasa nadrzędna dla wszystkich wyjątków, 
 
 Wyjątki dziedziczące po Error to błędy krytyczne, których za bardzo nie da się obsłużyć i nie powinniśmy próbować tego robić. Sami też takich wyjątków nie będziemy nigdy rzucać. Taki błąd to np. OutOfMemoryError, który występuje gdy skończy się pamięć komputera przeznaczona dla naszego programu. My, jako autorzy programu, nie możemy nic na wystąpienie takiego wyjątku poradzić. To, co możemy i powinniśmy zrobić, to przeanalizować dlaczego pamięć się skończyła:
 
-```java
+```text
 Czy po prostu za mało pamięci zostało przeznaczone na działanie naszego programu?
 Czy nasz program nie jest optymalnie napisany?
 Czy w programie występuje błąd, który powoduje niemożliwość zwalniania pamięci przez Garbage Collector (mechanizm odpowiedzialny za zwalnianie nieużywanej pamięci w naszych programach)?
@@ -1225,8 +1237,10 @@ Zapisując kod w ten sposób mówimy kompilatorowi:
 "Nieważne czy to będzie NieprawidlowaWartoscException czy NieprawidlowyWiekException, każdy z nich to Exception i chcę je obsłużyć w tej jednej sekcji catch".
 
 W wyniku działania tego fragmentu kodu zobaczymy na ekranie:
+```text
 Wystapil blad! Komunikat bledu: null
 Wystapil blad! Komunikat bledu: Imie nie moze byc puste.
+```
 
 W pierwszej linii widzimy, że komunikat błędu jest nullem – wynika to z faktu, że tworząc wyjątek typu NieprawidlowyWiekException w konstruktorze klasy Osoba nie podajemy żadnego komunikatu błędu.
 
@@ -1250,8 +1264,11 @@ try {
 ```
 
 Ten fragment kodu spowodowałby wypisanie na ekran:
+```text
 Nieprawidlowy wiek!
 Wystapil blad! Komunikat bledu: Imie nie moze byc puste.
+```
+
 Używanym tutaj "wyjątkiem ogólnym" nie musi być Exception, lecz dowolny typ wyjątku, który byłby w hierarchii dziedziczenia używanych przez nas klas wyjątków w klasie Osoba. Dla przykładu, jeżeli wyjątki NieprawidlowaWartoscException i NieprawidlowyWiekException dziedziczyłyby nie bezpośrednio po Exception, lecz po innym utworzonym przez nas typie wyjątków, np. BladWalidacjiDanychOsobyException, to moglibyśmy używać tego typu wyjątku w sekcji catch, aby złapać oba rodzaje wyjątków pochodnych od tego nowego typu wyjątku.
 ## Łapanie kilku wyjątków za pomocą znaku |
 
@@ -1309,9 +1326,10 @@ public static Osoba stworzPelnoletniaOsobe(String pierwszeImie, String nazwisko)
 }
 ```
 
-Zdefiniowaliśmy powyżej nową metodą – stworzPelnoletniaOsobe. Ma ona na celu stworzenie obiektu klasy Osoba, która ma wiek równy 18. Nie chcemy w tej metodzie obsługiwać przypadku, gdy ktoś poda nieprawidłowe imię bądź nazwisko – w związku z tym, by kompilator nie protestował, że nie obsłużyliśmy wyjątku NieprawidlowaWartoscException, dodaliśmy klauzulę throws do metody stworzPelnoletniaOsobe (1) – oznacza to, że ten, kto wywoła metodę stworzPelnoletniOsobea, będzie musiał:
+Zdefiniowaliśmy powyżej nową metodą – stworzPelnoletniaOsobe. Ma ona na celu stworzenie obiektu klasy Osoba, która ma wiek równy 18.  
+Nie chcemy w tej metodzie obsługiwać przypadku, gdy ktoś poda nieprawidłowe imię bądź nazwisko – w związku z tym, by kompilator nie protestował, że nie obsłużyliśmy wyjątku NieprawidlowaWartoscException, dodaliśmy klauzulę throws do metody stworzPelnoletniaOsobe (1) – oznacza to, że ten, kto wywoła metodę stworzPelnoletniOsobea, będzie musiał:
 
-```java
+```text
 obsłużyć wyjątek NieprawidlowaWartoscException lub
 także zdefiniować, że rzuca wyjątek NieprawidlowaWartoscException, jezeli nie będzie chciał go obsłużyć.
 ```
@@ -1337,7 +1355,7 @@ Tak naprawdę to nie metoda stworzPelnoletniaOsobe, lecz konstruktor klasy Osoba
 
 Obsługa wyjątków często nie jest łatwa – trzeba się zastanowić, jak program powinien zachować się, gdy wystąpi pewien wyjątek:
 
-```java
+```text
 Czy program powinien kontynuować działanie?
 Czy użytkownik powinien zostać powiadomiony o błędzie?
 Czy program powinien odczekać i spróbować ponownie wykonać kod, który spowodował wyjątek?
@@ -1416,7 +1434,7 @@ Różnicę pomiędzy "standardowym" try..catch..finally oraz try-with-resources 
 
 Aby odczytać z dysku plik w języku Java, musimy:
 
-```java
+```text
 Utworzyć obiekt typu File, który będzie skojarzony z plikiem na dysku.
 Utworzyć strumień danych, który będzie mógł czytać dane z pliku, na który wskazuje obiekt File. Strumieniem danych w naszych przykładach będzie obiekt klasy FileReader – klasa ta pozwala na czytanie z pliku znak po znaku.
 Zamknąć strumień po zakończeniu pracy na nim wywołując jego metodę close.
@@ -1465,7 +1483,7 @@ Swiecie
 
 Krótka analiza tego programu:
 
-```java
+```text
 Klasy do pracy z plikami, z których skorzystamy, znajdują się w pakiecie java.io w Bibliotece Standardowej Java.
 Tworzymy obiekt klasy File przekazując jako argument konstruktora lokalizację pliku, z którym ten obiekt będzie skojarzony.
 Definiujemy obiekt klasy FileReader, który będzie służył do odczytania pliku. Zmienna fileReader znajduje się przed blokiem try..catch ponieważ będziemy z niej chcieli skorzystać w bloku finally. Gdybyśmy umieścili definicję tej zmiennej wewnątrz bloku try, to zmienna ta byłaby dostępna jedynie w tym bloku.
@@ -1517,7 +1535,7 @@ Mechanizm wyjątków ma zarówno zalety, jak i wady.
 
 Mechanizm wyjątków ma dwie podstawowe zalety:
 
-```java
+```text
 Możemy obsłużyć dowolne sytuacje, które uznamy za nieprawidłowe, bez potrzeby stosowania rozwiązań z np. zwracaniem specjalnej wartości (jak w przykładzie z dzieleniem).
 Przenosi odpowiedzialność obsługi błędu do tego, kto używa kod, który potencjalnie rzuca wyjątek. Zamiast w funkcji podziel wypisywać na ekran, że nie można dzielić przez 0 bądź zwracać specjalną wartość w takim przypadku, pozwalamy temu, kto wywołuje metodę podziel, na odpowiednie obsłużenie takiego przypadku. Jest to o tyle ważne, że w bardziej skomplikowanych przypadkach może nie być jednego uniwersalnego sposobu na obsłużenie danego błędu – rzucenie wyjątku pozwoli, by w różnych sytuacjach można było odpowiednio na dany błąd zareagować.
 ```
@@ -1526,7 +1544,7 @@ Przenosi odpowiedzialność obsługi błędu do tego, kto używa kod, który pot
 
 W poprzednich rozdziałach widzieliśmy kilka cech wyjątków rodzaju Checked:
 
-```java
+```text
 jeżeli w wyniku wywołania metody może zostać rzucony wyjątek rodzaju Checked, a nie chcemy go obsługiwać, to musimy skorzystać ze słowa kluczowego throws, aby zaznaczyć, że dana metoda może taki wyjątek rzucić,
 jeżeli nie obsłużymy sytuacji, w której może być rzucony wyjątek rodzaju Checked i nie skorzystamy z throws, to nasz kod się nie skompiluje – kompilator zgłosi błąd.
 ```
@@ -1553,7 +1571,7 @@ Podsumowując – jeżeli w naszym programie chcemy zasygnalizować problem, kt�
 
 ## Podstawy wyjątków
 
-```java
+```text
 Wyjątki (exceptions) to sytuacje, w których coś w programie poszło nie tak.
 Gdy wystąpi wyjątek, mówimy, że został on rzucony.
 Wyjątki to obiekty klas. Jak każda klasa mają one swoją nazwę, konstruktory, pola i metody.
@@ -1572,7 +1590,7 @@ Exception in thread "main" java.lang.ArithmeticException: / by zero
 ## Łapanie wyjątków
 
 ```java
-Wyjątki łapiemy (obsługujemy) za pomocą mechanizmu try..catch..finally:
+// Wyjątki łapiemy (obsługujemy) za pomocą mechanizmu try..catch..finally:
     try {
       // instrukcje ktore moga potencjalnie zakonczyc sie wyjatkiem
     } catch (TypWyjatku dowolnaNazwa) {
@@ -1583,6 +1601,8 @@ Wyjątki łapiemy (obsługujemy) za pomocą mechanizmu try..catch..finally:
       // instrukcje, ktore maja byc wykonane niezaleznie od tego,
       // czy wyjatek zostal zlapany, czy nie
     }
+```
+
 Używając try..catch spodziewamy się, że w instrukcjach objętych przez try coś może pójść nie tak (ale nie musi). To, co powinno się zadziać w przypadku napotkania konkretnego problemu (i tylko wtedy), umieszczamy w sekcji catch.
 W sekcji catch podajemy typ wyjątku, jaki chcemy obsłużyć, oraz nazwę zmiennej, za pomocą której będziemy się do tego obiektu-wyjątku odnosić.
 Gdy występuje wyjątek, jego typ dopasowywany jest do listy wyjątków z obecnych sekcji catch. Jeżeli wyjątek zostanie dopasowany, wykonywany jest kod powiązany z tą sekcją catch, która ten konkretny typ wyjątku obsługuje.
@@ -1591,6 +1611,7 @@ Gdy wystąpi wyjątek, aktualnie wykonywany blok kodu zostaje przerwany. Dalsze 
 Silent catch to łapanie wyjątków bez ich obsługi – powinniśmy wystrzegać się takich sytuacji, ponieważ mogą prowadzić do trudnych do wykrycia i analizy błędów.
 Wyjątki do złapania definiowane w catch muszą być pochodnymi klasy Throwable, lub, jak to zazwyczaj ma miejsce, którejś z jej klas pochodnych: Exception lub RuntimeException (pośrednio bądź bezpośrednio) – inaczej kod się nie skompiluje.
 Zmienne definiowane wewnątrz bloku try po zakończeniu tego bloku przestają istnieć. Aby zmienna była dostępna poza try, należy ją zdefiniować i zainicjalizować przed try:
+```java
     int wynik = 0;
     try {
       wynik = podziel(10, 2);
@@ -1600,7 +1621,10 @@ Zmienne definiowane wewnątrz bloku try po zakończeniu tego bloku przestają is
       System.out.println("Sekcja finally: wynik wynosi " + wynik);
     }
     System.out.println("Po try wynik wynosi " + wynik);
+```
 Zamiast łapać kilka wyjątków, które może rzucić metoda, możemy złapać wyjątek nadrzędny dla tych wyjątków (którym zawsze jest wyjątek typu Exception) i w jednym miejscu obsłużyć wszystkie błędy:
+```java
+
     try {
       Osoba o = new Osoba("Joanna", "Strzelczyk", -1);
     } catch (Exception e) {
@@ -1608,15 +1632,19 @@ Zamiast łapać kilka wyjątków, które może rzucić metoda, możemy złapać 
           "Wystapil blad! Komunikat bledu: " + e.getMessage()
       );
     }
+```
 W powyższym przykładzie złapaliśmy wszystkie wyjątki korzystając z klasy bazowej wyjątków – Exception. Klasa ta jest "bardziej ogólna" niż inne klasy wyjątków, ponieważ jest ich rodzicem (dziedziczenie). Zapisując kod w ten sposób mówimy kompilatorowi: "Nieważne czy to będzie NieprawidlowaWartoscException czy NieprawidlowyWiekException, każdy z nich to Exception i chcę je obsłużyć w tej jednej sekcji catch".
 "Wyjątkiem ogólnym" powyżej nie musi być Exception, lecz dowolny typ wyjątku, który byłby w hierarchii dziedziczenia używanych przez nas klas wyjątków, które chcemy złapać.
 Możemy także złapać kilka wykluczających się typów wyjątków za pomocą znaku | (pionowa kreska, ang. pipe):
+```java
     try {
       Osoba o = new Osoba("Adrian", "Sochacki", 30);
     } catch (NieprawidlowaWartoscException | NieprawidlowyWiekException e) {
       System.out.println("Nieprawidlowa wartosc: " + e.getMessage());
     }
+```
 Kolejność obsługiwania wyjątków w blokach catch ma znaczenie – bardziej ogólne wyjątki muszą zawsze następować po mniej ogólnych. Najbardziej ogólnymi wyjątkami są wyjątki typu Exception (ponieważ wszystkie wyjątki bazują na tym typie), a mniej ogólne to te, które dziedziczą po klasie Exception:
+```java
     try {
       Osoba o = new Osoba(null, "Nowak", 30);
     } catch (Exception e) {
@@ -1626,8 +1654,11 @@ Kolejność obsługiwania wyjątków w blokach catch ma znaczenie – bardziej o
     } catch (NieprawidlowyWiekException e) { // blad kompilacji
       System.out.println("Nieprawidlowy wiek!");
     }
+```    
 Ten fragment kodu powoduje błąd kompilacji:
+```text
 Error: java: exception NieprawidlowyWiekException has already been caught
+```
 Sekcje catch muszą zawierać najbardziej szczegółowe (najniżej w hierarchii dziedziczenia) wyjątki na początku, a najbardziej ogólne na końcu.
 Od wersja Java 1.7 możemy korzystać z nowego mechanizmu try-with-resources, który ułatwia pracę z zasobami poprzez ich automatyczne zamykanie po zakończeniu bloku try. Klasy, które możemy używać w try-with-resources to te klasy, które implementują interfejs AutoCloseable lub Closeable. Przykład użycia:
 ```
@@ -1646,7 +1677,7 @@ try (FileReader fileReader = new FileReader(f)) {
 
 ## Rodzaje wyjątków
 
-```java
+```text
 Istnieją dwa typy wyjątków: Checked exceptions oraz Unchecked exceptions.
 Różnica pomiędzy tymi rodzajami wyjątków jest taka, że potencjał rzucenia przez metodę wyjątku typu Checked musi być umieszczony w klauzuli throws w sygnaturze metody. W przypadku wyjątków Unchecked nie musimy tego robić.
 O tym, czy wyjątek to jest rodzaju Checked czy Unchecked decyduje to, czy klasa wyjątku dziedziczy po klasie RuntimeException. RuntimeException to klasa pochodna od Exception.
@@ -1675,7 +1706,7 @@ Istnieje jeszcze trzeci rodzaj wyjątków, które są pochodnymi klasy Error. Wy
 
 ## Definiowanie i rzucanie wyjątków
 
-```java
+```text
 Jeżeli nasza metoda może rzucić wyjątki rodzaju Checked, to musimy zaznaczyć to w sygnaturze tej metody za pomocą słowa kluczowego throws:
     public Osoba(String imie, String nazwisko, int wiek)
         throws NieprawidlowaWartoscException, NieprawidlowyWiekException {
@@ -1718,7 +1749,7 @@ public class NieprawidlowaWartoscException extends Exception {
 
 ## Sprawdzanie rzucanych wyjątków i ich rodzaju
 
-```java
+```text
 Aby sprawdzić, jakie wyjątki może rzucić metoda, należy zajrzeć do dokumentacji tej metody w Java Doc jeżeli jest to metoda należąca do Biblioteki Standardowej Java, lub do odpowiedniej dokumentacji biblioteki, z której ta metoda pochodzi.
 W komentarzach dokumentacyjnych potencjał rzucenia przez metodę wyjątku opisywany jest za pomocą sekcji @exception.
 Sprawdzanie rodzaju wyjątku sprowadza się do analizy jego hierarchii dziedziczenia – jeżeli jest w niej zawarta klasa RuntimeException, oznacza to, że jest to wyjątek Unchecked i nie trzeba go obsługiwać w try..catch.
