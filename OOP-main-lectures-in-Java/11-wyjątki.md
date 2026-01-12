@@ -492,22 +492,26 @@ sequenceDiagram
 
 ### Zadania do samodzielnego wykonania
 
-1) Java: Napisz metodę `parsePort(String s): int`, która:
+1) Napisz metodę `parsePort(String s): int`, która:
 - zwraca liczbę z zakresu 1–65535,
 - dla wartości spoza zakresu rzuca `IllegalArgumentException` z czytelnym komunikatem,
 - dla nieliczby rzuca `NumberFormatException` (możesz pozwolić jej „wypłynąć”).
 
-2) Python: Stwórz klasę `ConfigLoader`, która wczytuje JSON z pliku.
-- Dla braku pliku rzuć `FileNotFoundError`,
-- dla niepoprawnego JSON rzuć `ConfigParseError` opakowując `json.JSONDecodeError` (`from e`).
+2) Stwórz klasę `ConfigLoader`, która posiada metodę `loadConfig(String path)`.
+- Metoda powinna wczytywać dane z pliku tekstowego.
+- Dla braku pliku rzuć własny wyjątek `ConfigFileNotFoundException` (unchecked), zachowując oryginalną przyczynę (`cause`).
+- Dla błędnego formatu danych rzuć `ConfigParseException` (checked).
 
-3) Java: Zaimplementuj `try-with-resources` do kopiowania pliku i napisz test łapiący `IOException` (np. brak uprawnień).
+3) Zaimplementuj mechanizm `try-with-resources` do kopiowania zawartości jednego pliku do drugiego. Napisz kod testujący, który łapie `IOException` i wypisuje stos wywołań.
 
-4) Python: Napisz własny context manager (klasa z `__enter__`/`__exit__`), który otwiera połączenie i zawsze je zamyka, nie gubiąc wyjątków z sekcji `with`.
+4) Napisz własną klasę `DatabaseConnection` implementującą interfejs `AutoCloseable`.
+- Metoda `close()` powinna wypisywać "Połączenie zamknięte".
+- Metoda `open()` powinna rzucać `ConnectionException`, jeśli symulowane połączenie się nie uda.
+- Przetestuj działanie w bloku `try-with-resources`, aby upewnić się, że zasób jest zamykany nawet przy wystąpieniu wyjątku.
 
 ---
 
 ### Dodatkowe wskazówki i linki
 
 - Java SE Docs: `Throwable`, `Exception`, `RuntimeException`, `try-with-resources`.
-- Python Docs: "Errors and Exceptions", `contextlib`, `traceback`.
+- Efektywne programowanie (Joshua Bloch) — rozdział o wyjątkach.
