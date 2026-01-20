@@ -650,3 +650,41 @@ Pola klasy:
     String miasto – wartość nieprawidłowa to null.
 ```
 
+#### Zadanie nr 10 (referencje do obiektów) - proszę przesłać do 28.01.2026 r.
+1. Co to jest sterta i stos?
+2. Czym różnią się typy prymitywne od typów referencyjnych (złożonych)?
+3. Co charakteryzuje obiekty niemutowalne?
+4. Czy i dlaczego, obiekty poniższej klasy są, lub nie są, niemutowalne?
+```java
+    public class ZagadkaMutowalne {
+      public final int x;
+      public ZagadkaMutowalne(int x) {
+        this.x = x;
+      }
+    }
+```
+5. Czy i dlaczego, obiekty poniższej klasy są, lub nie są, niemutowalne?
+
+Czy, i dlaczego, obiekty poniższej klasy są, lub nie są, niemutowalne?
+```java
+    public class ZagadkaMutowalne2 {
+      private String komunikat;
+      public void setKomunikat(String komunikat) {
+        this.komunikat = komunikat;
+      }
+      public String getKomunikat() {
+        return komunikat;
+      }
+    }
+```
+6. Czy i dlaczego, obiekty poniższej klasy są, lub nie są, niemutowalne?
+
+Czy, i dlaczego, obiekty poniższej klasy są, lub nie są, niemutowalne?
+```java
+    public class ZagadkaMutowalne3 {
+      private final String[] slowa;
+      public ZagadkaMutowalne3(String[] slowa) {
+        this.slowa = slowa;
+      }
+    }
+```
