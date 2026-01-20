@@ -1,5 +1,17 @@
 ### Zadania do wykładów
 
+### Spis treści
+1. [Zadanie nr 1 (rozgrzewka przed OOP i praktyka z Markdownem)](#zadanie-nr-1-rozgrzewka-przed-oop-i-praktyka-z-markdownem---proszę-przesłać-do-06102025-r)
+2. [Zadanie nr 2 (klasy i obiekty)](#zadanie-nr-2-klasy-i-obiekty---proszę-przesłać-do-13102025-r)
+3. [Zadanie nr 3 (importy i pakiety)](#zadanie-nr-3-importy-i-pakiety---proszę-przesłać-do-20102025-r)
+4. [Zadanie nr 4 (pola klas, modyfikatory dostępu)](#zadanie-nr-4-pola-klas-modyfikatory-dostępu---proszę-przesłać-do-29102025-r)
+5. [Zadanie nr 5 (konstruktory)](#zadanie-nr-5-konstruktory---proszę-przesłać-do-05112025-r)
+6. [Zadanie nr 6 (dziedziczenie i polimorfizm)](#zadanie-nr-6-dziedziczenie-i-polimorfizm---proszę-przesłać-do-14112025-r)
+7. [Zadanie nr 7 (interfejsy i klasy abstrakcyjne)](#zadanie-nr-7-interfejsy-i-klasy-abstrakcyjne---proszę-przesłać-do-30112025-r)
+8. [Zadanie nr 8 (testowanie kodu)](#zadanie-nr-8-testowanie-kodu---proszę-przesłać-do-14122025-r)
+9. [Zadanie nr 9 (wyjątki)](#zadanie-nr-9-wyjątki---proszę-przesłać-do-18012026-r)
+10. [Zadanie nr 10 (referencje do obiektów)](#zadanie-nr-10-referencje-do-obiektów---proszę-przesłać-do-28012026-r)
+
 #### Zadanie nr 1 (rozgrzewka przed OOP i praktyka z Markdownem) - proszę przesłać do 06.10.2025 r.
   - z pomocą dowolnego języka programowania napisz program, który po uruchomieniu:  
     - wyświetli w kolejności alfabetycznej nazwy czterech filarów OOP,  
