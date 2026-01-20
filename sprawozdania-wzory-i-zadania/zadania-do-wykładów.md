@@ -677,7 +677,6 @@ Pola klasy:
 ```
 5. Czy i dlaczego, obiekty poniższej klasy są, lub nie są, niemutowalne?
 
-Czy, i dlaczego, obiekty poniższej klasy są, lub nie są, niemutowalne?
 ```java
     public class ZagadkaMutowalne2 {
       private String komunikat;
@@ -691,7 +690,6 @@ Czy, i dlaczego, obiekty poniższej klasy są, lub nie są, niemutowalne?
 ```
 6. Czy i dlaczego, obiekty poniższej klasy są, lub nie są, niemutowalne?
 
-Czy, i dlaczego, obiekty poniższej klasy są, lub nie są, niemutowalne?
 ```java
     public class ZagadkaMutowalne3 {
       private final String[] slowa;
