@@ -158,7 +158,7 @@ Dlatego, przed przypisaniem do argumentu produkt nowo utworzonego obiektu, pokaz
 Metoda zmienProdukt w żaden sposób nie zmienia ani obiektu, na który pokazuje zmienna owoc, ani nie powoduje, że zmienna owoc zacznie pokazywać na obiekt utworzony wewnątrz metody zmienProdukt. Jedyna zmiana, jaka zostaje wykonana, to zmiana, na jaki obiekt pokazuje argument produkt – z obiektu utworzonego w linii (1) na nowy obiekt utworzony w metodzie (2).
 
 Zagadnienie to zostało przedstawione poniżej:  
-![Zmiana referencji w metodzie](images/zmiana_referencji_w_metodzie.png)
+![Zmiana referencji w metodzie](../images/zmiana_referencji_w_metodzie.png)
 
 Jedynym efektem przypisania nowego obiektu do argumentu produkt jest to, że od momentu wykonania tej instrukcji, nie mamy już w metodzie zmienProdukt dostępu do obiektu, na który wcześniej wskazywał argument produkt. Oryginalny obiekt, jak i zmienna owoc, która na niego wskazuje, nie zmieniają się.
 
@@ -345,9 +345,9 @@ poczatek obiektu odcinek2,
 ```
 
 wskazują na ten sam obiekt w pamięci:  
-![Wspołdzielenie obiektów](images/wspoldzielenie_obiektow.png)
+![Wspołdzielenie obiektów](../images/wspoldzielenie_obiektow.png)
 
-W tym przypadku, takie zachowanie jest niepożądane, ponieważ chcemy móc niezależnie modyfikować pola obiektów klasy Odcinek, nie wpływając na inne, istniejące obiekty tej klasy.
+W tym przypadku takie zachowanie jest niepożądane, ponieważ chcemy móc niezależnie modyfikować pola obiektów klasy Odcinek, nie wpływając na inne, istniejące obiekty tej klasy.
 
 Co możemy zrobić, aby zapobiec takiemu zachowaniu obiektów w naszych programach?
 
@@ -404,7 +404,7 @@ Odcinek zawarty pomiedzy Punkt(x: 200, y: 200) i Punkt(x: 10, y: 30)
 
 Za pomocą zmiennych zdefiniowanych w metodzie main mamy dostęp do obiektów, na które wskazują prywatne pola klasy Odcinek – zazwyczaj nie jest dobra praktyka, ponieważ możliwe są do wykonania zmiany naszych obiektów bez naszej wiedzy, co może prowadzić do potencjalnych błędów. Wszystko zależy od kontekstu, w jakim tworzymy nasze klasy, to znaczy: kto i do czego będzie ich używał.
 
-Często można w prosty sposób uchronić się przed potencjalnymi problemami pisząc kod w taki sposób, by nie współdzielić obiektów, które powinny być prywatne i wszelkie ich modyfikacje powinny odbywać się jedynie wewnątrz metod klasy, która z tych obiektów korzysta.
+Często można w prosty sposób uchronić się przed potencjalnymi problemami, pisząc kod w taki sposób, by nie współdzielić obiektów, które powinny być prywatne i wszelkie ich modyfikacje powinny odbywać się jedynie wewnątrz metod klasy, która z tych obiektów korzysta.
 ## Tworzenie kopii obiektów
 
 Możemy w konstruktorze klasy Odcinek nie przypisywać do pól poczatek i koniec referencji do obiektów przesłanych jako argumenty, lecz utworzyć nowe obiekty typu Punkt na podstawie tych argumentów:
@@ -1009,7 +1009,7 @@ Owoc po zmianie: Produkt o nazwie Czeresnie kosztuje 10.0
 
 Powyższe zagadnienia przedstawia poniższy rysunek:
 
-![Zmiana referencji w metodzie](images/zmiana_referencji.png)
+![Zmiana referencji w metodzie](../images/zmiana_referencji_w_metodzie.png)
 
 4. Zmienne typów złożonych mogą być zdefiniowane z modyfikatorem `final` – spowoduje to, że zmiennej nie będzie można przypisać innego obiektu (pierwszy fragment kodu poniżej), ale obiekt, na który zmienna ta wskazuje, będzie mógł być zmodyfikowany (drugi fragment kodu):
 
@@ -1060,7 +1060,7 @@ Odcinek zawarty pomiedzy Punkt(x: 0, y: 5) i Punkt(x: 10, y: 30)
 
 Na poniższym obrazku widać, że pola `poczatek` obu obiektów `odcinek1` i `odcinek2` wskazują na ten sam obiekt in pamięci, na który wskazuje także zmienna `poczatekOdcinkow`:
 
-![Wspoldzielenie obiektow](images/wspoldzielenie_obiektow.png)
+![Wspołdzielenie obiektów](../images/wspoldzielenie_obiektow.png)
 
 6. Aby uchronić się przed potencjalnymi problemami związanymi ze współdzieleniem obiektów, możemy:
     - w konstruktorze robić kopie przesyłanych argumentów
