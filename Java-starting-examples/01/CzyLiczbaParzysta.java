@@ -10,7 +10,8 @@ public class CzyLiczbaParzysta {
 
     if (liczba % 2 == 0) {
       czyParzysta = true;
-    } else {
+    }
+    else {
       czyParzysta = false;
     }
 
