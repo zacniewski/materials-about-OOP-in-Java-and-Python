@@ -4,15 +4,15 @@
 */
 public class HelloWorldZKomentarzami {
     /**
-     * To jest komentarz dokumentujacy, jak dziala metoda main.
+     * To jest komentarz dokumentujacy, jak działa metoda main.
      */
     public static void main(String[] args) {
         // to jest komentarz jednolinijkowy - ponizej wypisujemy tekst
-        System.out.println("Witaj Swiecie!"); // na koncu lini moze byc komentarz
+        System.out.println("Witaj Świecie!"); // na koncu linii może byc komentarz
 
         /*
-           Ponizsza linia kodu nie zostanie wykonan, poniewaz
-           zostala zakomentowana.
+           Poniższa linia kodu nie zostanie wykonan, ponieważ
+           została zakomentowana.
         */
         // System.out.println("Witajcie!");
 
