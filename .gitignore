@@ -31,3 +31,6 @@ bin/
 
 ### PyCharm
 .idea/
+
+### Java
+*.class
