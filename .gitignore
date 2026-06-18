@@ -29,8 +29,9 @@ bin/
 ### Mac OS ###
 .DS_Store
 
-### PyCharm
+### JetBrains IDE
 .idea/
+mcp.json
 
 ### Java
 *.class
