@@ -35,3 +35,7 @@ mcp.json
 
 ### Java
 *.class
+
+### Misc.
+egzamin*
+*weryfikacyjne*
