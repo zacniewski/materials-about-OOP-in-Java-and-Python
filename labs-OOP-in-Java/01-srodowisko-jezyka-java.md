@@ -38,6 +38,8 @@ Popularne środowiska programistyczne (IDE) dla Javy:
 - **NetBeans** — darmowe IDE wspierane przez Apache.
 - **Visual Studio Code** — lekki edytor z rozszerzeniami dla Javy.
 
+W praktyce warto zadbać o spójność wersji SDK/JDK używanej przez projekt oraz kompilator. W IntelliJ IDEA dobrze, aby wersja ustawiona w `Project Structure -> Project Settings -> Modules -> Dependencies` była zgodna z wersją wybraną w `File | Settings | Build, Execution, Deployment | Compiler | Java Compiler`. Tę samą zasadę warto stosować również w innych IDE i edytorach: najlepiej, gdy projekt, kompilator i narzędzia uruchomieniowe korzystają z tej samej wersji Javy, ponieważ ogranicza to ryzyko błędów kompilacji oraz problemów z konfiguracją środowiska.
+
 ### Konwencje nazewnicze w Javie
 | Element         | Konwencja              | Przykład                  |
 |-----------------|------------------------|---------------------------|
