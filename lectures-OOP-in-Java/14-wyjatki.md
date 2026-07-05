@@ -1,4 +1,4 @@
-# Wyjątki w Java
+# Wykład 11: Wyjątki w Java
 ## Żródło - https://kursjava.com/wyjatki/  
 
 ## Spis treści
@@ -1124,6 +1124,362 @@ java.lang.Object
                 java.lang.IllegalArgumentException
 ```
 
+---
+
+## Materiał rozszerzający: wyjątki w Java i Python
+
+Poniższa część zachowuje materiał z wcześniejszego, osobnego pliku porównawczego. Trzon wykładu pozostaje javowy, ale zestawienie z Pythonem pomaga lepiej zrozumieć kontrakty API, propagację błędów i praktykę projektową.
+
+### Cel wykładu
+Poznasz mechanizm wyjątków (ang. exceptions), głównie w Javie, z przykładami także w Pythonie. Zobaczysz: hierarchię, `try/catch/finally`, tworzenie własnych wyjątków, propagację, obsługę zasobów (`try-with-resources`, context manager), dobre praktyki i anty-wzorce.
+
+### Czym są wyjątki?
+Wyjątek to mechanizm sygnalizowania i obsługi błędów podczas wykonywania programu. Zamiast zwracać kod błędu, funkcja "rzuca" (Java: `throw`, Python: `raise`) obiekt wyjątku, a przepływ sterowania przeskakuje do najbliższego pasującego bloku obsługi (`catch` lub `except`).
+
+Korzyści:
+- oddzielenie ścieżki błędów od ścieżki "szczęśliwej" (happy path),
+- bogatszy kontekst o błędzie (typ, komunikat, stos wywołań),
+- lepsza współpraca z frameworkami (transakcje, zasoby, rollback),
+- silniejsze kontrakty API (zwłaszcza w Javie przez checked exceptions).
+
+### Hierarchia wyjątków (Java)
+
+```mermaid
+classDiagram
+Throwable <|-- Error
+Throwable <|-- Exception
+Exception <|-- RuntimeException
+
+class Throwable {
+  +getMessage()
+  +getCause()
+  +printStackTrace()
+}
+class Error {
+  <<unchecked>>
+}
+class Exception {
+  <<checked>>
+}
+class RuntimeException {
+  <<unchecked>>
+}
+```
+
+Wybrane fakty:
+- Wszystko dziedziczy z `Throwable`.
+- `Error` (np. `OutOfMemoryError`) oznacza problemy środowiskowe i zwykle ich nie łapiemy.
+- `Exception` dzieli się na checked i unchecked:
+  - checked: wszystkie potomki `Exception` poza `RuntimeException` i jego potomkami,
+  - unchecked: `RuntimeException` i pochodne, np. `NullPointerException`, `IllegalArgumentException`.
+
+### Hierarchia wyjątków (Python)
+
+```mermaid
+classDiagram
+BaseException <|-- Exception
+Exception <|-- RuntimeError
+Exception <|-- ValueError
+Exception <|-- TypeError
+Exception <|-- OSError
+BaseException <|-- SystemExit
+BaseException <|-- KeyboardInterrupt
+```
+
+Wybrane fakty:
+- Wszystko pochodzi z `BaseException`, ale typowe błędy aplikacyjne dziedziczą z `Exception`.
+- Python nie ma checked exceptions - obowiązek dokumentacji i testów spoczywa na programiście.
+
+### Checked vs unchecked (Java)
+- Checked (np. `IOException`, `SQLException`):
+  - musisz albo złapać (`try/catch`), albo zadeklarować (`throws`),
+  - są dobre do przewidywalnych błędów środowiskowych (I/O, sieć, baza danych).
+- Unchecked (`RuntimeException` i pochodne):
+  - nie wymagają deklaracji,
+  - nadają się do błędów programistycznych i walidacyjnych.
+
+Konsekwencje dla API:
+- publiczne API z checked exceptions jasno komunikuje, co może pójść źle,
+- unchecked lepiej sprawdza się przy błędach domenowych i nieprawidłowych argumentach.
+
+### Rzucanie i łapanie w Javie
+
+Zły przykład: zbyt szeroki `catch` i ukrycie problemu
+```java
+public class FileReaderBad {
+    public String read(String path) {
+        try {
+            java.nio.file.Path p = java.nio.file.Paths.get(path);
+            return java.nio.file.Files.readString(p);
+        } catch (Exception e) {
+            return "";
+        }
+    }
+}
+```
+
+Lepszy przykład: precyzyjny `catch` i owijanie wyjątku
+```java
+public class FileReaderGood {
+    public String read(String path) {
+        try {
+            var p = java.nio.file.Path.of(path);
+            return java.nio.file.Files.readString(p);
+        } catch (java.io.IOException io) {
+            throw new FileAccessException("Nie udało się odczytać pliku: " + path, io);
+        }
+    }
+}
+
+class FileAccessException extends RuntimeException {
+    public FileAccessException(String msg, Throwable cause) { super(msg, cause); }
+}
+```
+
+Rzucanie własnego wyjątku checked:
+```java
+public class UserService {
+    public User findById(String id) throws UserNotFoundException {
+        var user = loadFromDb(id);
+        if (user == null) {
+            throw new UserNotFoundException("Brak użytkownika id=" + id);
+        }
+        return user;
+    }
+
+    private User loadFromDb(String id) { return null; }
+}
+
+class User {}
+
+class UserNotFoundException extends Exception {
+    public UserNotFoundException(String msg) { super(msg); }
+}
+```
+
+Schemat przepływu `try/catch/finally`
+```mermaid
+flowchart TD
+  A[Start] --> B[try]
+  B -->|bez wyjątku| C{czy jest finally?}
+  B -->|wyjątek| D[szukaj pasującego catch]
+  D -->|złapano| C
+  D -->|nie znaleziono| E[Propagacja w górę]
+  C -->|tak| F[wykonaj finally]
+  C -->|nie| G[Koniec]
+  F --> G
+```
+
+### Zarządzanie zasobami
+
+Java: `try-with-resources`
+```java
+public static long countLines(String path) {
+    try (java.io.BufferedReader br = java.nio.file.Files.newBufferedReader(java.nio.file.Path.of(path))) {
+        return br.lines().count();
+    } catch (java.io.IOException e) {
+        throw new FileAccessException("Błąd I/O", e);
+    }
+}
+```
+
+Python: context manager `with`
+```python
+from pathlib import Path
+
+def count_lines(path: str) -> int:
+    try:
+        with Path(path).open("r", encoding="utf-8") as f:
+            return sum(1 for _ in f)
+    except OSError as e:
+        raise FileAccessError(f"Błąd I/O: {path}") from e
+
+class FileAccessError(RuntimeError):
+    pass
+```
+
+### Tworzenie własnych wyjątków
+
+Zasady:
+- w Javie nazwa klasy najczęściej kończy się na `Exception`,
+- trzeba zdecydować, czy wyjątek ma być checked (`extends Exception`) czy unchecked (`extends RuntimeException`),
+- warto dodać konstruktor z komunikatem i przyczyną (`cause`).
+
+Java:
+```java
+public class DomainValidationException extends RuntimeException {
+    public DomainValidationException(String message) { super(message); }
+    public DomainValidationException(String message, Throwable cause) { super(message, cause); }
+}
+```
+
+Python:
+```python
+class DomainValidationError(ValueError):
+    def __init__(self, message: str, *, code: str | None = None):
+        super().__init__(message)
+        self.code = code
+```
+
+### Propagacja, owijanie i łańcuch przyczyn
+- Owijaj wyjątki niskopoziomowe w wyjątki domenowe wyższego poziomu.
+- Zachowuj `cause` lub `__cause__`, aby nie tracić diagnostyki.
+
+Java:
+```java
+try {
+    paymentGateway.charge(card, amount);
+} catch (GatewayTimeoutException e) {
+    throw new PaymentFailedException("Płatność przekroczyła limit czasu", e);
+}
+```
+
+Python:
+```python
+try:
+    gateway.charge(card, amount)
+except TimeoutError as e:
+    raise PaymentFailedError("Płatność przekroczyła limit czasu") from e
+```
+
+### Dobre praktyki
+- Łap jak najwęższy typ wyjątku.
+- Nie tłum wyjątków po cichu; loguj lub propaguj.
+- Nie używaj wyjątków do normalnej kontroli przepływu.
+- Waliduj argumenty wcześnie.
+- Przekazuj sensowne komunikaty, ale bez ujawniania danych wrażliwych.
+- W aplikacjach warstwowych zakończ mapowaniem wyjątków na granicy warstwy.
+
+### Anty-wzorce
+
+1) Catch-all i zjedzenie błędu
+```java
+try { doWork(); } catch (Exception e) { /* nic */ }
+```
+
+2) Nadmiernie ogólne `throws`
+```java
+public void f() throws Exception { /* ... */ }
+```
+
+3) Utrata przyczyny
+```java
+catch (IOException e) {
+    throw new RuntimeException("Błąd");
+}
+```
+
+Lepsza wersja:
+```java
+catch (IOException e) {
+    throw new RuntimeException("Błąd", e);
+}
+```
+
+### Wyjątki a testy i kontrakty
+- Testuj, że metoda rzuca właściwy wyjątek.
+- Sprawdzaj komunikat błędu lub `cause`, jeśli ma znaczenie domenowe.
+- Dokumentuj możliwe wyjątki w JavaDoc i w materiałach kursowych.
+
+JUnit 5:
+```java
+import static org.junit.jupiter.api.Assertions.*;
+
+@org.junit.jupiter.api.Test
+void shouldThrowOnInvalidAmount() {
+    IllegalArgumentException ex = assertThrows(
+        IllegalArgumentException.class,
+        () -> account.withdraw(-10)
+    );
+    assertTrue(ex.getMessage().contains("ujemna"));
+}
+```
+
+### Wydajność i decyzje projektowe
+- Rzucanie wyjątku jest kosztowniejsze niż zwykły zwrot.
+- Wyjątek stosuj do sytuacji wyjątkowej, nie do zwykłego braku wyniku.
+- Dla zwykłego braku wartości w Javie rozważ `Optional`.
+
+```java
+User user = repo.findById(id).orElseThrow(() -> new UserNotFoundException("id=" + id));
+Optional<User> maybeUser = repo.findByEmail(email);
+```
+
+### Wątki, asynchroniczność i wyjątki
+- W Javie wyjątki z `CompletableFuture` są często opakowane w `CompletionException`.
+- W Pythonie zadania asynchroniczne trzeba `await`ować lub odczytywać z nich wyjątek jawnie.
+
+```java
+CompletableFuture<Void> f = CompletableFuture.runAsync(() -> {
+    throw new IllegalStateException("boom");
+});
+try {
+    f.join();
+} catch (CompletionException e) {
+    Throwable cause = e.getCause();
+}
+```
+
+### Kompletny mini-przykład (Java)
+```java
+class InsufficientFundsException extends RuntimeException {
+    public InsufficientFundsException(String msg) { super(msg); }
+}
+
+class Account {
+    private int balance;
+
+    public Account(int initial) { this.balance = initial; }
+
+    public void withdraw(int amount) {
+        if (amount <= 0) throw new IllegalArgumentException("Kwota musi być dodatnia");
+        if (amount > balance) throw new InsufficientFundsException("Brak środków: " + balance);
+        balance -= amount;
+    }
+}
+
+public class App {
+    public static void main(String[] args) {
+        Account acc = new Account(100);
+        try {
+            acc.withdraw(150);
+        } catch (InsufficientFundsException e) {
+            System.err.println("Nie można wypłacić: " + e.getMessage());
+        }
+    }
+}
+```
+
+### Diagram: warstwy i mapowanie wyjątków
+
+```mermaid
+sequenceDiagram
+  participant UI
+  participant API
+  participant Service
+  participant Repo
+
+  UI->>API: POST /pay
+  API->>Service: charge()
+  Service->>Repo: save()
+  Repo-->>Service: throws SQLException (checked)
+  Service-->>API: throws PaymentFailedException (unchecked, wrapped)
+  API-->>UI: HTTP 503 + JSON {error: "payment_failed"}
+```
+
+### Checklist projektowy
+- [ ] Czy złapano możliwie wąski typ wyjątku?
+- [ ] Czy nie zjedzono błędu bez logowania lub propagacji?
+- [ ] Czy zachowano łańcuch przyczyn (`cause`)?
+- [ ] Czy użyto `try-with-resources` do pracy z zasobami?
+- [ ] Czy testy pokrywają scenariusze błędne?
+
+### Zadania do samodzielnego wykonania
+1) Napisz metodę `parsePort(String s): int`, która zwraca liczbę z zakresu 1-65535 i poprawnie zgłasza błędy wejścia.
+2) Stwórz klasę `ConfigLoader` z metodą `loadConfig(String path)`, która opakowuje błędy I/O w wyjątek domenowy.
+3) Zaimplementuj kopiowanie pliku w `try-with-resources` i przetestuj obsługę `IOException`.
+4) Napisz klasę `DatabaseConnection` implementującą `AutoCloseable` i przećwicz zamykanie zasobu nawet przy wyjątku.
+
 źródło: oficjalna dokumentacja Java Doc – klasa Illegal ArgumentException
 
 Widzimy w tej hierarchii klasę RuntimeException, więc klasa IllegalArgumentException jest przedstawicielką wyjątków rodzaju Unchecked.
@@ -1765,4 +2121,3 @@ java.lang.Object
             java.lang.RuntimeException
                 java.lang.IllegalArgumentException
 ```
-

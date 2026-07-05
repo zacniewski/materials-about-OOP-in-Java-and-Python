@@ -1,3 +1,5 @@
+# Wykład 6: Konstruktory i inicjalizacja obiektów
+
 Źródło: https://kursjava.com/klasy/konstruktory/
 
 ### 1. Konstruktory
@@ -732,3 +734,331 @@ Pojazd.java:9: error: variable rokProdukcji might not have been initialized
 - Pola `final`, o ile nie są uniwersalnymi stałymi z punktu widzenia naszego programu, nazywamy tak jak inne zmienne, czyli korzystając z konwencji camelCase. Stałe, które wyznaczają pewną niezmienną wartość, jak na przykład liczba Pi, nazywamy wielkimi literami z podkreśleniem jako separator słów, np. `LICZBA_PI`.
 - Konstruktory mogą być prywatne – przydaje się to w przypadku wzorców projektowych, takich jak Singleton oraz Builder. Konstruktory prywatne mogą być używane przez klasy, w których zostały zdefiniowane.
 
+---
+
+## 7. Materiał rozszerzający: dodatkowe notatki i praktyka
+
+Ta sekcja zachowuje treści z wcześniejszego, osobnego pliku o konstruktorach. Zawiera bardziej syntetyczne definicje, porównania i ćwiczenia, które dobrze sprawdzają się jako materiał do powtórki przed laboratorium lub kolokwium.
+
+### 7.1. Spis treści rozszerzenia
+- [Czym jest konstruktor](#72-czym-jest-konstruktor)
+- [Sygnatura konstruktora](#73-sygnatura-konstruktora)
+- [Konstruktor domyślny (no-arg)](#74-konstruktor-domyslny-no-arg)
+- [Przeciążanie konstruktorów](#75-przeciazanie-konstruktorow)
+- [Łańcuchowanie: this(...) i super(...)](#76-lancuchowanie-this-i-super)
+- [Modyfikatory dostępu konstruktorów](#77-modyfikatory-dostepu-konstruktorow)
+- [Walidacja w konstruktorze i rzucanie wyjątków](#78-walidacja-w-konstruktorze-i-rzucanie-wyjatkow)
+- [Konstruktor kopiujący i defensywne kopiowanie](#79-konstruktor-kopiujacy-i-defensywne-kopiowanie)
+- [Klasy niemutowalne a konstruktor](#710-klasy-niemutowalne-a-konstruktor)
+- [Statyczne metody wytwórcze vs. konstruktor](#711-statyczne-metody-wytworcze-vs-konstruktor)
+- [Dziedziczenie a konstruktory](#712-dziedziczenie-a-konstruktory)
+- [Rekordy (record) w Java](#713-rekordy-record-w-java)
+- [Dobre praktyki](#714-dobre-praktyki)
+- [Najczęstsze błędy](#715-najczestsze-bledy)
+- [Mini-FAQ](#716-mini-faq)
+- [Ćwiczenia](#717-cwiczenia)
+
+### 7.2. Czym jest konstruktor
+Konstruktor to specjalna metoda wywoływana podczas tworzenia obiektu za pomocą `new`. Służy do inicjalizacji stanu obiektu (ustawiania pól na wartości początkowe) i może wykonywać walidację.
+
+- Nie zwraca wartości (nawet `void`).
+- Nosi nazwę klasy.
+- Może być przeciążany (wiele konstruktorów o różnych listach parametrów).
+
+Przykład:
+```java
+public class Person {
+    private String name;
+    private int age;
+
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+}
+```
+
+### 7.3. Sygnatura konstruktora
+Sygnatura obejmuje nazwę (identyczną z klasą) oraz listę parametrów.
+
+```java
+public class Rectangle {
+    private double width;
+    private double height;
+
+    public Rectangle(double width, double height) {
+        this.width = width;
+        this.height = height;
+    }
+}
+```
+
+Uwaga: nie można określić typu zwracanego. Modyfikatory dopuszczalne to m.in. `public`, `protected`, pakietowy (brak słowa kluczowego), `private`.
+
+### 7.4. Konstruktor domyślny (no-arg)
+Jeśli nie zdefiniujesz żadnego konstruktora, kompilator doda publiczny konstruktor bezargumentowy.
+
+- Znika on automatycznie, gdy dodasz jakikolwiek własny konstruktor.
+- Jeśli chcesz mieć i no-arg, i parametryczny, zdefiniuj oba.
+
+```java
+public class BankAccount {
+    private String owner;
+    private double balance;
+
+    public BankAccount() {
+        this.owner = "Unknown";
+        this.balance = 0.0;
+    }
+
+    public BankAccount(String owner, double balance) {
+        this.owner = owner;
+        this.balance = balance;
+    }
+}
+```
+
+### 7.5. Przeciążanie konstruktorów
+Możesz tworzyć wiele konstruktorów różniących się listą parametrów, a wspólną logikę współdzielić przez łańcuchowanie `this(...)`.
+
+```java
+public class Course {
+    private final String title;
+    private final int ects;
+    private final String[] tags;
+
+    public Course(String title, int ects) {
+        this(title, ects, new String[0]);
+    }
+
+    public Course(String title, int ects, String[] tags) {
+        this.title = title;
+        this.ects = ects;
+        this.tags = tags != null ? java.util.Arrays.copyOf(tags, tags.length) : new String[0];
+    }
+}
+```
+
+### 7.6. Łańcuchowanie: this(...) i super(...)
+- `this(...)` wywołuje inny konstruktor tej samej klasy (musi być pierwszą instrukcją).
+- `super(...)` wywołuje konstruktor klasy bazowej (również pierwsza instrukcja). Jeśli go nie podasz, wywołane zostanie domyślne `super()`.
+
+```java
+class Base {
+    protected final String id;
+    public Base(String id) { this.id = id; }
+}
+
+class Derived extends Base {
+    private final int level;
+
+    public Derived(String id) {
+        this(id, 0);
+    }
+
+    public Derived(String id, int level) {
+        super(id);
+        this.level = level;
+    }
+}
+```
+
+### 7.7. Modyfikatory dostępu konstruktorów
+- `public` - każdy może tworzyć obiekt.
+- Pakietowy (brak słowa kluczowego) - tylko w tym samym pakiecie.
+- `protected` - dostęp w pakiecie i w podklasach.
+- `private` - ogranicza tworzenie obiektów (np. wzorzec Singleton lub statyczne metody wytwórcze).
+
+```java
+public class Utility {
+    private Utility() { /* zapobieganie instancjonowaniu */ }
+}
+```
+
+### 7.8. Walidacja w konstruktorze i rzucanie wyjątków
+Waliduj parametry i rzucaj sensowne wyjątki, np. `IllegalArgumentException` lub `NullPointerException`.
+
+```java
+public class Employee {
+    private final String name;
+    private final double salary;
+
+    public Employee(String name, double salary) {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException("name must not be blank");
+        }
+        if (salary < 0) {
+            throw new IllegalArgumentException("salary must be >= 0");
+        }
+        this.name = name;
+        this.salary = salary;
+    }
+}
+```
+
+### 7.9. Konstruktor kopiujący i defensywne kopiowanie
+Przy polach referencyjnych do kolekcji lub tablic stosuj defensywne kopiowanie, aby uniknąć współdzielenia stanu między obiektami.
+
+```java
+import java.util.Arrays;
+
+public class Course {
+    private final String title;
+    private final int ects;
+    private final String[] tags;
+
+    public Course(String title, int ects, String[] tags) {
+        this.title = title;
+        this.ects = ects;
+        this.tags = tags != null ? Arrays.copyOf(tags, tags.length) : new String[0];
+    }
+
+    public Course(Course other) {
+        if (other == null) {
+            throw new IllegalArgumentException("other must not be null");
+        }
+        this.title = other.title;
+        this.ects = other.ects;
+        this.tags = Arrays.copyOf(other.tags, other.tags.length);
+    }
+}
+```
+
+### 7.10. Klasy niemutowalne a konstruktor
+W klasach niemutowalnych pola są `final`, brak setterów, a konstruktor nadaje ostateczne wartości. Unikaj udostępniania wewnętrznych, modyfikowalnych struktur bez kopii.
+
+```java
+public final class ImmutablePoint {
+    private final int x;
+    private final int y;
+
+    public ImmutablePoint(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public int getX() { return x; }
+    public int getY() { return y; }
+}
+```
+
+### 7.11. Statyczne metody wytwórcze vs. konstruktor
+Czasem lepiej użyć statycznej metody wytwórczej:
+- może mieć opisową nazwę (`from`, `of`, `withDefault`),
+- może zwracać podklasę lub obiekt z puli,
+- może cache'ować instancje.
+
+```java
+public class Color {
+    private final int r, g, b;
+    private Color(int r, int g, int b) { this.r = r; this.g = g; this.b = b; }
+
+    public static Color ofRgb(int r, int g, int b) {
+        return new Color(r, g, b);
+    }
+}
+```
+
+### 7.12. Dziedziczenie a konstruktory
+Konstruktor podklasy zawsze (jawnie lub niejawnie) wywołuje konstruktor nadklasy. Jeśli nadklasa nie ma konstruktora no-arg, podklasa musi jawnie wywołać `super(...)`.
+
+```java
+class PersonBase {
+    protected final String name;
+    public PersonBase(String name) { this.name = name; }
+}
+
+class Student extends PersonBase {
+    private final String indexNo;
+
+    public Student(String name, String indexNo) {
+        super(name);
+        this.indexNo = indexNo;
+    }
+}
+```
+
+### 7.13. Rekordy (record) w Java
+`record` automatycznie generuje tzw. kanoniczny konstruktor oraz `equals`, `hashCode`, `toString`.
+
+```java
+public record Point(int x, int y) {
+    public Point {
+        if (x < 0 || y < 0) throw new IllegalArgumentException("coords must be >= 0");
+    }
+}
+```
+
+### 7.14. Dobre praktyki
+- Inicjalizuj wszystkie wymagane pola w konstruktorze.
+- Waliduj argumenty jak najbliżej miejsca użycia.
+- Do wspólnej logiki używaj łańcuchowania `this(...)`.
+- Stosuj defensywne kopiowanie dla tablic i kolekcji przekazywanych z zewnątrz.
+- Nie wykonuj w konstruktorze operacji, które łatwo mogą się nie powieść (I/O, sieć).
+- Dla klas niemutowalnych używaj `final` i nie ujawniaj wewnętrznych referencji.
+
+### 7.15. Najczęstsze błędy
+- Brak no-arg po dodaniu konstruktora parametrycznego, gdy framework go wymaga.
+- Niewywołanie `super(...)` w podklasie, gdy nadklasa nie ma no-arg.
+- Współdzielenie tablic i kolekcji zamiast defensywnego kopiowania.
+- Walidacja zbyt późno i pozostawienie obiektu w nieprawidłowym stanie.
+
+### 7.16. Mini-FAQ
+- Czy konstruktor może zwracać wartość? Nie, nie ma typu zwracanego.
+- Czy można wywołać metodę w konstruktorze? Tak, ale trzeba uważać na metody wirtualne.
+- Czy można przeciążać konstruktory? Tak, to powszechny wzorzec.
+- Czy można mieć prywatny konstruktor? Tak, np. w Singletonie, klasach narzędziowych i metodach fabrycznych.
+
+### 7.17. Cwiczenia
+1) Napisz klasę `Person` z konstruktorami: no-arg (ustawia domyślne wartości) i parametrycznym (`name`, `age`). Dodaj walidację.
+```java
+public class Person {
+    private String name;
+    private int age;
+
+    public Person() {
+        this("Unknown", 0);
+    }
+
+    public Person(String name, int age) {
+        if (name == null || name.isBlank()) throw new IllegalArgumentException("name!");
+        if (age < 0) throw new IllegalArgumentException("age!");
+        this.name = name;
+        this.age = age;
+    }
+}
+```
+
+2) Zaimplementuj klasę `Rectangle` z przeciążonymi konstruktorami: `(w, h)` oraz `square(side)` jako statyczna metoda wytwórcza.
+```java
+public class Rectangle {
+    private final double w, h;
+    public Rectangle(double w, double h) {
+        if (w <= 0 || h <= 0) throw new IllegalArgumentException("dims!");
+        this.w = w; this.h = h;
+    }
+    public static Rectangle square(double side) { return new Rectangle(side, side); }
+}
+```
+
+3) Dodaj do klasy `Course` konstruktor kopiujący i upewnij się, że tablice lub kolekcje są kopiowane defensywnie.
+```java
+public class Course {
+    private final String title;
+    private final int ects;
+    private final String[] tags;
+
+    public Course(String title, int ects, String[] tags) {
+        this.title = title;
+        this.ects = ects;
+        this.tags = tags != null ? java.util.Arrays.copyOf(tags, tags.length) : new String[0];
+    }
+
+    public Course(Course other) {
+        if (other == null) throw new IllegalArgumentException("other!");
+        this.title = other.title;
+        this.ects = other.ects;
+        this.tags = java.util.Arrays.copyOf(other.tags, other.tags.length);
+    }
+}
+```
