@@ -1,5 +1,7 @@
 # 3. Klasy oraz ich elementy składowe, metody klasy
 
+> To laboratorium odpowiada modułowi wykładowemu `03-klasy-i-metody-main.md`. Głębsze omówienie pól klas znajduje się w laboratorium 6, a pełne omówienie konstruktorów w laboratorium 7.
+
 ## Teoria
 
 ### Czym jest klasa?
@@ -57,6 +59,25 @@ Elementy statyczne należą do klasy, nie do instancji:
 - `void` — metoda nie zwraca wartości.
 - Typ prymitywny (`int`, `double`, `boolean`, itp.) — metoda zwraca wartość prymitywną.
 - Typ obiektowy (`String`, `List`, własna klasa) — metoda zwraca referencję do obiektu.
+
+### Jak czytać klasę jako projekt obiektowy?
+W praktyce warto analizować klasę w czterech krokach:
+1. **Odpowiedzialność** — za co ta klasa odpowiada?
+2. **Stan** — jakie dane musi pamiętać?
+3. **Zachowanie** — jakie operacje udostępnia?
+4. **Granica dostępu** — co powinno być publiczne, a co ukryte?
+
+```mermaid
+classDiagram
+class Klasa {
+  -stanPrywatny
+  +konstruktor()
+  +metodaPubliczna()
+  -metodaPomocnicza()
+}
+```
+
+Taki sposób myślenia przygotowuje do kolejnych laboratoriów: enkapsulacji, konstruktorów, dziedziczenia i SOLID.
 
 ---
 
@@ -503,3 +524,59 @@ public class MetodyVarargs {
     }
 }
 ```
+
+---
+
+## Diagram zależności: klasa, obiekt, metoda i pole
+
+```mermaid
+flowchart TD
+    A[Klasa] --> B[Pola]
+    A --> C[Metody]
+    A --> D[Konstruktor]
+    D --> E[Obiekt 1]
+    D --> F[Obiekt 2]
+    E --> G[Własny stan]
+    F --> H[Własny stan]
+```
+
+Interpretacja:
+- jedna klasa jest szablonem,
+- wiele obiektów może powstać z tej samej klasy,
+- każdy obiekt ma własny stan,
+- metody opisują wspólne zachowanie zdefiniowane w klasie.
+
+## Typowe błędy na tym etapie
+
+- Mylenie klasy z obiektem.
+- Nadużywanie pól `public`.
+- Umieszczanie całej logiki w `main`.
+- Traktowanie metod statycznych jak zamiennika obiektów.
+- Zbyt duża liczba odpowiedzialności w jednej klasie.
+
+## Zadania laboratoryjne
+
+1. Napisz klasę `Film` z polami `tytul`, `rezyser`, `rokProdukcji`, `obejrzany` oraz metodami:
+   - `obejrzyj()`,
+   - `wyswietlInfo()`.
+2. Napisz klasę `KalkulatorTemperatur`, która ma:
+   - metodę statyczną `celsiusToFahrenheit(double c)`,
+   - metodę statyczną `fahrenheitToCelsius(double f)`,
+   - metodę instancji `opisZakresu(double c)`.
+3. Utwórz klasę `BankAccount`, która przechowuje saldo i udostępnia metody:
+   - `deposit(double amount)`,
+   - `withdraw(double amount)`,
+   - `getBalance()`.
+4. Napisz klasę `StudentGroup`, która posiada pole statyczne z liczbą utworzonych studentów.
+5. Zaimplementuj klasę `RectangleUtils`, która:
+   - tworzy prostokąt,
+   - liczy pole i obwód,
+   - używa `this` do odróżnienia pól od parametrów.
+
+## Mini-checklista po laboratorium
+
+- Czy odróżniasz klasę od obiektu?
+- Czy rozumiesz różnicę między metodą statyczną i instancyjną?
+- Czy wiesz, kiedy użyć `this`?
+- Czy potrafisz zaprojektować prostą klasę z czytelnym interfejsem?
+- Czy umiesz przewidzieć, które elementy klasy będą dalej rozwijane w kolejnych laboratoriach?

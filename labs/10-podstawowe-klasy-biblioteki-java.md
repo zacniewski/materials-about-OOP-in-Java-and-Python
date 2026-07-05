@@ -1,4 +1,4 @@
-# 6. Podstawowe klasy dostępne w pakietach języka obiektowego
+# 10. Podstawowe klasy biblioteki Java
 
 ## Teoria
 

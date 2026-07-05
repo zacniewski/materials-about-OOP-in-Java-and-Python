@@ -1,4 +1,4 @@
-# 9. Obiekty. Konstruktor. Metody obiektu.
+# 7. Konstruktory i inicjalizacja obiektów
 
 ## Teoria
 

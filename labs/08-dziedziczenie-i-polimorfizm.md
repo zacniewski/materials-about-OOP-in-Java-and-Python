@@ -1,4 +1,4 @@
-# 13. Dziedziczenie. Mechanizm kontroli głębokości dziedziczenia.
+# 8. Dziedziczenie i polimorfizm
 
 ## Teoria
 
@@ -55,6 +55,22 @@ Konstruktory są wywoływane **od góry hierarchii w dół**:
 - **Dziedziczenie** — relacja „jest" (is-a). Pies JEST zwierzęciem.
 - **Kompozycja** — relacja „ma" (has-a). Samochód MA silnik.
 - Zasada: **preferuj kompozycję nad dziedziczenie** (Effective Java, Joshua Bloch).
+
+### Dziedziczenie a polimorfizm
+Dziedziczenie opisuje strukturę relacji między klasami, a polimorfizm opisuje sposób używania tych klas przez wspólną abstrakcję.
+
+```mermaid
+classDiagram
+class Zwierze {
+  +wydajDzwiek()
+}
+class Pies
+class Kot
+Zwierze <|-- Pies
+Zwierze <|-- Kot
+```
+
+Jeżeli metoda przyjmuje `Zwierze`, to może pracować z `Pies`, `Kot` albo inną podklasą `Zwierze`.
 
 ---
 
@@ -676,3 +692,75 @@ public class DziedziczenieZInterfejsami {
     }
 }
 ```
+
+---
+
+## Materiał uzupełniający: przeciążanie, przesłanianie i polimorfizm
+
+Poniższe sekcje porządkują materiał ze starych laboratoriów `12-przeciazanie-i-przeslanianie-metod.md` oraz `14-polimorfizm.md`, tak aby cały temat znalazł się w jednym miejscu.
+
+### Przeciążanie a przesłanianie
+
+| Cecha | Przeciążanie | Przesłanianie |
+|---|---|---|
+| Kiedy występuje? | w tej samej klasie | w podklasie |
+| Co się zmienia? | lista parametrów | implementacja tej samej metody |
+| Kiedy wybór metody? | kompilacja | wykonanie programu |
+
+### Przykład - przeciążanie metod
+
+```java
+class Calculator {
+    int add(int a, int b) { return a + b; }
+    int add(int a, int b, int c) { return a + b + c; }
+    double add(double a, double b) { return a + b; }
+}
+```
+
+### Przykład - przesłanianie metod
+
+```java
+class Animal {
+    void sound() {
+        System.out.println("Jakis dzwiek");
+    }
+}
+
+class Dog extends Animal {
+    @Override
+    void sound() {
+        System.out.println("Hau hau");
+    }
+}
+```
+
+### Polimorfizm dynamiczny
+
+```java
+Animal a1 = new Animal();
+Animal a2 = new Dog();
+
+a1.sound(); // Animal.sound()
+a2.sound(); // Dog.sound()
+```
+
+### Ważna obserwacja
+- metody są polimorficzne,
+- pola nie są polimorficzne,
+- `private`, `static` i `final` nie biorą udziału w dynamicznym przesyłaniu wywołań.
+
+### Diagram: typ referencji a typ obiektu
+
+```mermaid
+flowchart LR
+    A[Referencja typu Animal] --> B[Obiekt Dog]
+    B --> C[Wywolanie Dog.sound()]
+```
+
+## Zadania laboratoryjne
+
+1. Zaimplementuj hierarchię `Employee -> Manager -> Director`.
+2. Dodaj w niej przesłanianie metody `getDescription()`.
+3. Napisz metodę przyjmującą tablicę `Employee[]` i wypisującą opis każdego obiektu.
+4. Pokaż na przykładzie, kiedy downcasting jest bezpieczny, a kiedy kończy się błędem.
+5. Przeanalizuj przypadek, w którym lepsza od dziedziczenia jest kompozycja.

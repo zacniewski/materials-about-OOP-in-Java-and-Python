@@ -1,4 +1,4 @@
-# 10. Powoływanie obiektu. Zmienne referencyjne.
+# 15. Referencje do obiektów i niemutowalność
 
 ## Teoria
 

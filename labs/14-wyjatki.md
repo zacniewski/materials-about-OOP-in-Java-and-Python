@@ -1,4 +1,4 @@
-# 15. Mechanizm obsługi wyjątków. Typy wyjątków.
+# 14. Wyjątki i obsługa błędów
 
 ## Teoria
 

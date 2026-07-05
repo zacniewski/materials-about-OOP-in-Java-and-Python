@@ -1,4 +1,4 @@
-# 11. Klasy abstrakcyjne
+# 9. Interfejsy i klasy abstrakcyjne
 
 ## Teoria
 
@@ -44,6 +44,15 @@ abstract void obliczPole(); // brak ciała — średnik zamiast nawiasów klamro
 - Gdy klasy pochodne mają **wspólny stan** (pola) i **wspólne zachowanie** (metody konkretne).
 - Gdy chcesz wymusić implementację pewnych metod w podklasach.
 - Gdy hierarchia klas ma relację „jest" (is-a) z częściowo wspólną logiką.
+
+### Jak ten temat łączy się z interfejsami?
+Interfejs opisuje głównie **kontrakt**, a klasa abstrakcyjna opisuje **kontrakt plus częściową implementację**.
+
+```mermaid
+flowchart TD
+    A[Interfejs] --> B[Co obiekt potrafi?]
+    C[Klasa abstrakcyjna] --> D[Co obiekt potrafi i co juz ma wspolne?]
+```
 
 ---
 
@@ -850,3 +859,91 @@ public class PlatnosciPrzyklad {
     }
 }
 ```
+
+---
+
+## Materiał uzupełniający: interfejsy
+
+Ta część porządkuje materiał ze starego laboratorium `07-interfejsy.md`, tak aby interfejsy i klasy abstrakcyjne były ćwiczone razem, zgodnie z układem wykładów.
+
+### Czym jest interfejs?
+Interfejs w Javie definiuje zestaw metod, które klasa implementująca musi dostarczyć. Opisuje bardziej rolę lub zdolność niż konkretny typ bazowy.
+
+### Najważniejsze cechy interfejsów
+- klasa może implementować wiele interfejsów,
+- interfejs nie przechowuje zwykłego stanu instancji,
+- od Java 8 może zawierać metody `default` i `static`,
+- świetnie nadaje się do strategii, callbacków i programowania "na kontrakt".
+
+### Przykład - prosty interfejs
+
+```java
+interface Printable {
+    void print();
+}
+
+class Report implements Printable {
+    @Override
+    public void print() {
+        System.out.println("Druk raportu");
+    }
+}
+```
+
+### Przykład - interfejs i klasa abstrakcyjna razem
+
+```java
+interface Drawable {
+    void draw();
+}
+
+abstract class Shape implements Drawable {
+    private final String name;
+
+    protected Shape(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    abstract double area();
+}
+
+class Circle extends Shape {
+    private final double r;
+
+    Circle(double r) {
+        super("Circle");
+        this.r = r;
+    }
+
+    @Override
+    public void draw() {
+        System.out.println("Rysuje kolo");
+    }
+
+    @Override
+    double area() {
+        return Math.PI * r * r;
+    }
+}
+```
+
+### Interfejs czy klasa abstrakcyjna?
+
+| Sytuacja | Lepszy wybór |
+|---|---|
+| wiele klas ma wspólny kontrakt | interfejs |
+| wiele klas ma wspólny stan i część logiki | klasa abstrakcyjna |
+| potrzebujesz wielu "ról" dla jednego obiektu | interfejs |
+| budujesz hierarchię z bazową implementacją | klasa abstrakcyjna |
+
+## Zadania laboratoryjne
+
+1. Zdefiniuj interfejs `Payable` z metodą `pay(double amount)`.
+2. Napisz klasy `CashPayment` i `CardPayment`, które implementują ten interfejs.
+3. Zbuduj abstrakcyjną klasę `Vehicle` z polami `brand` i `year` oraz abstrakcyjną metodą `start()`.
+4. Napisz klasy `Car` i `Bike`, które rozszerzają `Vehicle`.
+5. Zastanów się, które fragmenty projektu powinny być interfejsem, a które klasą abstrakcyjną.

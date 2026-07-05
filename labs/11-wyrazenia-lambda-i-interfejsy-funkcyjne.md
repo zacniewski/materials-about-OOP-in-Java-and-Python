@@ -1,4 +1,4 @@
-# 8. Wyrażenia lambda. Interfejsy funkcyjne.
+# 11. Wyrażenia lambda i interfejsy funkcyjne
 
 ## Teoria
 
