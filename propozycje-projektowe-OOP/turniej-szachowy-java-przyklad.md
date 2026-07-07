@@ -1,25 +1,25 @@
-# Pogladowy projekt OOP: Turniej szachowy w Javie
+# Poglądowy projekt OOP: Turniej szachowy w Javie
 
-Ten plik pokazuje przykladowa realizacje projektu `Turniej szachowy: parowanie i klasyfikacja` w Javie. Nie jest to kompletna aplikacja produkcyjna, tylko sensowny szkielet edukacyjny, na ktorym da sie cwiczyc:
+Ten plik pokazuje przykładową realizację projektu `Turniej szachowy: parowanie i klasyfikacja` w Javie. Nie jest to kompletna aplikacja produkcyjna, tylko sensowny szkielet edukacyjny, na którym da się ćwiczyć:
 
 - klasy abstrakcyjne,
 - interfejsy strategii,
-- kompozycje obiektow,
+- kompozycje obiektów,
 - polimorfizm,
 - serwisy domenowe,
-- organizacje pakietow.
+- organizacje pakietów.
 
 ## Cel projektu
 
-Zbudowac prosta aplikacje konsolowa, ktora:
+Zbudować prostą aplikację konsolową, która:
 
-1. przechowuje liste zawodnikow,
+1. przechowuje listę zawodników,
 2. paruje ich do rund,
 3. zapisuje wyniki partii,
-4. przelicza tabele turniejowa,
-5. drukuje klasyfikacje po kazdej rundzie.
+4. przelicza tabelę turniejową,
+5. drukuje klasyfikację po każdej rundzie.
 
-## Proponowana struktura pakietow
+## Proponowana struktura pakietów
 
 ```text
 src/main/java/
@@ -108,7 +108,7 @@ public class Player extends Competitor {
 
 ### 3. `MatchResult`
 
-Enum opisujacy wynik partii.
+Enum opisujący wynik partii.
 
 ```java
 package chess.domain;
@@ -215,7 +215,7 @@ public class Standing {
 
 ## Strategie
 
-Tu jest najwazniejszy element OOP tego projektu: algorytmy sa wydzielone do interfejsow i mozna je podmieniac bez przepisywania serwisu turniejowego.
+Tu jest najważniejszy element OOP tego projektu: algorytmy są wydzielone do interfejsów i można je podmieniać bez przepisywania serwisu turniejowego.
 
 ### 1. `PairingStrategy`
 
@@ -302,7 +302,7 @@ public class ClassicScoringRule implements ScoringRule {
 
 ### `TournamentService`
 
-To klasa spinajaca logike turnieju.
+To klasa spinajaca logikę turnieju.
 
 ```java
 package chess.service;
@@ -450,32 +450,32 @@ public class Main {
 }
 ```
 
-## Co ten projekt dobrze cwiczy w Javie
+## Co ten projekt dobrze ćwiczy w Javie
 
 1. `abstract class` kontra `interface`
-   - `Competitor` jest dobra baza pod wspolne dane i walidacje.
-   - `PairingStrategy` i `ScoringRule` sa kontraktami wymiennych algorytmow.
+   - `Competitor` jest dobra baza pod wspólne dane i walidację.
+   - `PairingStrategy` i `ScoringRule` są kontraktami wymiennych algorytmów.
 2. Enkapsulacje
-   - pola sa prywatne,
-   - stan obiektow zmienia sie kontrolowanymi metodami.
+   - pola są prywatne,
+   - stan obiektów zmienia się kontrolowanymi metodami.
 3. Polimorfizm
    - `TournamentService` nie zna konkretnego algorytmu parowania ani punktacji.
 4. Podzial odpowiedzialnosci
    - modele przechowuja dane,
    - strategie zawieraja algorytmy,
-   - serwisy spinaja przeplyw.
+   - serwisy spinaja przepływ.
 
-## Mozliwe rozszerzenia
+## Możliwe rozszerzenia
 
-1. Dodac `SwissPairingStrategy`.
-2. Dodac abstrakcyjna klase `Tournament`.
-3. Dodac zapis i odczyt danych z pliku CSV.
-4. Dodac walidacje nieparzystej liczby graczy i obsluge `bye`.
-5. Dodac testy jednostkowe dla `ClassicScoringRule` i `TournamentService`.
+1. Dodać `SwissPairingStrategy`.
+2. Dodać abstrakcyjną klasę `Tournament`.
+3. Dodać zapis i odczyt danych z pliku CSV.
+4. Dodać walidację nieparzystej liczby graczy i obsługę `bye`.
+5. Dodać testy jednostkowe dla `ClassicScoringRule` i `TournamentService`.
 
 ## Minimalna wersja do oddania przez studenta
 
-Jesli projekt ma byc krotszy, wystarczy:
+Jeśli projekt ma byc krotszy, wystarczy:
 
 - `Competitor`, `Player`,
 - `Match`, `MatchResult`, `Standing`,

@@ -1,24 +1,24 @@
-# Pogladowy projekt OOP: Turniej szachowy w Pythonie
+# Poglądowy projekt OOP: Turniej szachowy w Pythonie
 
-Ten plik pokazuje ten sam pomysl projektowy co wersja javowa, ale zapisany po pythonowemu. Celem nie jest wierne kopiowanie stylu Javy, tylko pokazanie, jak te same decyzje obiektowe przeniesc do Pythona:
+Ten plik pokazuje ten sam pomysł projektowy co wersja 'javowa', ale zapisany po 'pythonowemu'. Celem nie jest wierne kopiowanie stylu Javy, tylko pokazanie, jak te same decyzje obiektowe przenieść do Pythona:
 
 - klasy bazowe,
-- protokoly lub klasy strategii,
+- protokoły lub klasy strategii,
 - serwisy domenowe,
-- male, czytelne modele,
+- małe, czytelne modele,
 - prosty scenariusz uruchomieniowy.
 
 ## Cel projektu
 
-Zbudowac aplikacje konsolowa, ktora:
+Zbudować aplikację konsolową, która:
 
 1. rejestruje graczy,
-2. tworzy pary na runde,
+2. tworzy pary na rundę,
 3. zapisuje wyniki partii,
-4. buduje klasyfikacje,
+4. buduje klasyfikację,
 5. drukuje stan turnieju.
 
-## Proponowana struktura katalogow
+## Proponowana struktura katalogów
 
 ```text
 chess/
@@ -28,13 +28,13 @@ chess/
   services.py
 ```
 
-Mozna tez rozbic to na wiecej plikow, ale do nauki Python OOP taka uproszczona struktura jest wystarczajaca.
+Można też rozbić to na więcej plików, ale do nauki Python OOP taka uproszczona struktura jest wystarczająca.
 
 ## Model domeny
 
 ### `Competitor`
 
-W Pythonie dobrze sprawdza sie klasa bazowa z `ABC`.
+W Pythonie dobrze sprawdza się klasa bazowa z `ABC`.
 
 ```python
 from abc import ABC, abstractmethod
@@ -93,7 +93,7 @@ class MatchResult(Enum):
 
 ### `Match`
 
-W Pythonie warto uzyc `dataclass`, ale z walidacja w `__post_init__`.
+W Pythonie warto użyć `dataclass`, ale z walidacją w `__post_init__`.
 
 ```python
 from dataclasses import dataclass, field
@@ -132,7 +132,7 @@ class Standing:
 
 ## Strategie
 
-Tutaj tez warto utrzymac ten sam pomysl co w Javie: algorytmy sa wymiennymi obiektami.
+Tutaj też warto utrzymać ten sam pomysł co w Javie: algorytmy są wymiennymi obiektami.
 
 ### `PairingStrategy`
 
@@ -281,12 +281,12 @@ if __name__ == "__main__":
     main()
 ```
 
-## Co ten projekt dobrze cwiczy w Pythonie
+## Co ten projekt dobrze ćwiczy w Pythonie
 
-1. Roznice miedzy stylem javowym i pythonowym
-   - Python pozwala napisac krotszy model, ale nadal mozna zachowac czysty podzial odpowiedzialnosci.
+1. Różnice między stylem 'javowym' i 'pythonowym'
+   - Python pozwala napisać krótszy model, ale nadal można zachować czysty podział odpowiedzialności.
 2. Klasy bazowe abstrakcyjne
-   - `ABC` dobrze nadaje sie do pokazywania kontraktow.
+   - `ABC` dobrze nadaje się do pokazywania kontraktów.
 3. `dataclass`
    - Dobrze pasuje do prostych modeli typu `Match` i `Standing`.
 4. Strategia jako obiekt
@@ -294,11 +294,11 @@ if __name__ == "__main__":
 
 ## Rozszerzenia
 
-1. Dodac `SwissPairingStrategy`.
-2. Dodac obsluge nieparzystej liczby graczy i `bye`.
-3. Dodac eksport tabeli do CSV.
-4. Dodac testy w `pytest`.
-5. Rozbic projekt na osobne pliki per klasa.
+1. Dodać `SwissPairingStrategy`.
+2. Dodać obsługę nieparzystej liczby graczy i `bye`.
+3. Dodać eksport tabeli do CSV.
+4. Dodać testy w `pytest`.
+5. Rozbić projekt na osobne pliki per klasa.
 
 ## Minimalna wersja do oddania przez studenta
 
