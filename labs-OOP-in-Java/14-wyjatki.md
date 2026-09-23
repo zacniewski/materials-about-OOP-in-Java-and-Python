@@ -693,3 +693,13 @@ public class WalidacjaFormularza {
     }
 }
 ```
+
+
+## Zadania laboratoryjne
+
+1. 1. Napisz metodę `parseAge(String text)`, która rzuca własny wyjątek `InvalidAgeException` dla danych spoza zakresu 0-120.
+2. 2. Utwórz klasę `FileLoader` i obsłuż wyjątki związane z odczytem pliku, zapewniając czytelny komunikat dla użytkownika.
+3. 3. Zaimplementuj scenariusz z `try-catch-finally`, który pokazuje, że blok `finally` wykonuje się niezależnie od błędu.
+4. 4. Dodaj przykład `try-with-resources` dla `Scanner` lub `BufferedReader` i wyjaśnij, jak działa automatyczne zamykanie zasobów.
+5. 5. Zaprojektuj własny wyjątek biznesowy (np. `InsufficientFundsException`) i użyj go w klasie `BankAccount`.
+6. 6. Przygotuj mini-ćwiczenie: rozpoznaj, które wyjątki w Twoim kodzie powinny być obsłużone lokalnie, a które propagowane wyżej.

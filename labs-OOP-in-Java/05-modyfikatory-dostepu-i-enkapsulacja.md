@@ -666,3 +666,13 @@ public class Pizza {
     }
 }
 ```
+
+
+## Zadania laboratoryjne
+
+1. 1. Napisz klasę `User` z prywatnymi polami `login`, `email`, `age` oraz getterami i setterami z walidacją wieku i formatu e-mail.
+2. 2. Utwórz klasę `Wallet` z prywatnym polem `balance` i publicznymi metodami `deposit(double)` oraz `pay(double)` bez bezpośredniego dostępu do pola.
+3. 3. Zbuduj dwa pakiety: `shop.core` i `shop.ui`. Sprawdź, które elementy są widoczne przy użyciu `public`, `protected` i modyfikatora domyślnego.
+4. 4. Przygotuj klasę bazową `Animal` i klasę potomną `Dog`, a następnie pokaż praktyczny przypadek użycia `protected`.
+5. 5. Wybierz jedną istniejącą klasę z poprzednich laboratoriów i zrefaktoryzuj ją tak, by wszystkie pola były enkapsulowane.
+6. 6. Dopisz 4-5 zdań: jakie problemy może powodować pozostawienie pól jako `public` w większym projekcie.

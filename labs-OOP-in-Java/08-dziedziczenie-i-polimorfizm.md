@@ -759,8 +759,9 @@ flowchart LR
 
 ## Zadania laboratoryjne
 
-1. Zaimplementuj hierarchię `Employee -> Manager -> Director`.
-2. Dodaj w niej przesłanianie metody `getDescription()`.
-3. Napisz metodę przyjmującą tablicę `Employee[]` i wypisującą opis każdego obiektu.
-4. Pokaż na przykładzie, kiedy downcasting jest bezpieczny, a kiedy kończy się błędem.
-5. Przeanalizuj przypadek, w którym lepsza od dziedziczenia jest kompozycja.
+1. 1. Zaimplementuj hierarchię `Employee -> Manager -> Director` z metodą `getDescription()` i odpowiednimi polami charakterystycznymi dla każdej klasy.
+2. 2. Przesłoń metodę `calculateBonus()` w klasach potomnych i porównaj wyniki dla tego samego wynagrodzenia bazowego.
+3. 3. Napisz metodę `printTeam(Employee[] team)`, która demonstruje polimorfizm podczas wywołań metod na typie bazowym.
+4. 4. Dodaj przykład bezpiecznego rzutowania z użyciem `instanceof` i osobno przykład, który prowadzi do `ClassCastException`.
+5. 5. Rozszerz projekt o klasę `Contractor`, a następnie zdecyduj, czy lepsze będzie dziedziczenie czy kompozycja i uzasadnij to w 4-6 zdaniach.
+6. 6. Narysuj prosty diagram hierarchii klas (tekstowo lub w Mermaid) i zaznacz, które metody są przesłaniane.

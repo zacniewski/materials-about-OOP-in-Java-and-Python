@@ -563,3 +563,13 @@ public class PraktycznyPrzyklad {
     }
 }
 ```
+
+
+## Zadania laboratoryjne
+
+1. 1. Zdefiniuj własny interfejs funkcyjny `TextTransformer` i przygotuj dwie lambdy: jedna zamienia tekst na wielkie litery, druga odwraca napis.
+2. 2. Utwórz listę produktów i użyj `forEach` z lambdą do czytelnego wypisania ich nazwy oraz ceny.
+3. 3. Posortuj listę obiektów `Student` według średniej malejąco z użyciem `Comparator` i wyrażeń lambda.
+4. 4. Przefiltruj liczby całkowite tak, by zostały tylko parzyste większe od 10 (lambda + `removeIf` lub Stream API).
+5. 5. Przygotuj przykład użycia referencji do metody (np. `System.out::println` lub `Student::getName`) i porównaj go z równoważną lambdą.
+6. 6. Zaimplementuj prosty pipeline streamów: mapowanie, filtrowanie i redukcję, a na końcu wypisz wynik obliczeń.

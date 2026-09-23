@@ -178,21 +178,12 @@ Teraz test jest prosty.
 
 ## Zadania laboratoryjne
 
-1. Napisz klasę `MathUtils` z metodami:
-   - `square(int x)`,
-   - `isEven(int x)`,
-   - `max(int a, int b)`.
-   Dla każdej metody przygotuj minimum 3 przypadki testowe.
-2. Napisz klasę `PasswordValidator`, która:
-   - odrzuca hasła krótsze niż 8 znaków,
-   - wymaga przynajmniej jednej cyfry.
-   Przygotuj testy poprawnych i błędnych danych.
-3. Napisz klasę `BankAccount` z metodą `withdraw(double amount)` i przetestuj:
-   - poprawną wypłatę,
-   - próbę wypłaty kwoty większej niż saldo,
-   - próbę wypłaty kwoty ujemnej.
-4. Weź jedną klasę z wcześniejszych laboratoriów i przepisz ją tak, aby była łatwiejsza do testowania.
-
+1. 1. Napisz klasę `MathUtils` z metodami `add`, `subtract`, `divide` i przygotuj do nich testy jednostkowe w JUnit 5.
+2. 2. Dodaj testy przypadku brzegowego dla `divide`, w tym scenariusz dzielenia przez zero z oczekiwanym wyjątkiem.
+3. 3. Zaimplementuj klasę `UserValidator` i napisz testy parametryzowane dla poprawnych i błędnych danych.
+4. 4. Przygotuj testy dla klasy z poprzednich laboratoriów (np. `BankAccount`) obejmujące minimum: scenariusz pozytywny, negatywny i graniczny.
+5. 5. Uporządkuj testy zgodnie ze schematem Given-When-Then i dodaj czytelne nazwy metod testowych.
+6. 6. Uruchom wszystkie testy i zapisz krótką notatkę: które testy wykryłyby najpoważniejszy błąd biznesowy oraz dlaczego.
 ## Mini-checklista
 
 - Czy testujesz zachowanie, a nie szczegóły implementacji?

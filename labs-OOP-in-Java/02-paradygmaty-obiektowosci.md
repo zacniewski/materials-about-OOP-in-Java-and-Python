@@ -552,3 +552,13 @@ public class Licznik {
     }
 }
 ```
+
+
+## Zadania laboratoryjne
+
+1. 1. Zaprojektuj klasę `Book` z polami `title`, `author`, `available` oraz metodami `borrow()` i `returnBook()`.
+2. 2. Zaimplementuj klasę `BankAccount` z prywatnym polem `balance` i metodami `deposit(double)` oraz `withdraw(double)` z walidacją danych.
+3. 3. Utwórz hierarchię `Vehicle -> Car` i pokaż w `main`, które pola/metody są dziedziczone.
+4. 4. Dodaj klasę `ElectricCar`, która przesłania metodę `getDescription()` i zademonstruj polimorfizm na tablicy `Vehicle[]`.
+5. 5. Przygotuj przykład relacji kompozycji: klasa `Computer` zawiera obiekt `Processor`. Pokaż tworzenie i użycie tej relacji.
+6. 6. Porównaj podejście proceduralne i obiektowe: ten sam mini-problem (np. obsługa koszyka) zapisz w obu stylach i opisz różnice w 5-7 zdaniach.

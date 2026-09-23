@@ -556,23 +556,12 @@ Interpretacja:
 
 ## Zadania laboratoryjne
 
-1. Napisz klasę `Film` z polami `tytul`, `rezyser`, `rokProdukcji`, `obejrzany` oraz metodami:
-   - `obejrzyj()`,
-   - `wyswietlInfo()`.
-2. Napisz klasę `KalkulatorTemperatur`, która ma:
-   - metodę statyczną `celsiusToFahrenheit(double c)`,
-   - metodę statyczną `fahrenheitToCelsius(double f)`,
-   - metodę instancji `opisZakresu(double c)`.
-3. Utwórz klasę `BankAccount`, która przechowuje saldo i udostępnia metody:
-   - `deposit(double amount)`,
-   - `withdraw(double amount)`,
-   - `getBalance()`.
-4. Napisz klasę `StudentGroup`, która posiada pole statyczne z liczbą utworzonych studentów.
-5. Zaimplementuj klasę `RectangleUtils`, która:
-   - tworzy prostokąt,
-   - liczy pole i obwód,
-   - używa `this` do odróżnienia pól od parametrów.
-
+1. 1. Napisz klasę `Film` z polami `tytul`, `rezyser`, `rokProdukcji`, `obejrzany` oraz metodami `obejrzyj()` i `wyswietlInfo()`.
+2. 2. Utwórz klasę `KalkulatorTemperatur` z metodami statycznymi `celsiusToFahrenheit(double)` i `fahrenheitToCelsius(double)`.
+3. 3. Zaimplementuj klasę `BankAccount` z metodami `deposit(double)`, `withdraw(double)` i `getBalance()` oraz podstawową walidacją.
+4. 4. Napisz klasę `StudentGroup`, która posiada pole statyczne zliczające liczbę utworzonych obiektów klasy `Student`.
+5. 5. Przygotuj klasę `Rectangle` z konstruktorem, polami `width` i `height` oraz metodami `area()` i `perimeter()` wykorzystującymi `this`.
+6. 6. Dodaj do jednej wybranej klasy metodę z `varargs` (np. `sum(int... numbers)`) i pokaż jej użycie dla różnych liczb argumentów.
 ## Mini-checklista po laboratorium
 
 - Czy odróżniasz klasę od obiektu?

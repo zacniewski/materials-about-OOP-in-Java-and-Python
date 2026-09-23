@@ -331,3 +331,13 @@ public class Formatowanie {
     }
 }
 ```
+
+
+## Zadania laboratoryjne
+
+1. 1. Zainstaluj JDK (wersja LTS) i sprawdź w terminalu wyniki poleceń `java -version` oraz `javac -version`. Zapisz je w krótkiej notatce.
+2. 2. Utwórz program `HelloStudent`, który wypisuje: imię, kierunek studiów i aktualny rok akademicki. Skompiluj i uruchom go z linii poleceń.
+3. 3. Napisz program `TypyDanychDemo`, który deklaruje po jednej zmiennej każdego typu prymitywnego i wypisuje ich wartości wraz z opisem.
+4. 4. Przygotuj program `KalkulatorProsty`, który dla dwóch liczb całkowitych pokazuje: sumę, różnicę, iloczyn, iloraz całkowity i resztę z dzielenia.
+5. 5. Napisz program `WarunkiIPetle`, który dla liczby `n` wypisze liczby od `1` do `n` oraz osobno tylko liczby parzyste.
+6. 6. Utwórz program `TablicaOcen`, który oblicza średnią z tablicy ocen i wypisuje ocenę najwyższą oraz najniższą.

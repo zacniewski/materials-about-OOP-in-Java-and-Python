@@ -487,3 +487,13 @@ public class RandomIScannerPrzyklad {
     }
 }
 ```
+
+
+## Zadania laboratoryjne
+
+1. 1. Napisz program operujący na `String`, który: usuwa nadmiarowe spacje, zamienia tekst na małe litery i zlicza liczbę słów.
+2. 2. Przygotuj klasę `Student` z poprawnie zaimplementowanymi metodami `toString()`, `equals()` i `hashCode()`.
+3. 3. Użyj `ArrayList` do przechowywania obiektów `Student`, a następnie wyszukaj studenta po indeksie i po nazwisku.
+4. 4. Wykorzystaj `HashMap<String, Integer>` do zliczania częstości występowania słów w zdaniu.
+5. 5. Napisz funkcję, która konwertuje `List<Integer>` na `Set<Integer>` i wyjaśnij, co dzieje się z duplikatami.
+6. 6. Zbuduj prosty scenariusz wejścia z `Scanner`: pobierz 5 liczb od użytkownika i wypisz ich średnią oraz maksimum.

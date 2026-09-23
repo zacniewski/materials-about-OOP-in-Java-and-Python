@@ -942,8 +942,9 @@ class Circle extends Shape {
 
 ## Zadania laboratoryjne
 
-1. Zdefiniuj interfejs `Payable` z metodą `pay(double amount)`.
-2. Napisz klasy `CashPayment` i `CardPayment`, które implementują ten interfejs.
-3. Zbuduj abstrakcyjną klasę `Vehicle` z polami `brand` i `year` oraz abstrakcyjną metodą `start()`.
-4. Napisz klasy `Car` i `Bike`, które rozszerzają `Vehicle`.
-5. Zastanów się, które fragmenty projektu powinny być interfejsem, a które klasą abstrakcyjną.
+1. 1. Zdefiniuj interfejs `Payable` z metodą `pay(double amount)` oraz przygotuj dwie implementacje: `CashPayment` i `CardPayment`.
+2. 2. Utwórz interfejs `Reportable` z metodą `generateReport()` i zaimplementuj go w dwóch różnych klasach domenowych.
+3. 3. Zbuduj abstrakcyjną klasę `Vehicle` z polami `brand`, `year` i abstrakcyjną metodą `start()`, a następnie klasy `Car` i `Bike`.
+4. 4. Pokaż w `main`, jak przechowywać obiekty różnych klas implementujących ten sam interfejs w jednej kolekcji.
+5. 5. Dodaj do interfejsu jedną metodę domyślną (`default`) i jedną statyczną, a następnie wykorzystaj je w przykładzie.
+6. 6. Napisz krótkie porównanie: kiedy w Twoim projekcie lepiej użyć interfejsu, a kiedy klasy abstrakcyjnej (minimum 5 zdań).

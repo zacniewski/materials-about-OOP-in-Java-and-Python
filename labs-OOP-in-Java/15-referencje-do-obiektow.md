@@ -544,3 +544,13 @@ public class WspoldzieleniePrzyklad {
     }
 }
 ```
+
+
+## Zadania laboratoryjne
+
+1. 1. Przygotuj przykład, w którym dwie zmienne referencyjne wskazują ten sam obiekt i pokaż skutki modyfikacji przez jedną z nich.
+2. 2. Napisz klasę `Person` i zaimplementuj metodę kopiującą obiekt na dwa sposoby: kopia płytka oraz kopia głęboka.
+3. 3. Zbuduj klasę `ShoppingCart` z listą produktów i pokaż różnicę między przekazaniem referencji a utworzeniem niezależnej kopii koszyka.
+4. 4. Dodaj do jednej klasy metodę/fabrykę zwracającą kopię defensywną kolekcji i wyjaśnij, po co to robimy.
+5. 5. Użyj metody `clone()` albo konstruktora kopiującego w klasie z obiektem zagnieżdżonym i sprawdź, czy zmiany w kopii wpływają na oryginał.
+6. 6. Narysuj prosty schemat (tekstowy lub Mermaid) ilustrujący relacje referencji między obiektami przed i po kopiowaniu.

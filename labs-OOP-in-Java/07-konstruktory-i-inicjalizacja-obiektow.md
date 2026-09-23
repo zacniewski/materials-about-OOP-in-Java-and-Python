@@ -569,3 +569,13 @@ public class FabrykaPrzyklad {
     }
 }
 ```
+
+
+## Zadania laboratoryjne
+
+1. 1. Napisz klasę `Student` z trzema konstruktorami: domyślnym, z samym `name` oraz z `name` i `indexNumber`.
+2. 2. Zastosuj przeciążanie konstruktorów w klasie `Rectangle` i użyj `this(...)` do delegowania między konstruktorami.
+3. 3. Utwórz klasę `Car` z walidacją danych wejściowych w konstruktorze (np. rok produkcji i pojemność silnika).
+4. 4. Przygotuj klasę `Configuration` z blokiem inicjalizacyjnym i porównaj jego działanie z inicjalizacją bezpośrednio przy polu.
+5. 5. Zaimplementuj konstruktor kopiujący w klasie `AddressBookEntry` i pokaż różnicę między kopią a referencją do tego samego obiektu.
+6. 6. Napisz testowy `main`, który tworzy obiekty wszystkimi konstruktorami i wypisuje ich stan po inicjalizacji.

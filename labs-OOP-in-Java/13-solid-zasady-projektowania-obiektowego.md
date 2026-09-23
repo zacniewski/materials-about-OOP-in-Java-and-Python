@@ -256,3 +256,13 @@ Po tym laboratorium student powinien:
 - rozpoznawać podstawowe naruszenia SOLID,
 - umieć zaproponować prostą refaktoryzację,
 - rozumieć, że dobre projektowanie jest naturalnym rozwinięciem klas, interfejsów, dziedziczenia i testowania.
+
+
+## Zadania laboratoryjne
+
+1. 1. Wybierz prostą klasę „god object” i rozdziel jej odpowiedzialności zgodnie z SRP na co najmniej dwie klasy.
+2. 2. Przygotuj przykład naruszenia OCP, a następnie zrefaktoryzuj go tak, by nowe zachowanie dało się dodać bez modyfikacji istniejącej klasy.
+3. 3. Zbuduj krótką hierarchię klas i sprawdź, czy podklasy są podstawialne zgodnie z LSP; popraw naruszenia.
+4. 4. Podziel zbyt duży interfejs na mniejsze zgodnie z ISP i pokaż, że klasy implementują tylko potrzebne metody.
+5. 5. Zastosuj DIP: klasa wysokiego poziomu ma zależeć od interfejsu, a nie konkretnej implementacji (wstrzyknięcie zależności przez konstruktor).
+6. 6. Dla każdej litery SOLID dopisz 1-2 zdania, jakie korzyści dała refaktoryzacja w Twoim przykładzie.

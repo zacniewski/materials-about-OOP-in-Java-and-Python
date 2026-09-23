@@ -172,19 +172,12 @@ flowchart LR
 
 ## Zadania laboratoryjne
 
-1. Napisz klasę `Product` z polami:
-   - `name`,
-   - `price`,
-   - `category`,
-   - `available`.
-   Dodaj metodę `printInfo()`.
-2. Dodaj do klasy `Product` pole statyczne `productCount`, które zlicza utworzone produkty.
-3. Napisz klasę `LibraryMember` z polem `final memberId`.
-4. Pokaż różnicę między polem klasy a zmienną lokalną na przykładzie licznika wywołań metody.
-5. Zbuduj klasę `ScoreBoard`, w której:
-   - pola instancyjne przechowują wynik jednego meczu,
-   - pole statyczne przechowuje liczbę rozegranych meczów.
-
+1. 1. Napisz klasę `Product` z polami instancyjnymi `name`, `price`, `category`, `available` oraz metodą `printInfo()`.
+2. 2. Dodaj do klasy `Product` statyczne pole `productCount`, które zwiększa się przy tworzeniu każdego obiektu.
+3. 3. Utwórz klasę `LibraryMember` z polem `final memberId` i metodą wypisującą dane czytelnika.
+4. 4. Napisz klasę `VisitCounter`, która pokazuje różnicę między zmienną lokalną a polem klasy podczas wielokrotnego wywołania metody.
+5. 5. Zaimplementuj klasę `ScoreBoard`, gdzie pola instancyjne opisują wynik jednego meczu, a pole statyczne liczy wszystkie rozegrane mecze.
+6. 6. Przygotuj krótki eksperyment: utwórz kilka obiektów tej samej klasy i pokaż, że każdy ma własny stan, ale współdzieli pola statyczne.
 ## Rozszerzenie
 
 Przepisz jedną z klas z laboratorium 3 tak, aby:

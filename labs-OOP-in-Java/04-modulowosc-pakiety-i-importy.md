@@ -511,3 +511,13 @@ public class Aplikacja {
     }
 }
 ```
+
+
+## Zadania laboratoryjne
+
+1. 1. Utwórz strukturę pakietów `pl.edu.lab.model`, `pl.edu.lab.service`, `pl.edu.lab.app` i przenieś klasy do odpowiednich pakietów.
+2. 2. Zaimplementuj klasę `Product` w pakiecie `model` oraz klasę `ProductService` w pakiecie `service`, która operuje na liście produktów.
+3. 3. W klasie `Main` (pakiet `app`) użyj importów jawnych i uruchom scenariusz dodawania oraz wypisywania produktów.
+4. 4. Pokaż różnicę między `import java.util.List;` a `import java.util.*;` i opisz, które podejście preferujesz w projekcie i dlaczego.
+5. 5. Rozdziel projekt na co najmniej 5 klas tak, aby każda miała jedną odpowiedzialność i była w logicznym pakiecie.
+6. 6. Dodaj krótką instrukcję uruchomienia projektu z pakietami (kompilacja i uruchomienie klasy głównej) w formie 4-6 punktów.
