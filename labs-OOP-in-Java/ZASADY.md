@@ -3,7 +3,7 @@
 Zasady:
 1. Na każdym laboratorium jest instrukcja do wykonania.
    Instrukcję realizujemy, tworząc przy tym sprawozdanie
-   w formacie [Markdown](reports/markdown_guide.md).
+   w formacie [Markdown](../reports/markdown_guide.md).
    
 2. Każdy student zakłada prywatne repozytorium w serwisie
    [Github](https://github.com) i dodaje prowadzącego przedmiot (laboratorium)
