@@ -324,7 +324,150 @@ W profesjonalnym tworzeniu aplikacji w Javie rzadko używa się samego JDK z lin
 
 ---
 
-## 7. Dlaczego warto wybrać Javę?
+## 7. System kontroli wersji Git i platforma GitHub
+
+Przez cały semestr każdy student będzie przechowywał swój kod w repozytorium **Git**, synchronizowanym ze zdalnym repozytorium na **GitHubie**. To standard pracy w branży – żaden profesjonalny projekt nie powstaje bez systemu kontroli wersji.
+
+### 7.1. Czym jest system kontroli wersji?
+
+**System kontroli wersji (VCS – Version Control System)** zapisuje historię zmian w plikach. Pozwala:
+-   wrócić do dowolnej wcześniejszej wersji kodu,
+-   sprawdzić, **kto**, **kiedy** i **dlaczego** wprowadził zmianę,
+-   pracować równolegle nad różnymi funkcjami (gałęzie),
+-   współpracować w zespole bez przesyłania plików mailem („projekt_final_v3_POPRAWIONY.zip”).
+
+**Git** to rozproszony system kontroli wersji (stworzony w 2005 r. przez Linusa Torvaldsa). „Rozproszony” oznacza, że każdy programista ma na swoim komputerze **pełną kopię repozytorium** wraz z całą historią.
+
+| Pojęcie | Opis |
+| :--- | :--- |
+| **Git** | Program instalowany lokalnie, zarządzający historią zmian. |
+| **GitHub** | Serwis internetowy hostujący zdalne repozytoria Git (alternatywy: GitLab, Bitbucket). |
+| **Repozytorium** | Katalog projektu wraz z ukrytym folderem `.git` przechowującym historię. |
+| **Commit** | Migawka (snapshot) stanu projektu z opisem i autorem. |
+| **Gałąź (branch)** | Niezależna linia rozwoju projektu (domyślnie `main`). |
+| **Remote** | Odwołanie do zdalnego repozytorium (domyślnie nazwane `origin`). |
+
+### 7.2. Trzy obszary pracy w Gicie
+
+```mermaid
+sequenceDiagram
+    participant WD as Katalog roboczy
+    participant SA as Poczekalnia (staging)
+    participant LR as Repozytorium lokalne
+    participant RR as Repozytorium zdalne (GitHub)
+
+    WD->>SA: git add
+    SA->>LR: git commit
+    LR->>RR: git push
+    RR->>LR: git fetch / git pull
+    LR->>WD: git checkout / git switch
+```
+
+1.  **Katalog roboczy (working directory)** – pliki, które edytujemy.
+2.  **Poczekalnia (staging area / index)** – zmiany wybrane do najbliższego commita.
+3.  **Repozytorium (`.git`)** – zatwierdzona historia commitów.
+
+Plik w repozytorium może być: *untracked* (nieśledzony), *modified* (zmieniony), *staged* (dodany do poczekalni) lub *committed* (zatwierdzony).
+
+### 7.3. Instalacja
+
+-   **Windows**: instalator ze strony [git-scm.com](https://git-scm.com/download/win) (zawiera *Git Bash*) lub `winget install --id Git.Git -e`.
+-   **macOS**: `xcode-select --install` lub `brew install git`.
+-   **Linux (Debian/Ubuntu)**: `sudo apt install git`; (Fedora): `sudo dnf install git`.
+
+Weryfikacja:
+```bash
+git --version
+```
+
+### 7.4. Konfiguracja lokalna
+
+Jednorazowo, po instalacji, ustawiamy tożsamość (zapisywaną w każdym commicie):
+```bash
+git config --global user.name "Jan Kowalski"
+git config --global user.email "jan.kowalski@example.com"   # ten sam e-mail co na GitHubie
+git config --global init.defaultBranch main
+git config --global core.editor "nano"                       # opcjonalnie
+git config --list                                            # podgląd konfiguracji
+```
+
+> **Uwaga (Windows):** warto ustawić `git config --global core.autocrlf true`, a na Linux/macOS `input` – zapobiega to problemom z końcami linii.
+
+### 7.5. Konfiguracja zdalna – GitHub
+
+1.  Załóż konto na [github.com](https://github.com) (najlepiej z nazwą użytkownika, której nie wstydzisz się pokazać pracodawcy). Studenci mogą skorzystać z [GitHub Education](https://education.github.com/).
+2.  Skonfiguruj uwierzytelnianie – GitHub **nie akceptuje haseł** przy operacjach Gita. Do wyboru:
+    -   **Klucz SSH** (zalecane):
+        ```bash
+        ssh-keygen -t ed25519 -C "jan.kowalski@example.com"
+        cat ~/.ssh/id_ed25519.pub        # skopiuj zawartość
+        ```
+        Klucz publiczny wklej w *GitHub → Settings → SSH and GPG keys → New SSH key*, a następnie sprawdź połączenie: `ssh -T git@github.com`.
+    -   **HTTPS + Personal Access Token** lub **Git Credential Manager** (instalowany razem z Git for Windows) – przy pierwszym `push` otworzy się okno logowania do GitHuba.
+3.  Utwórz repozytorium na GitHubie (*New repository*) i połącz je z lokalnym:
+    ```bash
+    git remote add origin git@github.com:login/oop-java.git
+    git push -u origin main
+    ```
+
+### 7.6. Podstawowy cykl pracy
+
+```bash
+git init                      # utworzenie repozytorium w bieżącym katalogu
+git status                    # stan plików
+git add HelloWorld.java       # dodanie pliku do poczekalni (git add . – wszystkie)
+git commit -m "Dodaj program HelloWorld"
+git log --oneline             # historia commitów
+git diff                      # różnice niezatwierdzone
+git push                      # wysłanie commitów na GitHub
+git pull                      # pobranie i scalenie zmian z GitHuba
+git clone <adres>             # skopiowanie istniejącego repozytorium
+```
+
+**Gałęzie** pozwalają rozwijać nową funkcję bez psucia działającego kodu:
+```bash
+git switch -c lab02           # utworzenie i przejście na gałąź lab02
+# ... praca, commity ...
+git switch main
+git merge lab02               # scalenie zmian do main
+```
+
+```mermaid
+gitGraph
+    commit id: "init"
+    commit id: "lab01"
+    branch lab02
+    checkout lab02
+    commit id: "klasa Student"
+    commit id: "testy"
+    checkout main
+    merge lab02
+```
+
+### 7.7. Plik `.gitignore`
+
+Nie wersjonujemy plików generowanych (bajtkod, wyniki budowania) ani ustawień IDE. Przykładowy `.gitignore` dla projektu Javy:
+```gitignore
+*.class
+out/
+target/
+build/
+.idea/
+*.iml
+.DS_Store
+```
+
+### 7.8. Dobre praktyki
+
+-   Commituj **często i małymi porcjami** – jeden commit = jedna logiczna zmiana.
+-   Pisz zrozumiałe komunikaty w trybie rozkazującym, np. `Dodaj walidację wieku w klasie Student`.
+-   Przed rozpoczęciem pracy wykonaj `git pull`, po zakończeniu – `git push`.
+-   Nigdy nie umieszczaj w repozytorium haseł, tokenów ani kluczy prywatnych.
+-   IntelliJ IDEA ma wbudowaną obsługę Gita (*VCS / Git*), ale warto najpierw zrozumieć polecenia w terminalu.
+
+---
+
+## 8. Dlaczego warto wybrać Javę?
 
 -   **Bezpieczeństwo**: JVM zapewnia piaskownicę (sandbox) dla aplikacji.
 -   **Wielowątkowość**: Java ma natywne wsparcie dla procesów równoległych.

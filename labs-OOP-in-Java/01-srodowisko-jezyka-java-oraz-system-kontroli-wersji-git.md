@@ -49,9 +49,78 @@ W praktyce warto zadbać o spójność wersji SDK/JDK używanej przez projekt or
 | Stała           | UPPER_SNAKE_CASE       | `MAX_ROZMIAR`            |
 | Pakiet          | lowercase              | `com.firma.projekt`      |
 
+### Git i GitHub — kontrola wersji
+Przez cały semestr rozwiązania zadań przechowujemy w repozytorium **Git**, synchronizowanym z **GitHubem**.
+- **Git** — program lokalny zapisujący historię zmian (commity) w ukrytym katalogu `.git`.
+- **GitHub** — serwis przechowujący zdalne kopie repozytoriów (remote `origin`).
+- Cykl pracy: edycja pliku → `git add` (poczekalnia) → `git commit` (historia lokalna) → `git push` (GitHub).
+
+```
+Katalog roboczy --git add--> Staging --git commit--> Repozytorium lokalne --git push--> GitHub
+                                                                       <--git pull--
+```
+
 ---
 
 ## Przykłady
+
+### Przykład 0 — Instalacja i konfiguracja Gita
+**Instalacja:**
+- Windows: [git-scm.com/download/win](https://git-scm.com/download/win) (instaluje też *Git Bash*) lub `winget install --id Git.Git -e`,
+- macOS: `xcode-select --install` lub `brew install git`,
+- Linux: `sudo apt install git` (Debian/Ubuntu) / `sudo dnf install git` (Fedora).
+
+```bash
+git --version
+```
+
+**Konfiguracja lokalna (jednorazowo):**
+```bash
+git config --global user.name "Jan Kowalski"
+git config --global user.email "jan.kowalski@example.com"
+git config --global init.defaultBranch main
+git config --list
+```
+
+**Konfiguracja zdalna — GitHub i klucz SSH:**
+1. Załóż konto na [github.com](https://github.com) (ten sam e-mail co w `user.email`).
+2. Wygeneruj klucz i dodaj część publiczną w *GitHub → Settings → SSH and GPG keys → New SSH key*:
+```bash
+ssh-keygen -t ed25519 -C "jan.kowalski@example.com"
+cat ~/.ssh/id_ed25519.pub
+ssh -T git@github.com     # oczekiwany komunikat: "Hi login! You've successfully authenticated..."
+```
+> Alternatywa: adres HTTPS i logowanie przez Git Credential Manager (okno przeglądarki przy pierwszym `git push`). Zwykłe hasło do konta nie działa.
+
+### Przykład 0a — Pierwsze repozytorium i praca z GitHubem
+```bash
+mkdir oop-java && cd oop-java
+git init
+echo "# Programowanie obiektowe w Javie" > README.md
+printf "*.class\nout/\n.idea/\n*.iml\n" > .gitignore
+git status                          # pliki nieśledzone (untracked)
+git add README.md .gitignore
+git commit -m "Inicjalizacja repozytorium"
+git log --oneline
+
+# połączenie z pustym repozytorium utworzonym na GitHubie (bez README)
+git remote add origin git@github.com:login/oop-java.git
+git remote -v
+git push -u origin main
+```
+
+Dalsza praca i najważniejsze polecenia:
+```bash
+git diff                    # co zmieniłem od ostatniego commita?
+git add .                   # dodaj wszystkie zmiany
+git commit -m "Dodaj lab01"
+git push                    # wyślij na GitHub
+git pull                    # pobierz zmiany (np. z innego komputera)
+git clone git@github.com:login/oop-java.git   # kopia repozytorium na nowym komputerze
+git restore Plik.java       # cofnij niezatwierdzone zmiany w pliku
+git switch -c nowa-galaz    # nowa gałąź
+git merge nowa-galaz        # scal gałąź z bieżącą
+```
 
 ### Przykład 1 — Pierwszy program „Hello World"
 ```java
@@ -335,9 +404,15 @@ public class Formatowanie {
 
 ## Zadania laboratoryjne
 
-1. 1. Zainstaluj JDK (wersja LTS) i sprawdź w terminalu wyniki poleceń `java -version` oraz `javac -version`. Zapisz je w krótkiej notatce.
-2. 2. Utwórz program `HelloStudent`, który wypisuje: imię, kierunek studiów i aktualny rok akademicki. Skompiluj i uruchom go z linii poleceń.
-3. 3. Napisz program `TypyDanychDemo`, który deklaruje po jednej zmiennej każdego typu prymitywnego i wypisuje ich wartości wraz z opisem.
-4. 4. Przygotuj program `KalkulatorProsty`, który dla dwóch liczb całkowitych pokazuje: sumę, różnicę, iloczyn, iloraz całkowity i resztę z dzielenia.
-5. 5. Napisz program `WarunkiIPetle`, który dla liczby `n` wypisze liczby od `1` do `n` oraz osobno tylko liczby parzyste.
-6. 6. Utwórz program `TablicaOcen`, który oblicza średnią z tablicy ocen i wypisuje ocenę najwyższą oraz najniższą.
+1. Zainstaluj Gita, sprawdź `git --version` i skonfiguruj `user.name`, `user.email` oraz `init.defaultBranch main`. Pokaż wynik `git config --list`.
+2. Załóż konto na GitHubie, wygeneruj klucz SSH, dodaj go do konta i potwierdź połączenie poleceniem `ssh -T git@github.com`.
+3. Utwórz na GitHubie repozytorium `oop-java`, a lokalnie katalog z plikami `README.md` i `.gitignore` (ignorującym `*.class`, `out/`, `.idea/`). Wykonaj pierwszy commit i `git push -u origin main`. Przekaż prowadzącemu link do repozytorium. Wszystkie kolejne zadania z laboratoriów umieszczaj w tym repozytorium (np. w katalogach `lab01`, `lab02`, ...).
+4. Zainstaluj JDK (wersja LTS) i sprawdź w terminalu wyniki poleceń `java -version` oraz `javac -version`. Zapisz je w pliku `lab01/notatka.md` i zatwierdź commitem.
+5. Utwórz program `HelloStudent`, który wypisuje: imię, kierunek studiów i aktualny rok akademicki. Skompiluj i uruchom go z linii poleceń. Sprawdź `git status` — plik `.class` nie powinien się pojawić (dzięki `.gitignore`). Zatwierdź i wypchnij zmiany.
+6. Napisz program `TypyDanychDemo`, który deklaruje po jednej zmiennej każdego typu prymitywnego i wypisuje ich wartości wraz z opisem.
+7. Przygotuj program `KalkulatorProsty`, który dla dwóch liczb całkowitych pokazuje: sumę, różnicę, iloczyn, iloraz całkowity i resztę z dzielenia.
+8. Napisz program `WarunkiIPetle`, który dla liczby `n` wypisze liczby od `1` do `n` oraz osobno tylko liczby parzyste.
+9. Utwórz program `TablicaOcen`, który oblicza średnią z tablicy ocen i wypisuje ocenę najwyższą oraz najniższą.
+10. Ćwiczenie z gałęziami: utwórz gałąź `petle` (`git switch -c petle`), dodaj w niej program z zadania 8 w co najmniej dwóch commitach, wróć na `main` i scal gałąź (`git merge petle`). Obejrzyj historię `git log --oneline --graph` i wypchnij wszystko na GitHub. Na koniec sklonuj repozytorium do innego katalogu (`git clone`) i sprawdź, że zawiera wszystkie pliki.
+
+> Po każdym zadaniu wykonuj osobny commit z czytelnym opisem (np. `Dodaj program KalkulatorProsty`) i regularnie wykonuj `git push`.
