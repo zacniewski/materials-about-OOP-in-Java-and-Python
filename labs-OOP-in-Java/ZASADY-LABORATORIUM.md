@@ -2,12 +2,11 @@
 
 Zasady:
 1. Na każdym laboratorium jest instrukcja do wykonania.
-   Instrukcję realizujemy, tworząc przy tym sprawozdanie
-   w formacie [Markdown](../reports/markdown_guide.md).
+   Instrukcję realizujemy, tworząc przy tym sprawozdanie w formacie [Markdown](../reports/markdown_guide.md).
    
-1. Każdy student zakłada prywatne repozytorium w serwisie
-   [Github](https://github.com) i dodaje prowadzącego przedmiot (laboratorium)
-   jako współpracownika (*Settings* > *Collaborators*).
+1. Każdy student zakłada prywatne repozytorium w serwisie [Github](https://github.com) 
+   i dodaje prowadzącego przedmiot (laboratorium)
+   jako współpracownika (*Settings* -> *Collaborators*).
 
 1. Sprawozdania dodajemy do repozytorium na osobnej gałęzi
    (np. `lab01`, `lab02` itd.). Po zakończeniu prac nad sprawozdaniem
