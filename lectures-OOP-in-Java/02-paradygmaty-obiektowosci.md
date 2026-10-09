@@ -128,8 +128,79 @@ public class KontoBankowe {
     public double getSaldo() {
         return saldo;
     }
+
+    public static void main(String[] args) {
+        KontoBankowe konto = new KontoBankowe();
+        konto.wplac(100);
+        konto.wyplac(50);
+        System.out.println("Saldo: " + konto.getSaldo());
+    }
 }
 ```
+
+#### Czy `KontoBankowe` jest typem danych?
+
+Tak. `KontoBankowe` jest **typem referencyjnym zdefiniowanym przez użytkownika**. W Javie każda klasa definiuje nowy typ:
+
+```java
+KontoBankowe konto = new KontoBankowe();
+```
+
+- `KontoBankowe` stoi tu w tym samym miejscu, co `int` w `int x = 5;`. Jest typem zmiennej `konto`.
+- `new KontoBankowe()` tworzy **obiekt**, czyli wartość tego typu.
+- Zmienna `konto` przechowuje **referencję** do obiektu, a nie sam obiekt.
+
+Typ danych to zbiór możliwych wartości razem z operacjami, które można na nich wykonać. W `KontoBankowe`:
+- **wartości (stan):** pole `private double saldo`,
+- **operacje (zachowanie):** `wplac`, `wyplac`, `getSaldo`.
+
+Pole `saldo` jest prywatne, więc zmienić je można tylko przez metody. Tak powstaje **abstrakcyjny typ danych (ADT)**: kod z zewnątrz zna operacje, ale nie wewnętrzną reprezentację.
+
+| | `double` (typ prosty) | `KontoBankowe` (typ klasowy) |
+|---|---|---|
+| Kto go zdefiniował | język | programista |
+| Co przechowuje zmienna | samą wartość | referencję do obiektu |
+| Wartość domyślna pola | `0.0` | `null` |
+| Operacje | operatory `+`, `-` itd. | metody |
+
+#### Jak działa enkapsulacja w `KontoBankowe`?
+
+**1. Ukryte dane: `private double saldo`**
+
+Modyfikator `private` sprawia, że pole jest widoczne tylko wewnątrz klasy `KontoBankowe`. W innej klasie poniższy kod się nie skompiluje:
+
+```java
+konto.saldo = 1_000_000;   // błąd kompilacji: saldo has private access
+konto.saldo = -500;        // też niemożliwe
+```
+
+> **Uwaga:** w przykładzie metoda `main` leży **wewnątrz** klasy `KontoBankowe`, więc tam `konto.saldo` akurat by się skompilowało. Ochrona działa wobec **innych klas**.
+
+**2. Publiczny interfejs: `wplac`, `wyplac`, `getSaldo`**
+
+- `wplac(kwota)` przyjmuje tylko kwotę dodatnią (`kwota > 0`).
+- `wyplac(kwota)` przyjmuje tylko kwotę dodatnią i nie większą niż saldo (`kwota <= saldo`), więc saldo nigdy nie spadnie poniżej zera.
+- `getSaldo()` pozwala tylko **odczytać** wartość. Nie ma `setSaldo`, więc nie da się ustawić dowolnej kwoty.
+
+Obiekt sam pilnuje swojego **niezmiennika** (ang. *invariant*): „saldo ≥ 0”.
+
+**3. Co to daje**
+
+- **Spójność danych:** konta nie da się wprowadzić w nieprawidłowy stan.
+- **Jedno miejsce kontroli:** nowe reguły (limit wypłat, prowizja, historia operacji) dopisujemy tylko w `wplac` i `wyplac`.
+- **Swoboda zmian implementacji:** można np. zamienić `double saldo` na `long saldoWGroszach`, żeby uniknąć błędów zaokrągleń. Jeśli sygnatury metod zostaną takie same, kod korzystający z klasy nie wymaga zmian.
+
+**4. Porównanie: klasa bez enkapsulacji**
+
+```java
+public class KontoBankowe {
+    public double saldo;   // każdy może zrobić konto.saldo = -9999;
+}
+```
+
+Tutaj każda klasa w programie musiałaby sama sprawdzać kwoty, a wystarczy jeden błąd, żeby stan konta stał się niepoprawny.
+
+**Podsumowanie:** dane są prywatne, a operacje publiczne i walidują dane wejściowe. Klasa działa jak bankomat: nie sięgasz ręką do sejfu, tylko korzystasz z przycisków, które sprawdzają, czy operacja jest dozwolona.
 
 ### 3. Dziedziczenie
 
