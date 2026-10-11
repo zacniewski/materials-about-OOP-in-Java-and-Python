@@ -201,6 +201,13 @@ Co działa, co można ulepszyć, czego nauczyłeś/aś się na laboratorium.
 
 ## 8. Eksport do PDF
 ### Narzędzia JetBrains (IntelliJ, PyCharm, DataGrip)
+
+**Wymagane pluginy:**
+- **Markdown** (autor: *JetBrains*) — wbudowany i domyślnie włączony; zapewnia edytor, podgląd i eksport do PDF/HTML. Sprawdź go w *Settings → Plugins → Installed*.
+
+**Opcjonalne pluginy:**
+- **Mermaid** — renderowanie diagramów Mermaid w podglądzie i eksporcie. Możesz też włączyć wbudowane rozszerzenie: *Settings → Languages & Frameworks → Markdown → Markdown Extensions → Mermaid*.
+
 Aby przekonwertować plik Markdown na format PDF za pomocą środowisk IDE od JetBrains:
 
 1. Otwórz plik `.md` w edytorze.
@@ -208,3 +215,22 @@ Aby przekonwertować plik Markdown na format PDF za pomocą środowisk IDE od Je
 3. Kliknij prawym przyciskiem myszy w obszarze edytora tekstu lub podglądu.
 4. Wybierz opcję **Export to PDF...** (lub **Export to HTML...** jeśli wolisz format przeglądarkowy).
 5. Wybierz miejsce zapisu i potwierdź.
+
+### Visual Studio Code (VSC)
+
+**Wymagane rozszerzenia:**
+- **Markdown PDF** (autor: *yzane*) — eksport plików `.md` do PDF/HTML/PNG/JPEG.
+
+**Opcjonalne rozszerzenia:**
+- **Markdown Preview Mermaid Support** (autor: *Matt Bierner*) — renderowanie diagramów Mermaid w podglądzie (rozszerzenie Markdown PDF obsługuje Mermaid w eksporcie).
+- **Markdown All in One** — skróty, spis treści, ułatwienia edycji.
+
+Aby przekonwertować plik Markdown na format PDF w VSC:
+
+1. Zainstaluj rozszerzenie **Markdown PDF** (panel *Extensions*, `Ctrl+Shift+X`).
+2. Otwórz plik `.md` w edytorze (podgląd: `Ctrl+Shift+V` lub `Ctrl+K V`).
+3. Kliknij prawym przyciskiem myszy w obszarze edytora i wybierz **Markdown PDF: Export (pdf)**
+   lub otwórz paletę poleceń (`Ctrl+Shift+P`) i wpisz `Markdown PDF: Export (pdf)`.
+4. Plik PDF zostanie zapisany domyślnie w tym samym katalogu co plik `.md`.
+
+> Przy pierwszym eksporcie rozszerzenie może pobrać przeglądarkę Chromium — wymaga to połączenia z internetem.
