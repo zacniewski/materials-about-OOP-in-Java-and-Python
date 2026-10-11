@@ -421,6 +421,151 @@ zdefiniowana metoda `toString`. Dlaczego zapis ten wygląda w taki właśnie spo
 w jednym z kolejnych podrozdziałów.
 
 
+### Słowo kluczowe `static`
+
+> Materiał w tym podrozdziale bazuje na artykule z [Kursu Javy](https://kursjava.com/klasy/metody-i-pola-statyczne/).
+
+Do tej pory pola klasy `Samochod` (`predkosc` oraz `kolor`) należały do konkretnego obiektu –
+każdy egzemplarz klasy `Samochod` miał swój własny, niezależny zestaw tych pól. Czasami jednak
+chcielibyśmy, aby pewna wartość była **wspólna dla wszystkich obiektów danej klasy**, a nie
+powielana w każdym z nich. Służy do tego właśnie modyfikator **static**.
+
+#### Pola statyczne
+
+Pole oznaczone modyfikatorem **static** nazywamy _polem statycznym_ (albo _polem klasowym_).
+W przeciwieństwie do zwykłych pól (tzw. _pól instancyjnych_), pole statyczne nie jest tworzone dla
+każdego obiektu odrębnie – istnieje tylko jedna jego kopia, współdzielona przez wszystkie obiekty
+danej klasy. Jeżeli jeden obiekt zmieni wartość pola statycznego, zmiana ta będzie widoczna dla
+wszystkich innych obiektów tej klasy.
+
+Spójrzmy na przykład klasy `Samochod`, do której dodajemy statyczne pole `licznikSamochodow`,
+które będzie zliczać, ile obiektów tej klasy zostało do tej pory utworzonych:
+
+```java
+public class Samochod {
+    private int predkosc;
+    private String kolor;
+
+    public static int licznikSamochodow = 0; // (1)
+
+    public Samochod() {
+        licznikSamochodow++; // (2)
+    }
+
+    public void ustawPredkosc(int nowaPredkosc) {
+        predkosc = nowaPredkosc;
+    }
+
+    public void ustawKolor(String nowyKolor) {
+        kolor = nowyKolor;
+    }
+}
+```
+
+1. Pole `licznikSamochodow` jest polem statycznym _(1)_ – jest ono współdzielone przez
+   wszystkie obiekty klasy `Samochod`, a nie tworzone od nowa dla każdego z nich.
+2. W konstruktorze klasy `Samochod` zwiększamy wartość tego pola o jeden _(2)_ – dzięki
+   temu za każdym razem, gdy utworzymy nowy obiekt tej klasy (za pomocą słowa
+   kluczowego **new**), wartość pola `licznikSamochodow` zostanie zwiększona.
+
+Pola statyczne, w przeciwieństwie do pól instancyjnych, odwołujemy się do nich raczej przez
+nazwę klasy, a nie przez nazwę konkretnego obiektu:
+
+```java
+public class UzycieSamochodu {
+    public static void main(String[] args) {
+        Samochod samochod1 = new Samochod();
+        Samochod samochod2 = new Samochod();
+        Samochod samochod3 = new Samochod();
+
+        System.out.println(Samochod.licznikSamochodow); // wypisze: 3
+    }
+}
+```
+
+Jak widzimy, odwołujemy się do pola `licznikSamochodow` poprzez nazwę klasy (`Samochod`),
+a nie poprzez żaden z utworzonych obiektów – ponieważ pole to nie należy do żadnego
+konkretnego obiektu, lecz do samej klasy.
+
+#### Metody statyczne
+
+Podobnie jak pola, metody również mogą być statyczne. Metoda statyczna (oznaczona
+modyfikatorem **static**) nie jest związana z żadnym konkretnym obiektem – można ją wywołać
+bez konieczności tworzenia obiektu danej klasy. W rzeczywistości metodę `main`, której używamy
+od samego początku kursu, zawsze definiowaliśmy jako statyczną – właśnie dlatego, że do jej
+wywołania (przez JVM, w momencie startu programu) nie jest potrzebny żaden obiekt.
+
+Dodajmy do naszej klasy `Samochod` statyczną metodę, która zwróci liczbę utworzonych do tej
+pory samochodów:
+
+```java
+public class Samochod {
+    private int predkosc;
+    private String kolor;
+
+    private static int licznikSamochodow = 0;
+
+    public Samochod() {
+        licznikSamochodow++;
+    }
+
+    public static int zwrocLiczbeSamochodow() { // (1)
+        return licznikSamochodow; // (2)
+    }
+
+    public void ustawPredkosc(int nowaPredkosc) {
+        predkosc = nowaPredkosc;
+    }
+
+    public void ustawKolor(String nowyKolor) {
+        kolor = nowyKolor;
+    }
+}
+```
+
+1. Metoda `zwrocLiczbeSamochodow` jest metodą statyczną _(1)_ – informuje nas o tym
+   modyfikator **static** znajdujący się w jej sygnaturze.
+2. Wewnątrz metody statycznej możemy odwoływać się do pól statycznych _(2)_, ponieważ
+   zarówno metoda, jak i pole, nie są związane z żadnym konkretnym obiektem.
+
+Metodę statyczną wywołujemy, podobnie jak pole statyczne, poprzez nazwę klasy:
+
+```java
+public class UzycieSamochodu {
+    public static void main(String[] args) {
+        Samochod samochod1 = new Samochod();
+        Samochod samochod2 = new Samochod();
+
+        System.out.println(Samochod.zwrocLiczbeSamochodow()); // wypisze: 2
+    }
+}
+```
+
+```
+Metody statyczne nie mogą odwoływać się do pól instancyjnych (niestatycznych) danej
+klasy, ponieważ pola instancyjne należą do konkretnego obiektu, a metoda statyczna nie
+jest wywoływana na rzecz żadnego obiektu – nie "wie" więc, do którego obiektu miałaby się
+odwołać. Z tego powodu metoda main, która jest statyczna, nie mogłaby odwołać się np. do
+pola predkosc bez wcześniejszego utworzenia konkretnego obiektu klasy Samochod.
+```
+
+#### Kiedy używać modyfikatora `static`?
+
+Modyfikatora **static** używamy, gdy chcemy, aby dane pole lub metoda były związane z klasą
+jako całością, a nie z konkretnym jej obiektem. Przykłady zastosowań:
+
+- liczniki, takie jak nasz `licznikSamochodow`, wspólne dla wszystkich obiektów danej klasy,
+- metody narzędziowe (tzw. _utility methods_), które nie operują na żadnym konkretnym
+  obiekcie, np. metody z klasy `Math` (`Math.max`, `Math.sqrt`), które wywołujemy bez
+  tworzenia obiektu klasy `Math`,
+- stałe wspólne dla wszystkich obiektów danej klasy (często łączone z modyfikatorem
+  **final**, o którym powiemy sobie w kolejnych rozdziałach).
+
+Na razie, poza metodą `main`, nie będziemy korzystać z modyfikatora **static** przy definiowaniu
+własnych pól i metod – skupimy się na polach i metodach instancyjnych, które są ściśle związane
+z konkretnymi obiektami naszych klas.
+
+
 ## Podsumowanie
 
 - Klasy w programowaniu służą m.in. do opisywania otaczających nas przedmiotów, pojęć,
