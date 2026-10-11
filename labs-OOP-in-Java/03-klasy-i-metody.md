@@ -556,12 +556,12 @@ Interpretacja:
 
 ## Zadania laboratoryjne
 
-1. 1. Napisz klasę `Film` z polami `tytul`, `rezyser`, `rokProdukcji`, `obejrzany` oraz metodami `obejrzyj()` i `wyswietlInfo()`.
-2. 2. Utwórz klasę `KalkulatorTemperatur` z metodami statycznymi `celsiusToFahrenheit(double)` i `fahrenheitToCelsius(double)`.
-3. 3. Zaimplementuj klasę `BankAccount` z metodami `deposit(double)`, `withdraw(double)` i `getBalance()` oraz podstawową walidacją.
-4. 4. Napisz klasę `StudentGroup`, która posiada pole statyczne zliczające liczbę utworzonych obiektów klasy `Student`.
-5. 5. Przygotuj klasę `Rectangle` z konstruktorem, polami `width` i `height` oraz metodami `area()` i `perimeter()` wykorzystującymi `this`.
-6. 6. Dodaj do jednej wybranej klasy metodę z `varargs` (np. `sum(int... numbers)`) i pokaż jej użycie dla różnych liczb argumentów.
+1. Napisz klasę `Film` z polami `tytul`, `rezyser`, `rokProdukcji`, `obejrzany` oraz metodami `obejrzyj()`, `wyswietlInfo()`, `toString()`.  Utwórz dwa obiekty danej klasy i ustaw wybrane przez siebie wartości pól oraz wyświetl informacje za pomocą zdefiniowanych metod.   
+2. Utwórz klasę `KalkulatorTemperatur` z metodami statycznymi `celsiusToFahrenheit(double)` i `fahrenheitToCelsius(double)`.
+3. Zaimplementuj klasę `BankAccount` z metodami `deposit(double)`, `withdraw(double)` i `getBalance()` oraz podstawową walidacją.
+4. Napisz klasę `StudentGroup`, która posiada pole statyczne zliczające liczbę utworzonych obiektów klasy `Student`.
+5. Przygotuj klasę `Rectangle` z konstruktorem, polami `width` i `height` oraz metodami `area()` i `perimeter()` wykorzystującymi `this`.
+6. Dodaj do jednej wybranej klasy metodę z `varargs` (np. `sum(int... numbers)`) i pokaż jej użycie dla różnych liczb argumentów.
 ## Mini-checklista po laboratorium
 
 - Czy odróżniasz klasę od obiektu?
