@@ -556,7 +556,7 @@ Interpretacja:
 
 ## Zadania laboratoryjne
 
-1. Napisz klasę `Film` z polami `tytul`, `rezyser`, `rokProdukcji`, `obejrzany` oraz metodami `obejrzyj()`, `wyswietlInfo()`, `toString()`.  Utwórz dwa obiekty danej klasy i ustaw wybrane przez siebie wartości pól oraz wyświetl informacje za pomocą zdefiniowanych metod.   
+1. Napisz klasę `Film` z polami `tytul`, `rezyser`, `rokProdukcji`, `obejrzany` oraz metodami `obejrzyj()`, `wyswietlInfo()` lub `toString()` (zalecane).  Utwórz dwa obiekty danej klasy i ustaw wybrane przez siebie wartości pól oraz wyświetl informacje za pomocą zdefiniowanych metod.   
 2. Utwórz klasę `KalkulatorTemperatur` z metodami statycznymi `celsiusToFahrenheit(double)` i `fahrenheitToCelsius(double)`.
 3. Zaimplementuj klasę `BankAccount` z metodami `deposit(double)`, `withdraw(double)` i `getBalance()` oraz podstawową walidacją.
 4. Napisz klasę `StudentGroup`, która posiada pole statyczne zliczające liczbę utworzonych obiektów klasy `Student`.
