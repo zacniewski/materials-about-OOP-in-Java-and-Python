@@ -561,7 +561,32 @@ Interpretacja:
 3. Zaimplementuj klasę `BankAccount` z metodami `deposit(double)`, `withdraw(double)` i `getBalance()` oraz podstawową walidacją.
 4. Napisz klasę `StudentGroup`, która posiada pole statyczne zliczające liczbę utworzonych obiektów klasy `Student`.
 5. Przygotuj klasę `Rectangle` z konstruktorem, polami `width` i `height` oraz metodami `area()` i `perimeter()` wykorzystującymi `this`.
-6. Dodaj do jednej wybranej klasy metodę z `varargs` (np. `sum(int... numbers)`) i pokaż jej użycie dla różnych liczb argumentów.
+6. Dodaj do jednej wybranej klasy metodę z `varargs` (np. `sum(int... numbers)`) i pokaż jej użycie dla różnych liczb argumentów. Poniżej przykład z `varargs`:  
+```java
+public void printNumbers(int... numbers) {
+    for (int n : numbers) {
+        System.out.println(n);
+    }
+}
+```
+
+**Najważniejsze zasady:** (do zad. nr 6)
+
+• Tablica w tle: Wewnątrz metody parametr typu `varargs` jest traktowany jak zwykła tablica (`int[] numbers`).   
+• Ostatnie miejsce: Parametr `varargs` musi być zawsze ostatnim parametrem na liście argumentów metody.  
+• Limit: W deklaracji metody może znajdować się tylko jeden parametr `varargs`.  
+• Brak argumentów: Wywołanie metody bez przekazania wartości (`printNumbers()`) przekaże pustą tablicę o długości 0.  
+
+
+**Przykład użycia:** (do zad. nr 6)
+```java
+// Wywołanie z różną liczbą argumentów:
+printNumbers(1, 2, 3);
+printNumbers(10, 20);
+printNumbers(); // pusta tablica
+```  
+
+
 ## Mini-checklista po laboratorium
 
 - Czy odróżniasz klasę od obiektu?
