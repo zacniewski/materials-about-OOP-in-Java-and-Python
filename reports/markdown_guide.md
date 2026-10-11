@@ -119,7 +119,6 @@ ls -la
 Składnia wstawiania obrazka jest bardzo podobna do wstawiania linku, ale zaczyna się od wykrzyknika:
 
 `![Tekst alternatywny](sciezka/do/obrazka.png)`
-
 - **Tekst alternatywny**: Wyświetla się, gdy obrazek nie może zostać załadowany.
 - **Ścieżka**: Może to być ścieżka lokalna (np. `img/schemat.png`) lub adres URL.
 
