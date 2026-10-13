@@ -556,9 +556,39 @@ public class Licznik {
 
 ## Zadania laboratoryjne
 
+Poniższe zadania ćwiczą cztery filary OOP (abstrakcję, enkapsulację, dziedziczenie, polimorfizm) oraz relacje między obiektami (asocjację, agregację, kompozycję) omówione w części teoretycznej. Rozwiązując kolejne zadania, korzystaj z przykładów 1-10 jako wzorca stylu kodu (pola `private`, konstruktory, metody `toString()`, klasa `main` z testowym wywołaniem).
+
 1. Zaprojektuj klasę `Book` z polami `title`, `author`, `available` oraz metodami `borrow()` i `returnBook()`.
+   - Pola powinny być `private` (enkapsulacja) — udostępnij je przez gettery, a stan `available` modyfikuj wyłącznie wewnątrz metod `borrow()` i `returnBook()`.
+   - Metoda `borrow()` powinna wypożyczać książkę tylko wtedy, gdy `available == true` (ustawia wtedy `available = false` i wypisuje komunikat); w przeciwnym razie powinna poinformować, że książka jest już wypożyczona.
+   - Metoda `returnBook()` powinna działać odwrotnie — zwraca książkę (`available = true`), a jeśli książka nie była wypożyczona, wypisuje stosowny komunikat.
+   - Dodaj konstruktor inicjalizujący `title`, `author` oraz ustawiający `available` na `true`, a także metodę `toString()` prezentującą stan obiektu.
+   - W metodzie `main` utwórz kilka obiektów `Book`, przetestuj wypożyczenie, próbę ponownego wypożyczenia tej samej książki oraz zwrot.
+
 2. Zaimplementuj klasę `BankAccount` z prywatnym polem `balance` i metodami `deposit(double)` oraz `withdraw(double)` z walidacją danych.
+   - `deposit(double kwota)` powinna akceptować tylko kwoty dodatnie — dla kwoty ujemnej lub zerowej wypisz komunikat o błędzie i nie zmieniaj salda (por. przykład 2 — `KontoBankowe`).
+   - `withdraw(double kwota)` powinna dodatkowo sprawdzać, czy na koncie jest wystarczająco środków (`kwota <= balance`); jeśli nie, wypisz komunikat o braku środków i nie modyfikuj salda.
+   - Dodaj konstruktor przyjmujący saldo początkowe (z walidacją, że nie jest ujemne) oraz metodę `getBalance()`.
+   - Przetestuj w `main` scenariusze: poprawną wpłatę, wypłatę większą niż saldo oraz wpłatę ujemnej kwoty.
+
 3. Utwórz hierarchię `Vehicle -> Car` i pokaż w `main`, które pola/metody są dziedziczone.
+   - Klasa bazowa `Vehicle` powinna mieć wspólne pola (np. `marka`, `rokProdukcji`) oraz metodę, np. `getDescription()`, zwracającą podstawowy opis pojazdu (wzoruj się na przykładzie 4 — `Zwierze`/`Pies`/`Kot`).
+   - Klasa `Car` powinna dziedziczyć po `Vehicle` (`extends Vehicle`), wywoływać konstruktor nadklasy przez `super(...)` i dodawać własne pole, np. `liczbaDrzwi`.
+   - W `main` utwórz obiekt `Car`, wywołaj na nim zarówno metodę odziedziczoną z `Vehicle`, jak i metodę zdefiniowaną tylko w `Car`, i w komentarzach zaznacz, które elementy pochodzą z klasy bazowej, a które są specyficzne dla `Car`.
+
 4. Dodaj klasę `ElectricCar`, która przesłania metodę `getDescription()` i zademonstruj polimorfizm na tablicy `Vehicle[]`.
+   - `ElectricCar` powinna dziedziczyć po `Vehicle` (ewentualnie po `Car` z zadania 3) i nadpisywać (`@Override`) metodę `getDescription()`, dodając informację specyficzną dla pojazdu elektrycznego, np. o zasięgu baterii (por. przykład 5 — `Figura`/`Kolo`/`Prostokat`/`Trojkat`).
+   - Utwórz tablicę typu `Vehicle[]` zawierającą różne podklasy (`Car`, `ElectricCar` itd.) i w pętli `for` wywołaj na każdym elemencie `getDescription()` — zwróć uwagę, że mimo tego samego typu referencji (`Vehicle`) wywoływana jest metoda właściwa dla faktycznego typu obiektu (polimorfizm dynamiczny).
+   - Dodaj krótki komentarz wyjaśniający, dlaczego to jest przykład polimorfizmu, a nie zwykłego wywołania metody.
+
 5. Przygotuj przykład relacji kompozycji: klasa `Computer` zawiera obiekt `Processor`. Pokaż tworzenie i użycie tej relacji.
+   - `Processor` powinien mieć własne pola (np. `model`, `liczbaRdzeni`) oraz metodę np. `wykonajObliczenia()`.
+   - `Computer` powinien przechowywać pole typu `Processor` jako `private` i tworzyć/otrzymywać jego instancję w swoim konstruktorze — zgodnie z definicją kompozycji (przykład 7 — `Silnik`/`Samochod2`) procesor nie powinien istnieć niezależnie od komputera, tzn. nie powinno być możliwości podmiany procesora po utworzeniu obiektu `Computer`.
+   - Dodaj metodę `Computer.uruchom()`, która deleguje część pracy do obiektu `Processor` (np. wywołuje `wykonajObliczenia()`).
+   - W `main` zademonstruj utworzenie `Computer` i wywołanie jego metod, a w komentarzu krótko wyjaśnij różnicę między tą kompozycją a agregacją z przykładu 9 (`Kurs`/`Wykladowca`), gdzie obiekt może istnieć niezależnie od tego, kto go używa.
+
 6. Porównaj podejście proceduralne i obiektowe: ten sam mini-problem (np. obsługa koszyka) zapisz w obu stylach i opisz różnice w 5-7 zdaniach.
+   - Wersja proceduralna: zaimplementuj logikę koszyka (dodawanie produktów, obliczanie sumy) za pomocą statycznych metod operujących na strukturach danych przekazywanych jako parametry (podobnie jak `ProceduralneKolo` w przykładzie 8).
+   - Wersja obiektowa: zaimplementuj klasę (np. `Koszyk`) przechowującą listę produktów jako pole oraz metody operujące na własnym stanie obiektu (np. `dodajProdukt()`, `obliczSume()`), podobnie jak `ObiektKolo` w przykładzie 8.
+   - W `main` uruchom obie wersje na tych samych danych wejściowych i porównaj wyniki.
+   - W opisie (5-7 zdań, w komentarzu lub osobnym pliku tekstowym) odnieś się m.in. do: czytelności kodu, łatwości rozszerzania (np. dodania rabatów), ochrony danych przed niepożądaną modyfikacją (enkapsulacja) oraz tego, który styl lepiej sprawdziłby się przy rozroście projektu.
