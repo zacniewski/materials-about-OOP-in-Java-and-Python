@@ -553,6 +553,203 @@ public class Licznik {
 }
 ```
 
+---
+
+## Informacje uzupełniające do zadań
+
+### Kompilacja i uruchamianie programu z wieloma klasami w jednym pliku
+- W jednym pliku `.java` może być **tylko jedna** klasa `public` i jej nazwa musi być identyczna z nazwą pliku (np. `public class PolimorfizmPrzyklad` → plik `PolimorfizmPrzyklad.java`).
+- Pozostałe klasy w tym samym pliku deklarujemy bez modyfikatora `public` (np. `class Pies extends Zwierze`).
+- Kompilacja i uruchomienie z terminala:
+```bash
+javac PolimorfizmPrzyklad.java   # tworzy pliki .class dla wszystkich klas z pliku
+java PolimorfizmPrzyklad         # uruchamia klasę zawierającą metodę main
+```
+- Od Javy 11 można też uruchomić plik bez osobnej kompilacji: `java PolimorfizmPrzyklad.java`.
+
+### Modyfikatory dostępu — ściąga
+| Modyfikator   | Ta sama klasa | Ten sam pakiet | Podklasa | Wszędzie |
+|---------------|:-------------:|:--------------:|:--------:|:--------:|
+| `private`     | ✔             | ✘              | ✘        | ✘        |
+| (brak)        | ✔             | ✔              | ✘*       | ✘        |
+| `protected`   | ✔             | ✔              | ✔        | ✘        |
+| `public`      | ✔             | ✔              | ✔        | ✔        |
+
+\* podklasa z innego pakietu nie ma dostępu; w tym samym pakiecie — ma.
+
+Uwaga: pola `private` klasy bazowej **są** częścią obiektu podklasy, ale podklasa nie ma do nich bezpośredniego dostępu — musi użyć getterów albo pola `protected`.
+
+### Konstruktory, `this` i `super`
+- Konstruktor ma nazwę klasy i nie ma typu zwracanego. Jeśli nie napiszesz żadnego, kompilator doda bezparametrowy konstruktor domyślny.
+- `this.pole = parametr;` — rozróżnia pole obiektu od parametru o tej samej nazwie.
+- `super(...)` — wywołuje konstruktor nadklasy; musi być **pierwszą instrukcją** konstruktora podklasy. Jeśli nadklasa nie ma konstruktora bezparametrowego, wywołanie `super(...)` jest obowiązkowe.
+- `super.metoda()` — wywołuje wersję metody z nadklasy (przydatne przy rozszerzaniu, a nie całkowitym zastępowaniu działania):
+```java
+@Override
+String getDescription() {
+    return super.getDescription() + ", zasięg: " + zasiegKm + " km";
+}
+```
+
+### Walidacja w konstruktorze i metodach
+Konstruktor może sprawdzać dane tak samo jak setter. Gdy dane są niepoprawne, można ustawić wartość bezpieczną i wypisać komunikat:
+```java
+public Konto(double saldoPoczatkowe) {
+    if (saldoPoczatkowe < 0) {
+        System.out.println("Saldo początkowe nie może być ujemne — ustawiono 0.");
+        this.saldo = 0;
+    } else {
+        this.saldo = saldoPoczatkowe;
+    }
+}
+```
+Alternatywnie można zgłosić wyjątek: `throw new IllegalArgumentException("Saldo nie może być ujemne");` (wyjątki omawiamy szerzej w dalszych zajęciach).
+
+### Pole logiczne (`boolean`) jako stan obiektu
+Pole typu `boolean` dobrze opisuje stan „tak/nie” (np. dostępność). Getter dla pola logicznego zwyczajowo nazywa się `isXxx()`:
+```java
+private boolean wlaczony = false;
+
+public boolean isWlaczony() { return wlaczony; }
+
+public void wlacz() {
+    if (wlaczony) {
+        System.out.println("Urządzenie jest już włączone.");
+    } else {
+        wlaczony = true;
+        System.out.println("Włączono urządzenie.");
+    }
+}
+```
+
+### Metoda `toString()` i adnotacja `@Override`
+- Każda klasa dziedziczy po `Object` metodę `toString()`. Domyślnie zwraca ona coś w rodzaju `Book@1b6d3586`, dlatego warto ją nadpisać.
+- `System.out.println(obiekt)` oraz `"tekst" + obiekt` automatycznie wywołują `toString()`.
+- `@Override` informuje kompilator, że metoda ma nadpisywać metodę z nadklasy — jeśli pomylisz nazwę lub parametry, kompilator zgłosi błąd. Przy nadpisywaniu nie wolno zawęzić dostępu (np. `toString()` musi pozostać `public`).
+- `String.format("%s ma %d drzwi, cena %.2f zł", marka, drzwi, cena)` — formatowanie: `%s` tekst, `%d` liczba całkowita, `%.2f` liczba zmiennoprzecinkowa z 2 miejscami, `%b` boolean, `%n` nowa linia (to samo w `System.out.printf`).
+
+### Dziedziczenie — co jest dziedziczone?
+- Dziedziczone są pola i metody (poza `private`, do których brak bezpośredniego dostępu) — **nie** są dziedziczone konstruktory.
+- Podklasa może: używać odziedziczonych metod, dodawać nowe pola/metody, nadpisywać metody (`@Override`).
+- Java pozwala dziedziczyć tylko po **jednej** klasie (`extends` jednej nadklasy). Hierarchia może być wielopoziomowa, np. `Vehicle -> Car -> ElectricCar`.
+- Operator `instanceof` sprawdza faktyczny typ obiektu: `if (v instanceof Car) { ... }`.
+
+### Polimorfizm — typ referencji a typ obiektu
+```java
+Vehicle v = new ElectricCar("Tesla", 2023, 4, 500); // referencja Vehicle, obiekt ElectricCar
+v.getDescription();   // wywoła wersję z ElectricCar (wiązanie dynamiczne, w czasie działania)
+// v.getZasieg();     // BŁĄD kompilacji — typ referencji Vehicle nie zna tej metody
+```
+- **Typ referencji** decyduje, *jakie* metody można wywołać (sprawdza kompilator).
+- **Typ obiektu** decyduje, *która wersja* metody zostanie wykonana (decyzja w czasie działania programu).
+- Dzięki temu pętla `for (Vehicle v : pojazdy)` obsługuje każdy nowy typ pojazdu bez zmiany kodu pętli (zasada otwarte-zamknięte).
+
+### Kompozycja vs agregacja w kodzie
+| Cecha                         | Kompozycja                                   | Agregacja                                   |
+|-------------------------------|----------------------------------------------|---------------------------------------------|
+| Kto tworzy część?             | Zwykle obiekt-całość (w konstruktorze)       | Część tworzona na zewnątrz i przekazywana   |
+| Czy część żyje bez całości?   | Nie                                          | Tak                                         |
+| Czy część może być współdzielona? | Nie                                      | Tak (np. jeden wykładowca — wiele kursów)   |
+
+Aby wymusić kompozycję, utwórz część wewnątrz konstruktora, oznacz pole jako `private final` i nie dodawaj settera — po utworzeniu obiektu nie da się podmienić części:
+```java
+class Dom {
+    private final Pokoj pokoj; // final — przypisanie tylko raz, w konstruktorze
+
+    Dom(String nazwaPokoju, double metraz) {
+        this.pokoj = new Pokoj(nazwaPokoju, metraz); // część tworzona przez całość
+    }
+
+    void opisz() {
+        System.out.println("Dom zawiera: " + pokoj.opis()); // delegowanie pracy do części
+    }
+}
+```
+
+### Listy (`ArrayList`) — przydatne w zadaniu z koszykiem
+Tablica ma stały rozmiar, a `ArrayList` rośnie automatycznie:
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+List<String> nazwy = new ArrayList<>();
+nazwy.add("Chleb");            // dodanie elementu
+nazwy.add("Mleko");
+System.out.println(nazwy.size());   // 2 — liczba elementów
+System.out.println(nazwy.get(0));   // "Chleb" — element o indeksie 0
+nazwy.remove("Mleko");               // usunięcie elementu
+for (String n : nazwy) {             // przejście po liście
+    System.out.println(n);
+}
+```
+- W `< >` podajemy typ obiektowy: `List<Double>`, `List<Produkt>` (nie `List<double>`).
+- Lista może przechowywać obiekty własnej klasy, np. `List<Produkt> produkty`.
+
+Przykład — ten sam problem (lista ocen) w dwóch stylach:
+```java
+import java.util.ArrayList;
+import java.util.List;
+
+// Styl PROCEDURALNY — dane przekazywane do metod statycznych
+class OcenyProceduralnie {
+    static void dodajOcene(List<Double> oceny, double ocena) {
+        oceny.add(ocena);
+    }
+
+    static double srednia(List<Double> oceny) {
+        double suma = 0;
+        for (double o : oceny) {
+            suma += o;
+        }
+        return oceny.isEmpty() ? 0 : suma / oceny.size();
+    }
+}
+
+// Styl OBIEKTOWY — dane ukryte wewnątrz obiektu
+class Dziennik {
+    private final List<Double> oceny = new ArrayList<>();
+
+    void dodajOcene(double ocena) {
+        if (ocena >= 2.0 && ocena <= 5.0) {
+            oceny.add(ocena);
+        } else {
+            System.out.println("Nieprawidłowa ocena: " + ocena);
+        }
+    }
+
+    double srednia() {
+        double suma = 0;
+        for (double o : oceny) {
+            suma += o;
+        }
+        return oceny.isEmpty() ? 0 : suma / oceny.size();
+    }
+}
+
+public class OcenyPorownanie {
+    public static void main(String[] args) {
+        List<Double> oceny = new ArrayList<>();
+        OcenyProceduralnie.dodajOcene(oceny, 4.0);
+        OcenyProceduralnie.dodajOcene(oceny, 5.0);
+        oceny.add(100.0); // nic nie chroni danych przed błędną modyfikacją!
+        System.out.println("Proceduralnie: " + OcenyProceduralnie.srednia(oceny));
+
+        Dziennik d = new Dziennik();
+        d.dodajOcene(4.0);
+        d.dodajOcene(5.0);
+        d.dodajOcene(100.0); // odrzucone — enkapsulacja chroni stan
+        System.out.println("Obiektowo: " + d.srednia());
+    }
+}
+```
+
+### Typowe błędy
+- Brak `super(...)` w konstruktorze podklasy, gdy nadklasa ma tylko konstruktor z parametrami → błąd kompilacji.
+- Odwołanie do pola `private` nadklasy w podklasie → błąd kompilacji (użyj gettera lub `protected`).
+- Porównywanie tekstów przez `==` zamiast `equals()` (np. `marka.equals("Toyota")`).
+- Wywołanie metody na `null` (pole obiektowe niezainicjalizowane w konstruktorze) → `NullPointerException`.
+- Kilka klas `public` w jednym pliku → błąd kompilacji.
+
 
 ## Zadania laboratoryjne
 
