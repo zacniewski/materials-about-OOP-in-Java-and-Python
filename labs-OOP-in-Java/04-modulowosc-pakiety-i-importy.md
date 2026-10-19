@@ -23,6 +23,62 @@ package com.firma.projekt.modul;
 - Stosuje się odwróconą notację domenową: `com.firma.projekt`.
 - Struktura pakietów odpowiada strukturze katalogów na dysku.
 
+### Idea pakietów na rysunkach
+
+**Deklaracja `package` wyznacza miejsce pliku na dysku:**
+
+```mermaid
+flowchart LR
+    P["package com.sklep.model;<br/>public class Produkt"] --> D1["com/"]
+    D1 --> D2["sklep/"]
+    D2 --> D3["model/"]
+    D3 --> F["Produkt.java"]
+```
+
+**Pakiety tworzą drzewo (ale podpakiet to osobny, niezależny pakiet):**
+
+```mermaid
+flowchart TD
+    COM["com"] --> SKLEP["com.sklep<br/>Main"]
+    SKLEP --> MODEL["com.sklep.model<br/>Produkt"]
+    SKLEP --> SERWIS["com.sklep.serwis<br/>SerwisProduktow"]
+    SKLEP --> UTIL["com.sklep.util<br/>Formatowanie"]
+```
+
+**Zależności (importy) między pakietami:**
+
+```mermaid
+flowchart LR
+    MAIN["com.sklep<br/>Main"] -- import --> SERWIS["com.sklep.serwis"]
+    MAIN -- import --> MODEL["com.sklep.model"]
+    SERWIS -- import --> MODEL
+    SERWIS -- import --> JU["java.util"]
+    MODEL -. automatycznie .-> JL["java.lang"]
+```
+
+**Kolejność elementów w pliku źródłowym:**
+
+```mermaid
+flowchart TD
+    A["1. package ...;  (najwyżej jedna, zawsze pierwsza)"] --> B["2. import ...;  (zero lub więcej)"]
+    B --> C["3. deklaracje klas / interfejsów"]
+```
+
+**Dostęp pakietowy (brak modyfikatora):**
+
+```mermaid
+flowchart LR
+    subgraph M["pakiet com.sklep.model"]
+        PR["Produkt<br/>double cena (package-private)"]
+        KO["Koszyk"]
+    end
+    subgraph A["pakiet com.sklep"]
+        MA["Main"]
+    end
+    KO -- "dostęp do cena ✔" --> PR
+    MA -. "dostęp do cena ✘" .-> PR
+```
+
 ### Mechanizm importowania klas
 Import pozwala używać klas z innych pakietów bez podawania pełnej nazwy kwalifikowanej:
 
@@ -510,6 +566,187 @@ public class Aplikacja {
         System.out.println("Towar: " + t);
     }
 }
+```
+
+### Przykład 11 — Dostęp pakietowy (package-private)
+```java
+// Plik: pl/edu/lab/bank/Konto.java
+package pl.edu.lab.bank;
+
+public class Konto {
+    double saldo; // brak modyfikatora — dostęp tylko w pakiecie pl.edu.lab.bank
+
+    public double getSaldo() {
+        return saldo;
+    }
+}
+```
+
+```java
+// Plik: pl/edu/lab/bank/Kasjer.java
+package pl.edu.lab.bank;
+
+public class Kasjer {
+    public void wplac(Konto k, double kwota) {
+        k.saldo += kwota; // OK — ten sam pakiet
+    }
+}
+```
+
+```java
+// Plik: pl/edu/lab/app/Bankomat.java
+package pl.edu.lab.app;
+
+import pl.edu.lab.bank.Kasjer;
+import pl.edu.lab.bank.Konto;
+
+public class Bankomat {
+    public static void main(String[] args) {
+        Konto k = new Konto();
+        new Kasjer().wplac(k, 500);
+        System.out.println("Saldo: " + k.getSaldo());
+        // k.saldo = 1_000_000; // BŁĄD KOMPILACJI — inny pakiet
+    }
+}
+```
+
+### Przykład 12 — Klasa niepubliczna w pakiecie (szczegół implementacji)
+```java
+// Plik: pl/edu/lab/tekst/Tekst.java
+package pl.edu.lab.tekst;
+
+public class Tekst {
+    public static String naglowek(String s) {
+        return Ramka.otocz(s.toUpperCase());
+    }
+}
+
+// Klasa bez "public" — widoczna tylko w pakiecie pl.edu.lab.tekst
+class Ramka {
+    static String otocz(String s) {
+        String linia = "*".repeat(s.length() + 4);
+        return linia + "\n* " + s + " *\n" + linia;
+    }
+}
+```
+
+```java
+// Plik: pl/edu/lab/app/DemoTekst.java
+package pl.edu.lab.app;
+
+import pl.edu.lab.tekst.Tekst;
+// import pl.edu.lab.tekst.Ramka; // BŁĄD — Ramka nie jest publiczna
+
+public class DemoTekst {
+    public static void main(String[] args) {
+        System.out.println(Tekst.naglowek("pakiety w javie"));
+    }
+}
+```
+
+### Przykład 13 — Interfejs w jednym pakiecie, implementacje w drugim
+```mermaid
+flowchart LR
+    subgraph API["pl.edu.lab.figury.api"]
+        F["interface Figura"]
+    end
+    subgraph IMPL["pl.edu.lab.figury.impl"]
+        K["Kolo"]
+        P["Prostokat"]
+    end
+    subgraph APP["pl.edu.lab.app"]
+        D["DemoFigury"]
+    end
+    K -- implements --> F
+    P -- implements --> F
+    D -- import --> F
+    D -- import --> K
+    D -- import --> P
+```
+
+```java
+// Plik: pl/edu/lab/figury/api/Figura.java
+package pl.edu.lab.figury.api;
+
+public interface Figura {
+    double pole();
+}
+```
+
+```java
+// Plik: pl/edu/lab/figury/impl/Kolo.java
+package pl.edu.lab.figury.impl;
+
+import pl.edu.lab.figury.api.Figura;
+
+public class Kolo implements Figura {
+    private final double r;
+
+    public Kolo(double r) { this.r = r; }
+
+    @Override
+    public double pole() { return Math.PI * r * r; }
+}
+```
+
+```java
+// Plik: pl/edu/lab/figury/impl/Prostokat.java
+package pl.edu.lab.figury.impl;
+
+import pl.edu.lab.figury.api.Figura;
+
+public class Prostokat implements Figura {
+    private final double a, b;
+
+    public Prostokat(double a, double b) { this.a = a; this.b = b; }
+
+    @Override
+    public double pole() { return a * b; }
+}
+```
+
+```java
+// Plik: pl/edu/lab/app/DemoFigury.java
+package pl.edu.lab.app;
+
+import pl.edu.lab.figury.api.Figura;
+import pl.edu.lab.figury.impl.Kolo;
+import pl.edu.lab.figury.impl.Prostokat;
+
+import java.util.List;
+
+public class DemoFigury {
+    public static void main(String[] args) {
+        List<Figura> figury = List.of(new Kolo(1), new Prostokat(2, 3));
+        for (Figura f : figury) {
+            System.out.printf("%s: %.2f%n", f.getClass().getSimpleName(), f.pole());
+        }
+    }
+}
+```
+
+### Przykład 14 — Kompilacja i uruchomienie projektu z pakietami
+Struktura katalogów dla przykładu 13:
+```
+src/
+└── pl/edu/lab/
+    ├── app/DemoFigury.java
+    └── figury/
+        ├── api/Figura.java
+        └── impl/Kolo.java, Prostokat.java
+```
+
+```bash
+# kompilacja wszystkich plików do katalogu out (javac odtworzy strukturę pakietów)
+javac -d out $(find src -name "*.java")
+# uruchomienie — podajemy PEŁNĄ nazwę klasy (pakiet + klasa)
+java -cp out pl.edu.lab.app.DemoFigury
+```
+
+```mermaid
+flowchart LR
+    S["src/pl/edu/lab/app/DemoFigury.java"] -- "javac -d out" --> C["out/pl/edu/lab/app/DemoFigury.class"]
+    C -- "java -cp out pl.edu.lab.app.DemoFigury" --> R["JVM uruchamia main()"]
 ```
 
 

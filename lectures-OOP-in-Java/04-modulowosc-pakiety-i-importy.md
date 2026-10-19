@@ -26,6 +26,69 @@ Korzyści z pakietów:
 - brak konfliktów nazw między pakietami (np. dwie klasy `Utils` w różnych pakietach),
 - możliwość grupowania powiązanych tematów (np. `geometry`, `math`, `text`).
 
+### 1.1. Pakiety na rysunkach
+
+**Nazwa pakietu = ścieżka katalogów.** Każda kropka w nazwie pakietu odpowiada podkatalogowi:
+
+```mermaid
+flowchart LR
+    A["package laboratoria.lab2.math;"] --> B["laboratoria/"]
+    B --> C["lab2/"]
+    C --> D["math/"]
+    D --> E["BasicMath.java"]
+```
+
+**Hierarchia pakietów w przykładowym projekcie** (pakiety jak „szuflady” na klasy):
+
+```mermaid
+flowchart TD
+    ROOT["src/"] --> PL["pl"]
+    PL --> UMG["umg"]
+    UMG --> APP["pl.umg.app<br/>Main"]
+    UMG --> MODEL["pl.umg.model<br/>Student, Kurs"]
+    UMG --> SERWIS["pl.umg.serwis<br/>SerwisStudentow"]
+    UMG --> UTIL["pl.umg.util<br/>Walidator"]
+```
+
+**Pakiet jako przestrzeń nazw** — dwie klasy `Utils` nie kolidują, bo ich pełne nazwy (FQN) są różne:
+
+```mermaid
+flowchart LR
+    subgraph P1["pakiet laboratoria.lab2.a.utils"]
+        U1["Utils"]
+    end
+    subgraph P2["pakiet laboratoria.lab2.b.utils"]
+        U2["Utils"]
+    end
+    U1 -.FQN.-> F1["laboratoria.lab2.a.utils.Utils"]
+    U2 -.FQN.-> F2["laboratoria.lab2.b.utils.Utils"]
+```
+
+**Widoczność a pakiety** — element bez modyfikatora (package-private) widzą tylko klasy z tego samego pakietu:
+
+```mermaid
+flowchart LR
+    subgraph PA["pakiet pl.umg.model"]
+        S["Student<br/>public getImie()<br/>int wiek (package-private)"]
+        K["Kurs"]
+    end
+    subgraph PB["pakiet pl.umg.app"]
+        M["Main"]
+    end
+    K -- "widzi getImie() i wiek" --> S
+    M -- "widzi tylko getImie()" --> S
+    M -. "wiek – błąd kompilacji" .-x S
+```
+
+**Import a podpakiety** — gwiazdka obejmuje tylko klasy bezpośrednio w pakiecie:
+
+```mermaid
+flowchart TD
+    I["import java.util.*;"] --> L["java.util.List ✔"]
+    I --> AL["java.util.ArrayList ✔"]
+    I -. nie obejmuje .-> C["java.util.concurrent.ExecutorService ✘"]
+```
+
 
 ## 2. Mechanizm importowania klas
 Import jest skrótem składniowym umożliwiającym używanie krótkich nazw klas zamiast pełnych kwalifikacji (FQN — Fully Qualified Name).
@@ -153,6 +216,191 @@ import laboratoria.lab2.a.*; // nie importuje laboratoria.lab2.a.utils
 Aby użyć klasy z `laboratoria.lab2.a.utils.Utils`, musisz:
 ```java
 import laboratoria.lab2.a.utils.Utils;
+```
+
+### 4.6. Kompletny projekt z deklaracjami `package`
+Struktura projektu:
+
+```mermaid
+flowchart TD
+    SRC["src/"] --> PL["pl/umg/"]
+    PL --> M["model/Student.java<br/>package pl.umg.model"]
+    PL --> S["serwis/Dziekanat.java<br/>package pl.umg.serwis"]
+    PL --> A["app/Main.java<br/>package pl.umg.app"]
+    A -- import --> S
+    A -- import --> M
+    S -- import --> M
+```
+
+```java
+// Plik: src/pl/umg/model/Student.java
+package pl.umg.model;
+
+public class Student {
+    private final String imie;
+    private final double srednia;
+
+    public Student(String imie, double srednia) {
+        this.imie = imie;
+        this.srednia = srednia;
+    }
+
+    public String getImie() { return imie; }
+    public double getSrednia() { return srednia; }
+
+    @Override
+    public String toString() {
+        return imie + " (" + srednia + ")";
+    }
+}
+```
+
+```java
+// Plik: src/pl/umg/serwis/Dziekanat.java
+package pl.umg.serwis;
+
+import pl.umg.model.Student;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Dziekanat {
+    private final List<Student> studenci = new ArrayList<>();
+
+    public void zapisz(Student s) {
+        studenci.add(s);
+    }
+
+    public List<Student> stypendysci(double prog) {
+        List<Student> wynik = new ArrayList<>();
+        for (Student s : studenci) {
+            if (s.getSrednia() >= prog) {
+                wynik.add(s);
+            }
+        }
+        return wynik;
+    }
+}
+```
+
+```java
+// Plik: src/pl/umg/app/Main.java
+package pl.umg.app;
+
+import pl.umg.model.Student;
+import pl.umg.serwis.Dziekanat;
+
+public class Main {
+    public static void main(String[] args) {
+        Dziekanat d = new Dziekanat();
+        d.zapisz(new Student("Ala", 4.8));
+        d.zapisz(new Student("Olek", 3.9));
+        System.out.println("Stypendyści: " + d.stypendysci(4.5));
+    }
+}
+```
+
+Kompilacja i uruchomienie (z katalogu nadrzędnego wobec `src`):
+```bash
+javac -d out src/pl/umg/model/Student.java src/pl/umg/serwis/Dziekanat.java src/pl/umg/app/Main.java
+java -cp out pl.umg.app.Main
+```
+
+```mermaid
+sequenceDiagram
+    participant J as javac -d out
+    participant O as katalog out/
+    participant V as java -cp out
+    J->>O: out/pl/umg/model/Student.class
+    J->>O: out/pl/umg/serwis/Dziekanat.class
+    J->>O: out/pl/umg/app/Main.class
+    V->>O: szuka pl.umg.app.Main → out/pl/umg/app/Main.class
+```
+
+### 4.7. Klasy z tego samego pakietu — bez importu
+```java
+// Plik: pl/umg/geometria/Punkt.java
+package pl.umg.geometria;
+
+public class Punkt {
+    final double x, y; // package-private — widoczne w pl.umg.geometria
+
+    public Punkt(double x, double y) {
+        this.x = x;
+        this.y = y;
+    }
+}
+```
+
+```java
+// Plik: pl/umg/geometria/Odcinek.java
+package pl.umg.geometria;
+
+// brak importu — Punkt jest w tym samym pakiecie
+public class Odcinek {
+    private final Punkt a, b;
+
+    public Odcinek(Punkt a, Punkt b) {
+        this.a = a;
+        this.b = b;
+    }
+
+    public double dlugosc() {
+        // bezpośredni dostęp do pól package-private
+        return Math.hypot(b.x - a.x, b.y - a.y);
+    }
+}
+```
+
+```java
+// Plik: pl/umg/app/DemoGeometria.java
+package pl.umg.app;
+
+import pl.umg.geometria.Odcinek;
+import pl.umg.geometria.Punkt;
+
+public class DemoGeometria {
+    public static void main(String[] args) {
+        Odcinek o = new Odcinek(new Punkt(0, 0), new Punkt(3, 4));
+        System.out.println("Długość: " + o.dlugosc()); // 5.0
+        // new Punkt(1, 1).x;  // BŁĄD: pole x nie jest widoczne poza pakietem
+    }
+}
+```
+
+### 4.8. Ta sama nazwa klasy w dwóch pakietach
+```java
+// Plik: pl/umg/sklep/Zamowienie.java
+package pl.umg.sklep;
+
+public class Zamowienie {
+    public String opis() { return "Zamówienie w sklepie"; }
+}
+```
+
+```java
+// Plik: pl/umg/magazyn/Zamowienie.java
+package pl.umg.magazyn;
+
+public class Zamowienie {
+    public String opis() { return "Zamówienie dostawy do magazynu"; }
+}
+```
+
+```java
+// Plik: pl/umg/app/DemoKonflikt.java
+package pl.umg.app;
+
+import pl.umg.sklep.Zamowienie; // krótka nazwa = wersja ze sklepu
+
+public class DemoKonflikt {
+    public static void main(String[] args) {
+        Zamowienie z1 = new Zamowienie();
+        pl.umg.magazyn.Zamowienie z2 = new pl.umg.magazyn.Zamowienie(); // FQN
+        System.out.println(z1.opis());
+        System.out.println(z2.opis());
+    }
+}
 ```
 
 
