@@ -81,9 +81,9 @@ public class Punkt {
 6. Napisz klasę `Osoba` z polami `wiek`, `imie`, `nazwisko`, setterami i metodą `toString()`. W `main` utwórz obiekt i wypisz go na ekran.
 
 #### Zadanie nr 4 (modułowość, pakiety i importy)
-1. Dodaj klasę w pakiecie `laboratoria.lab2.text` (np. `TextStats`) z metodą `countWords(String s)` i pokaż użycie przez import w osobnej klasie.
+1. Utwórz własny pakiet `pl.uczelnia.tekst` (katalogi `pl/uczelnia/tekst`) i umieść w nim publiczną klasę `TextStats` z metodą `public static int countWords(String s)`. W innym pakiecie (np. `pl.uczelnia.app`) utwórz klasę `Main`, która zaimportuje `TextStats` instrukcją `import` i wypisze liczbę słów w przykładowym zdaniu. W sprawozdaniu pokaż strukturę katalogów oraz deklaracje `package`.
 2. Utwórz dwa pakiety z klasą `Helper` w każdym i pokaż użycie obu przez pełne nazwy kwalifikowane.
-3. Uruchom zadania 1–5 z folderu `laboratoria/lab2/zadania-1_5-do-działu-o-modułach-i-pakietach`.
+3. Utwórz pakiet `pl.uczelnia.geometria` z klasami `Punkt` i `Odcinek` (z metodą `dlugosc()`). W klasie z innego pakietu pokaż trzy sposoby użycia: import pojedynczej klasy (`import pl.uczelnia.geometria.Punkt;`), import wszystkich klas pakietu (`import pl.uczelnia.geometria.*;`) oraz import statyczny (np. `import static java.lang.Math.sqrt;`). W sprawozdaniu wyjaśnij, czym różnią się te rodzaje importu i dodaj zrzut ekranu z działania programu.
 
 #### Zadanie nr 5 (modyfikatory dostępu i enkapsulacja)
 1. Jakie powinny być nazwy getterów i setterów dla pól:
