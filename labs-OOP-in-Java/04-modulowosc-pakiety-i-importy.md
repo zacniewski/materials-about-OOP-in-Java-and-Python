@@ -758,3 +758,55 @@ flowchart LR
 4. Pokaż różnicę między `import java.util.List;` a `import java.util.*;` i opisz, które podejście preferujesz w projekcie i dlaczego.
 5. Rozdziel projekt na co najmniej 5 klas tak, aby każda miała jedną odpowiedzialność i była w logicznym pakiecie.
 6. Dodaj krótką instrukcję uruchomienia projektu z pakietami (kompilacja i uruchomienie klasy głównej) w formie 4-6 punktów.
+
+### Szczegółowa lista kontrolna (checklist)
+
+Poniższa lista kontrolna pomaga zweryfikować, czy każde zadanie zostało wykonane poprawnie i kompletnie.
+
+#### Zadanie 1 — Struktura pakietów
+- [ ] Katalog `src` zawiera strukturę odpowiadającą nazwom pakietów: `src/pl/edu/lab/model`, `src/pl/edu/lab/service`, `src/pl/edu/lab/app`.
+- [ ] Każdy plik `.java` ma na samej górze (przed importami) deklarację `package pl.edu.lab.xxx;` zgodną z katalogiem, w którym się znajduje.
+- [ ] Nazwy pakietów są pisane wyłącznie małymi literami, bez polskich znaków i spacji.
+- [ ] Żadna klasa nie została „ręcznie” przeniesiona bez zmiany deklaracji `package` (sprawdź, czy katalog i deklaracja są zgodne).
+- [ ] Projekt kompiluje się bez błędów poleceniem `javac -d out $(find src -name "*.java")`.
+
+#### Zadanie 2 — Klasy `Product` i `ProductService`
+- [ ] Klasa `Product` znajduje się w pakiecie `pl.edu.lab.model` i jest zadeklarowana jako `public`.
+- [ ] `Product` posiada prywatne pola (np. `nazwa`, `cena`), konstruktor oraz publiczne gettery.
+- [ ] Klasa `ProductService` znajduje się w pakiecie `pl.edu.lab.service` i jest `public`.
+- [ ] `ProductService` przechowuje listę obiektów `Product` (np. `List<Product>`) i udostępnia metody do dodawania oraz wypisywania/filtrowania produktów.
+- [ ] `ProductService` poprawnie importuje klasę `Product` z pakietu `model` (`import pl.edu.lab.model.Product;`).
+- [ ] Pola klas są odpowiednio zamknięte (`private`) — dostęp do nich odbywa się przez metody publiczne, a nie bezpośrednio.
+
+#### Zadanie 3 — Klasa `Main` i scenariusz użycia
+- [ ] Klasa `Main` znajduje się w pakiecie `pl.edu.lab.app` i zawiera metodę `main(String[] args)`.
+- [ ] `Main` używa importów jawnych (konkretnych klas), a nie tylko wildcard (`import pl.edu.lab...*`).
+- [ ] Scenariusz w `main` tworzy co najmniej kilka obiektów `Product`, dodaje je do `ProductService` i wypisuje wynik na konsolę.
+- [ ] Program uruchamia się bez błędów poleceniem `java -cp out pl.edu.lab.app.Main` i wyświetla oczekiwane dane.
+- [ ] Kod nie zawiera nieużywanych importów (tzw. „martwych” importów).
+
+#### Zadanie 4 — Import konkretny vs. wildcard
+- [ ] Przygotowany jest krótki przykład kodu pokazujący `import java.util.List;` obok `import java.util.*;`.
+- [ ] Opisana jest różnica: import konkretny wskazuje jedną klasę, wildcard importuje wszystkie klasy z danego pakietu (ale nie z podpakietów).
+- [ ] Wskazana jest co najmniej jedna zaleta i jedna wada każdego podejścia (np. czytelność i jawność zależności vs. wygoda przy wielu importach).
+- [ ] Zawarta jest jasna rekomendacja, które podejście autor preferuje w projekcie wraz z uzasadnieniem (np. czytelność, unikanie konfliktów nazw).
+
+#### Zadanie 5 — Podział na minimum 5 klas
+- [ ] Projekt zawiera co najmniej 5 odrębnych klas.
+- [ ] Każda klasa ma jedną, jasno określoną odpowiedzialność (zasada Single Responsibility).
+- [ ] Każda klasa znajduje się w logicznie dobranym pakiecie (np. `model`, `service`, `app`, `util`).
+- [ ] Nazwy klas i pakietów są spójne i czytelne (zgodne z konwencją nazewniczą Javy).
+- [ ] Zależności między klasami są zrealizowane przez importy, a nie przez pełne nazwy kwalifikowane w kodzie (chyba że celowo demonstrujemy konflikt nazw).
+
+#### Zadanie 6 — Instrukcja uruchomienia projektu
+- [ ] Instrukcja zawiera od 4 do 6 ponumerowanych punktów.
+- [ ] Opisany jest krok kompilacji (np. `javac -d out $(find src -name "*.java")`) z wyjaśnieniem, co robi flaga `-d`.
+- [ ] Opisany jest krok uruchomienia (np. `java -cp out pl.edu.lab.app.Main`) z wyjaśnieniem, dlaczego trzeba podać pełną nazwę kwalifikowaną klasy głównej.
+- [ ] Instrukcja wspomina o strukturze katalogów `src`/`out` i o tym, że `javac` odtwarza strukturę pakietów w katalogu wyjściowym.
+- [ ] Instrukcja jest zrozumiała dla osoby, która nie znała wcześniej projektu (brak założeń o „oczywistej” wiedzy).
+
+#### Ogólna weryfikacja końcowa
+- [ ] Cały projekt kompiluje się bez błędów i ostrzeżeń dotyczących pakietów/importów.
+- [ ] Nie występują konflikty nazw klas ani niejednoznaczne importy.
+- [ ] Modyfikatory dostępu (`public`, domyślny/pakietowy, `private`) są stosowane świadomie i zgodnie z zasadą enkapsulacji.
+- [ ] Kod został przetestowany uruchomieniem (nie tylko skompilowany) i wyniki działania są zgodne z oczekiwaniami.
