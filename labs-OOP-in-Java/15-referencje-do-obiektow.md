@@ -548,9 +548,48 @@ public class WspoldzieleniePrzyklad {
 
 ## Zadania laboratoryjne
 
-1. 1. Przygotuj przykład, w którym dwie zmienne referencyjne wskazują ten sam obiekt i pokaż skutki modyfikacji przez jedną z nich.
-2. 2. Napisz klasę `Person` i zaimplementuj metodę kopiującą obiekt na dwa sposoby: kopia płytka oraz kopia głęboka.
-3. 3. Zbuduj klasę `ShoppingCart` z listą produktów i pokaż różnicę między przekazaniem referencji a utworzeniem niezależnej kopii koszyka.
-4. 4. Dodaj do jednej klasy metodę/fabrykę zwracającą kopię defensywną kolekcji i wyjaśnij, po co to robimy.
-5. 5. Użyj metody `clone()` albo konstruktora kopiującego w klasie z obiektem zagnieżdżonym i sprawdź, czy zmiany w kopii wpływają na oryginał.
-6. 6. Narysuj prosty schemat (tekstowy lub Mermaid) ilustrujący relacje referencji między obiektami przed i po kopiowaniu.
+1. Przygotuj przykład, w którym dwie zmienne referencyjne wskazują ten sam obiekt i pokaż skutki modyfikacji przez jedną z nich.
+2. Napisz klasę `Person` i zaimplementuj metodę kopiującą obiekt na dwa sposoby: kopia płytka oraz kopia głęboka.
+3. Zbuduj klasę `ShoppingCart` z listą produktów i pokaż różnicę między przekazaniem referencji a utworzeniem niezależnej kopii koszyka.
+4. Dodaj do jednej klasy metodę/fabrykę zwracającą kopię defensywną kolekcji i wyjaśnij, po co to robimy.
+5. Użyj metody `clone()` albo konstruktora kopiującego w klasie z obiektem zagnieżdżonym i sprawdź, czy zmiany w kopii wpływają na oryginał.
+6. Narysuj prosty schemat (tekstowy lub Mermaid) ilustrujący relacje referencji między obiektami przed i po kopiowaniu.
+
+### Szczegółowa lista kontrolna (checklist)
+
+Poniższa lista kontrolna pomaga zweryfikować, czy każde zadanie zostało wykonane poprawnie i kompletnie.
+
+#### Zadanie 1 — Dwie referencje do jednego obiektu
+- [ ] Dwie zmienne wskazują ten sam obiekt (np. `b = a`).
+- [ ] Modyfikacja przez jedną zmienną jest widoczna przez drugą.
+- [ ] Pokazano wynik porównania `a == b`.
+
+#### Zadanie 2 — Kopia płytka i głęboka w `Person`
+- [ ] Klasa `Person` zawiera pole będące obiektem (np. `Address`).
+- [ ] Kopia płytka współdzieli zagnieżdżony obiekt.
+- [ ] Kopia głęboka tworzy nowy zagnieżdżony obiekt.
+- [ ] Różnica jest zademonstrowana zmianą pola zagnieżdżonego obiektu.
+
+#### Zadanie 3 — `ShoppingCart` — referencja vs kopia
+- [ ] Przekazanie referencji powoduje, że zmiany są widoczne w obu miejscach.
+- [ ] Niezależna kopia ma własną listę (np. `new ArrayList<>(...)`).
+
+#### Zadanie 4 — Kopia defensywna
+- [ ] Getter lub fabryka zwraca kopię (lub `List.copyOf` / `Collections.unmodifiableList`).
+- [ ] Pokazano, że modyfikacja zwróconej kolekcji nie zmienia stanu obiektu.
+- [ ] Wyjaśniono cel kopii defensywnej.
+
+#### Zadanie 5 — `clone()` lub konstruktor kopiujący
+- [ ] Klasa zawiera obiekt zagnieżdżony.
+- [ ] Sprawdzono, czy zmiany w kopii wpływają na oryginał.
+- [ ] Jeśli użyto `clone()`, klasa implementuje `Cloneable`.
+
+#### Zadanie 6 — Schemat referencji
+- [ ] Schemat (tekstowy lub Mermaid) pokazuje stan przed i po kopiowaniu.
+- [ ] Widać, które obiekty są współdzielone, a które skopiowane.
+
+#### Ogólna weryfikacja końcowa
+- [ ] Cały kod kompiluje się bez błędów i ostrzeżeń.
+- [ ] Program został uruchomiony, a wyniki są zgodne z oczekiwaniami.
+- [ ] Nazwy klas, metod i zmiennych są zgodne z konwencjami Javy.
+- [ ] Odpowiedzi opisowe są zapisane w repozytorium (np. w pliku `README.md` lub komentarzach).

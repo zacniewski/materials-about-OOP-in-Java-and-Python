@@ -670,9 +670,57 @@ public class Pizza {
 
 ## Zadania laboratoryjne
 
-1. 1. Napisz klasę `User` z prywatnymi polami `login`, `email`, `age` oraz getterami i setterami z walidacją wieku i formatu e-mail.
-2. 2. Utwórz klasę `Wallet` z prywatnym polem `balance` i publicznymi metodami `deposit(double)` oraz `pay(double)` bez bezpośredniego dostępu do pola.
-3. 3. Zbuduj dwa pakiety: `shop.core` i `shop.ui`. Sprawdź, które elementy są widoczne przy użyciu `public`, `protected` i modyfikatora domyślnego.
-4. 4. Przygotuj klasę bazową `Animal` i klasę potomną `Dog`, a następnie pokaż praktyczny przypadek użycia `protected`.
-5. 5. Wybierz jedną istniejącą klasę z poprzednich laboratoriów i zrefaktoryzuj ją tak, by wszystkie pola były enkapsulowane.
-6. 6. Dopisz 4-5 zdań: jakie problemy może powodować pozostawienie pól jako `public` w większym projekcie.
+1. Napisz klasę `User` z prywatnymi polami `login`, `email`, `age` oraz getterami i setterami z walidacją wieku i formatu e-mail.
+2. Utwórz klasę `Wallet` z prywatnym polem `balance` i publicznymi metodami `deposit(double)` oraz `pay(double)` bez bezpośredniego dostępu do pola.
+3. Zbuduj dwa pakiety: `shop.core` i `shop.ui`. Sprawdź, które elementy są widoczne przy użyciu `public`, `protected` i modyfikatora domyślnego.
+4. Przygotuj klasę bazową `Animal` i klasę potomną `Dog`, a następnie pokaż praktyczny przypadek użycia `protected`.
+5. Wybierz jedną istniejącą klasę z poprzednich laboratoriów i zrefaktoryzuj ją tak, by wszystkie pola były enkapsulowane.
+6. Dopisz 4-5 zdań: jakie problemy może powodować pozostawienie pól jako `public` w większym projekcie.
+
+### Szczegółowa lista kontrolna (checklist)
+
+Poniższa lista kontrolna pomaga zweryfikować, czy każde zadanie zostało wykonane poprawnie i kompletnie.
+
+#### Zadanie 1 — Klasa `User` z walidacją
+- [ ] Pola `login`, `email`, `age` są zadeklarowane jako `private`.
+- [ ] Dla każdego pola istnieje publiczny getter oraz setter (lub świadomie pominięty setter, np. dla `login`).
+- [ ] Setter `setAge` odrzuca wartości ujemne i nierealne (np. > 150) — rzuca wyjątek lub wypisuje komunikat i nie zmienia stanu.
+- [ ] Setter `setEmail` sprawdza podstawowy format adresu (np. obecność `@` i kropki w domenie).
+- [ ] Walidacja jest wykonywana również przy tworzeniu obiektu (konstruktor korzysta z setterów lub tej samej logiki).
+- [ ] W `main` pokazano zarówno poprawne, jak i niepoprawne dane wejściowe.
+
+#### Zadanie 2 — Klasa `Wallet`
+- [ ] Pole `balance` jest `private` i nie posiada publicznego settera.
+- [ ] Metoda `deposit(double)` odrzuca kwoty ujemne i zerowe.
+- [ ] Metoda `pay(double)` nie pozwala zejść poniżej zera (brak środków jest sygnalizowany).
+- [ ] Stan portfela można odczytać wyłącznie przez getter (np. `getBalance()`).
+- [ ] Próba bezpośredniego dostępu `wallet.balance` spoza klasy kończy się błędem kompilacji (sprawdzone).
+
+#### Zadanie 3 — Pakiety `shop.core` i `shop.ui`
+- [ ] Istnieją dwa pakiety z poprawnymi deklaracjami `package` zgodnymi ze strukturą katalogów.
+- [ ] W `shop.core` jest klasa z elementami `public`, `protected`, domyślnymi i `private`.
+- [ ] Z klasy w `shop.ui` sprawdzono, które elementy są dostępne, a które powodują błąd kompilacji.
+- [ ] Wyniki eksperymentu zostały zapisane (np. w tabeli lub komentarzu) dla każdego modyfikatora.
+
+#### Zadanie 4 — `Animal` i `Dog` — modyfikator `protected`
+- [ ] Klasa `Animal` posiada co najmniej jedno pole lub metodę `protected`.
+- [ ] Klasa `Dog` dziedziczy po `Animal` (`extends`) i korzysta z elementu `protected`.
+- [ ] Przykład pokazuje sensowny powód użycia `protected` (dostęp dla podklas, ukrycie przed resztą świata).
+- [ ] Klasy znajdują się w różnych pakietach, aby różnica między `protected` a domyślnym była widoczna.
+
+#### Zadanie 5 — Refaktoryzacja istniejącej klasy
+- [ ] Wybrana klasa pochodzi z wcześniejszych laboratoriów i wskazano jej pierwotną wersję.
+- [ ] Wszystkie pola instancyjne są teraz `private`.
+- [ ] Dodano tylko te gettery/settery, które są rzeczywiście potrzebne.
+- [ ] Kod korzystający z klasy został zaktualizowany i nadal się kompiluje oraz działa poprawnie.
+
+#### Zadanie 6 — Problemy z polami `public`
+- [ ] Tekst zawiera 4-5 pełnych zdań.
+- [ ] Wymieniono co najmniej dwa konkretne problemy (np. brak walidacji, niespójny stan, trudność zmiany implementacji).
+- [ ] Odwołano się do pojęcia enkapsulacji.
+
+#### Ogólna weryfikacja końcowa
+- [ ] Cały kod kompiluje się bez błędów i ostrzeżeń.
+- [ ] Program został uruchomiony, a wyniki są zgodne z oczekiwaniami.
+- [ ] Nazwy klas, metod i zmiennych są zgodne z konwencjami Javy.
+- [ ] Odpowiedzi opisowe są zapisane w repozytorium (np. w pliku `README.md` lub komentarzach).

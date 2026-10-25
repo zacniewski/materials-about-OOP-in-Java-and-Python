@@ -260,9 +260,48 @@ Po tym laboratorium student powinien:
 
 ## Zadania laboratoryjne
 
-1. 1. Wybierz prostą klasę „god object” i rozdziel jej odpowiedzialności zgodnie z SRP na co najmniej dwie klasy.
-2. 2. Przygotuj przykład naruszenia OCP, a następnie zrefaktoryzuj go tak, by nowe zachowanie dało się dodać bez modyfikacji istniejącej klasy.
-3. 3. Zbuduj krótką hierarchię klas i sprawdź, czy podklasy są podstawialne zgodnie z LSP; popraw naruszenia.
-4. 4. Podziel zbyt duży interfejs na mniejsze zgodnie z ISP i pokaż, że klasy implementują tylko potrzebne metody.
-5. 5. Zastosuj DIP: klasa wysokiego poziomu ma zależeć od interfejsu, a nie konkretnej implementacji (wstrzyknięcie zależności przez konstruktor).
-6. 6. Dla każdej litery SOLID dopisz 1-2 zdania, jakie korzyści dała refaktoryzacja w Twoim przykładzie.
+1. Wybierz prostą klasę „god object” i rozdziel jej odpowiedzialności zgodnie z SRP na co najmniej dwie klasy.
+2. Przygotuj przykład naruszenia OCP, a następnie zrefaktoryzuj go tak, by nowe zachowanie dało się dodać bez modyfikacji istniejącej klasy.
+3. Zbuduj krótką hierarchię klas i sprawdź, czy podklasy są podstawialne zgodnie z LSP; popraw naruszenia.
+4. Podziel zbyt duży interfejs na mniejsze zgodnie z ISP i pokaż, że klasy implementują tylko potrzebne metody.
+5. Zastosuj DIP: klasa wysokiego poziomu ma zależeć od interfejsu, a nie konkretnej implementacji (wstrzyknięcie zależności przez konstruktor).
+6. Dla każdej litery SOLID dopisz 1-2 zdania, jakie korzyści dała refaktoryzacja w Twoim przykładzie.
+
+### Szczegółowa lista kontrolna (checklist)
+
+Poniższa lista kontrolna pomaga zweryfikować, czy każde zadanie zostało wykonane poprawnie i kompletnie.
+
+#### Zadanie 1 — SRP
+- [ ] Wskazano odpowiedzialności oryginalnej klasy „god object”.
+- [ ] Po refaktoryzacji każda nowa klasa ma jedną odpowiedzialność.
+- [ ] Program działa tak samo jak przed refaktoryzacją.
+
+#### Zadanie 2 — OCP
+- [ ] Przedstawiono kod naruszający OCP (np. `if/switch` po typie).
+- [ ] Po refaktoryzacji nowe zachowanie dodaje się przez nową klasę (np. implementację interfejsu).
+- [ ] Dodano przykładowe nowe zachowanie bez modyfikacji istniejącej klasy.
+
+#### Zadanie 3 — LSP
+- [ ] Zbudowano hierarchię z co najmniej dwiema podklasami.
+- [ ] Wskazano naruszenie LSP (lub uzasadniono jego brak).
+- [ ] Po poprawce podklasy można używać w miejscu nadklasy bez zmiany zachowania programu.
+
+#### Zadanie 4 — ISP
+- [ ] Pokazano zbyt duży interfejs i klasę zmuszoną do pustych implementacji.
+- [ ] Interfejs podzielono na mniejsze, spójne interfejsy.
+- [ ] Klasy implementują tylko potrzebne interfejsy.
+
+#### Zadanie 5 — DIP
+- [ ] Klasa wysokiego poziomu zależy od interfejsu, a nie od konkretnej klasy.
+- [ ] Zależność jest wstrzykiwana przez konstruktor.
+- [ ] Pokazano podmianę implementacji bez zmiany klasy wysokiego poziomu.
+
+#### Zadanie 6 — Podsumowanie SOLID
+- [ ] Dla każdej z pięciu zasad dopisano 1-2 zdania.
+- [ ] Korzyści odnoszą się do własnego przykładu, a nie tylko do definicji.
+
+#### Ogólna weryfikacja końcowa
+- [ ] Cały kod kompiluje się bez błędów i ostrzeżeń.
+- [ ] Program został uruchomiony, a wyniki są zgodne z oczekiwaniami.
+- [ ] Nazwy klas, metod i zmiennych są zgodne z konwencjami Javy.
+- [ ] Odpowiedzi opisowe są zapisane w repozytorium (np. w pliku `README.md` lub komentarzach).

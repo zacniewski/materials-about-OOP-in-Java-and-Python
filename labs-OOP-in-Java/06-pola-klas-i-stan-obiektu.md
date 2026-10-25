@@ -172,12 +172,55 @@ flowchart LR
 
 ## Zadania laboratoryjne
 
-1. 1. Napisz klasę `Product` z polami instancyjnymi `name`, `price`, `category`, `available` oraz metodą `printInfo()`.
-2. 2. Dodaj do klasy `Product` statyczne pole `productCount`, które zwiększa się przy tworzeniu każdego obiektu.
-3. 3. Utwórz klasę `LibraryMember` z polem `final memberId` i metodą wypisującą dane czytelnika.
-4. 4. Napisz klasę `VisitCounter`, która pokazuje różnicę między zmienną lokalną a polem klasy podczas wielokrotnego wywołania metody.
-5. 5. Zaimplementuj klasę `ScoreBoard`, gdzie pola instancyjne opisują wynik jednego meczu, a pole statyczne liczy wszystkie rozegrane mecze.
-6. 6. Przygotuj krótki eksperyment: utwórz kilka obiektów tej samej klasy i pokaż, że każdy ma własny stan, ale współdzieli pola statyczne.
+1. Napisz klasę `Product` z polami instancyjnymi `name`, `price`, `category`, `available` oraz metodą `printInfo()`.
+2. Dodaj do klasy `Product` statyczne pole `productCount`, które zwiększa się przy tworzeniu każdego obiektu.
+3. Utwórz klasę `LibraryMember` z polem `final memberId` i metodą wypisującą dane czytelnika.
+4. Napisz klasę `VisitCounter`, która pokazuje różnicę między zmienną lokalną a polem klasy podczas wielokrotnego wywołania metody.
+5. Zaimplementuj klasę `ScoreBoard`, gdzie pola instancyjne opisują wynik jednego meczu, a pole statyczne liczy wszystkie rozegrane mecze.
+6. Przygotuj krótki eksperyment: utwórz kilka obiektów tej samej klasy i pokaż, że każdy ma własny stan, ale współdzieli pola statyczne.
+
+### Szczegółowa lista kontrolna (checklist)
+
+Poniższa lista kontrolna pomaga zweryfikować, czy każde zadanie zostało wykonane poprawnie i kompletnie.
+
+#### Zadanie 1 — Klasa `Product`
+- [ ] Klasa posiada pola instancyjne `name`, `price`, `category`, `available` z odpowiednimi typami (`String`, `double`, `String`, `boolean`).
+- [ ] Metoda `printInfo()` wypisuje wszystkie pola w czytelnej formie.
+- [ ] Utworzono co najmniej dwa obiekty o różnych wartościach pól.
+
+#### Zadanie 2 — Statyczne pole `productCount`
+- [ ] Pole `productCount` jest zadeklarowane jako `static`.
+- [ ] Licznik jest zwiększany w konstruktorze (każde utworzenie obiektu go inkrementuje).
+- [ ] Do licznika odwołujemy się przez nazwę klasy (`Product.productCount` lub statyczny getter).
+- [ ] Wypisana wartość licznika zgadza się z liczbą utworzonych obiektów.
+
+#### Zadanie 3 — Klasa `LibraryMember` z polem `final`
+- [ ] Pole `memberId` jest `final` i jest inicjalizowane w konstruktorze lub przy deklaracji.
+- [ ] Nie istnieje setter dla `memberId`; próba ponownego przypisania kończy się błędem kompilacji.
+- [ ] Metoda wypisująca dane czytelnika pokazuje wszystkie pola.
+
+#### Zadanie 4 — Klasa `VisitCounter` — zmienna lokalna vs pole
+- [ ] Metoda zawiera zmienną lokalną oraz modyfikuje pole klasy.
+- [ ] Metoda jest wywoływana co najmniej 3 razy.
+- [ ] Wynik pokazuje, że zmienna lokalna resetuje się przy każdym wywołaniu, a pole zachowuje wartość.
+
+#### Zadanie 5 — Klasa `ScoreBoard`
+- [ ] Pola instancyjne opisują wynik jednego meczu (np. drużyny i liczba punktów).
+- [ ] Pole statyczne zlicza wszystkie utworzone mecze.
+- [ ] Utworzono kilka meczów i wypisano zarówno ich wyniki, jak i łączną liczbę meczów.
+
+#### Zadanie 6 — Eksperyment ze stanem obiektów
+- [ ] Utworzono co najmniej 3 obiekty tej samej klasy.
+- [ ] Zmiana pola instancyjnego jednego obiektu nie wpływa na pozostałe.
+- [ ] Zmiana pola statycznego jest widoczna we wszystkich obiektach.
+- [ ] Wynik eksperymentu został krótko opisany.
+
+#### Ogólna weryfikacja końcowa
+- [ ] Cały kod kompiluje się bez błędów i ostrzeżeń.
+- [ ] Program został uruchomiony, a wyniki są zgodne z oczekiwaniami.
+- [ ] Nazwy klas, metod i zmiennych są zgodne z konwencjami Javy.
+- [ ] Odpowiedzi opisowe są zapisane w repozytorium (np. w pliku `README.md` lub komentarzach).
+
 ## Rozszerzenie
 
 Przepisz jedną z klas z laboratorium 3 tak, aby:

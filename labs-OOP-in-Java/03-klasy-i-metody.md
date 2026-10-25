@@ -587,6 +587,48 @@ printNumbers(); // pusta tablica
 ```  
 
 
+### Szczegółowa lista kontrolna (checklist)
+
+Poniższa lista kontrolna pomaga zweryfikować, czy każde zadanie zostało wykonane poprawnie i kompletnie.
+
+#### Zadanie 1 — Klasa `Film`
+- [ ] Klasa ma pola `tytul`, `rezyser`, `rokProdukcji`, `obejrzany`.
+- [ ] Metoda `obejrzyj()` zmienia stan pola `obejrzany`.
+- [ ] Metoda `wyswietlInfo()` lub `toString()` (z `@Override`) prezentuje dane filmu.
+- [ ] Utworzono dwa obiekty z różnymi wartościami pól i wypisano ich stan.
+
+#### Zadanie 2 — Klasa `KalkulatorTemperatur`
+- [ ] Obie metody są `static` i przyjmują/zwracają `double`.
+- [ ] Wzory są poprawne (np. 0°C = 32°F, 100°C = 212°F).
+- [ ] Metody wywoływane są przez nazwę klasy, bez tworzenia obiektu.
+
+#### Zadanie 3 — Klasa `BankAccount`
+- [ ] Pole salda jest `private`.
+- [ ] `deposit` i `withdraw` odrzucają kwoty niedodatnie.
+- [ ] `withdraw` nie pozwala zejść poniżej zera.
+- [ ] `getBalance()` zwraca aktualne saldo; przetestowano poprawne i błędne operacje.
+
+#### Zadanie 4 — `StudentGroup` i pole statyczne
+- [ ] Licznik jest polem `static`.
+- [ ] Licznik jest zwiększany przy każdym utworzeniu obiektu `Student` (w konstruktorze).
+- [ ] Wypisana wartość licznika zgadza się z liczbą utworzonych obiektów.
+
+#### Zadanie 5 — Klasa `Rectangle` i `this`
+- [ ] Konstruktor przypisuje pola przez `this.width = width` i `this.height = height`.
+- [ ] `area()` i `perimeter()` zwracają poprawne wartości.
+- [ ] Przetestowano metody na co najmniej jednym obiekcie.
+
+#### Zadanie 6 — Metoda z `varargs`
+- [ ] Parametr `varargs` jest ostatnim (i jedynym takim) parametrem metody.
+- [ ] Metodę wywołano z różną liczbą argumentów, w tym bez argumentów.
+- [ ] Wynik dla pustego wywołania jest poprawny (np. suma = 0).
+
+#### Ogólna weryfikacja końcowa
+- [ ] Cały kod kompiluje się bez błędów i ostrzeżeń.
+- [ ] Program został uruchomiony, a wyniki są zgodne z oczekiwaniami.
+- [ ] Nazwy klas, metod i zmiennych są zgodne z konwencjami Javy.
+- [ ] Rozwiązania są zatwierdzone (commit) i wypchnięte do repozytorium.
+
 ## Mini-checklista po laboratorium
 
 - Czy odróżniasz klasę od obiektu?

@@ -416,3 +416,67 @@ public class Formatowanie {
 10. Ćwiczenie z gałęziami: utwórz gałąź `petle` (`git switch -c petle`), dodaj w niej program z zadania 8 w co najmniej dwóch commitach, wróć na `main` i scal gałąź (`git merge petle`). Obejrzyj historię `git log --oneline --graph` i wypchnij wszystko na GitHub. Na koniec sklonuj repozytorium do innego katalogu (`git clone`) i sprawdź, że zawiera wszystkie pliki.
 
 > Po każdym zadaniu wykonuj osobny commit z czytelnym opisem (np. `Dodaj program KalkulatorProsty`) i regularnie wykonuj `git push`.
+
+### Szczegółowa lista kontrolna (checklist)
+
+Poniższa lista kontrolna pomaga zweryfikować, czy każde zadanie zostało wykonane poprawnie i kompletnie.
+
+#### Zadanie 1 — Instalacja i konfiguracja Gita
+- [ ] `git --version` zwraca zainstalowaną wersję.
+- [ ] Ustawiono `user.name` i `user.email` (`git config --global`).
+- [ ] Ustawiono `init.defaultBranch main`.
+- [ ] Wynik `git config --list` zawiera powyższe wpisy.
+
+#### Zadanie 2 — Konto GitHub i klucz SSH
+- [ ] Konto na GitHubie jest aktywne.
+- [ ] Wygenerowano klucz SSH (np. `ssh-keygen -t ed25519`), a klucz publiczny dodano do konta.
+- [ ] `ssh -T git@github.com` wyświetla powitanie z nazwą użytkownika.
+
+#### Zadanie 3 — Repozytorium `oop-java`
+- [ ] Repozytorium `oop-java` istnieje na GitHubie.
+- [ ] Lokalnie są pliki `README.md` i `.gitignore` ignorujący `*.class`, `out/`, `.idea/`.
+- [ ] Wykonano pierwszy commit i `git push -u origin main`.
+- [ ] Link do repozytorium przekazano prowadzącemu; przyjęto strukturę katalogów `lab01`, `lab02`, ...
+
+#### Zadanie 4 — Instalacja JDK
+- [ ] Zainstalowano JDK w wersji LTS.
+- [ ] `java -version` i `javac -version` wskazują tę samą wersję.
+- [ ] Wyniki zapisano w `lab01/notatka.md` i zatwierdzono commitem.
+
+#### Zadanie 5 — Program `HelloStudent`
+- [ ] Program wypisuje imię, kierunek studiów i rok akademicki.
+- [ ] Skompilowano go `javac` i uruchomiono `java` z linii poleceń.
+- [ ] `git status` nie pokazuje pliku `.class`.
+- [ ] Zmiany zatwierdzono i wypchnięto.
+
+#### Zadanie 6 — Program `TypyDanychDemo`
+- [ ] Zadeklarowano zmienne wszystkich 8 typów prymitywnych (`byte`, `short`, `int`, `long`, `float`, `double`, `char`, `boolean`).
+- [ ] Literały `long` i `float` mają poprawne sufiksy (`L`, `f`).
+- [ ] Każda wartość jest wypisana z opisem typu.
+
+#### Zadanie 7 — Program `KalkulatorProsty`
+- [ ] Wypisywane są suma, różnica, iloczyn, iloraz całkowity i reszta.
+- [ ] Iloraz używa dzielenia całkowitego (`/` na `int`), a reszta operatora `%`.
+- [ ] Obsłużono (lub opisano) przypadek dzielenia przez zero.
+
+#### Zadanie 8 — Program `WarunkiIPetle`
+- [ ] Wypisywane są liczby od `1` do `n` włącznie.
+- [ ] Osobno wypisywane są tylko liczby parzyste (np. warunek `i % 2 == 0`).
+- [ ] Sprawdzono działanie dla małych wartości `n` (np. 0, 1, 10).
+
+#### Zadanie 9 — Program `TablicaOcen`
+- [ ] Średnia jest liczona jako `double` (bez obcięcia przez dzielenie całkowite).
+- [ ] Poprawnie wyznaczono ocenę najwyższą i najniższą.
+- [ ] Program działa dla dowolnej długości tablicy (użyto `length`).
+
+#### Zadanie 10 — Gałęzie w Gicie
+- [ ] Utworzono gałąź `petle` (`git switch -c petle`).
+- [ ] Na gałęzi są co najmniej dwa commity z programem z zadania 8.
+- [ ] Gałąź scalono do `main` (`git merge petle`), a `git log --oneline --graph` pokazuje historię.
+- [ ] Wszystko wypchnięto, a sklonowane repozytorium zawiera wszystkie pliki.
+
+#### Ogólna weryfikacja końcowa
+- [ ] Cały kod kompiluje się bez błędów i ostrzeżeń.
+- [ ] Program został uruchomiony, a wyniki są zgodne z oczekiwaniami.
+- [ ] Nazwy klas, metod i zmiennych są zgodne z konwencjami Javy.
+- [ ] Rozwiązania są zatwierdzone (commit) i wypchnięte do repozytorium.

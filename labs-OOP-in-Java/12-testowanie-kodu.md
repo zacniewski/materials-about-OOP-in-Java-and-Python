@@ -178,12 +178,48 @@ Teraz test jest prosty.
 
 ## Zadania laboratoryjne
 
-1. 1. Napisz klasę `MathUtils` z metodami `add`, `subtract`, `divide` i przygotuj do nich testy jednostkowe w JUnit 5.
-2. 2. Dodaj testy przypadku brzegowego dla `divide`, w tym scenariusz dzielenia przez zero z oczekiwanym wyjątkiem.
-3. 3. Zaimplementuj klasę `UserValidator` i napisz testy parametryzowane dla poprawnych i błędnych danych.
-4. 4. Przygotuj testy dla klasy z poprzednich laboratoriów (np. `BankAccount`) obejmujące minimum: scenariusz pozytywny, negatywny i graniczny.
-5. 5. Uporządkuj testy zgodnie ze schematem Given-When-Then i dodaj czytelne nazwy metod testowych.
-6. 6. Uruchom wszystkie testy i zapisz krótką notatkę: które testy wykryłyby najpoważniejszy błąd biznesowy oraz dlaczego.
+1. Napisz klasę `MathUtils` z metodami `add`, `subtract`, `divide` i przygotuj do nich testy jednostkowe w JUnit 5.
+2. Dodaj testy przypadku brzegowego dla `divide`, w tym scenariusz dzielenia przez zero z oczekiwanym wyjątkiem.
+3. Zaimplementuj klasę `UserValidator` i napisz testy parametryzowane dla poprawnych i błędnych danych.
+4. Przygotuj testy dla klasy z poprzednich laboratoriów (np. `BankAccount`) obejmujące minimum: scenariusz pozytywny, negatywny i graniczny.
+5. Uporządkuj testy zgodnie ze schematem Given-When-Then i dodaj czytelne nazwy metod testowych.
+6. Uruchom wszystkie testy i zapisz krótką notatkę: które testy wykryłyby najpoważniejszy błąd biznesowy oraz dlaczego.
+
+### Szczegółowa lista kontrolna (checklist)
+
+Poniższa lista kontrolna pomaga zweryfikować, czy każde zadanie zostało wykonane poprawnie i kompletnie.
+
+#### Zadanie 1 — `MathUtils` i testy JUnit 5
+- [ ] Klasa zawiera metody `add`, `subtract`, `divide`.
+- [ ] Testy używają JUnit 5 (`org.junit.jupiter.api.Test`).
+- [ ] Każda metoda ma co najmniej jeden test z asercją.
+
+#### Zadanie 2 — Przypadki brzegowe `divide`
+- [ ] Dzielenie przez zero jest testowane z `assertThrows`.
+- [ ] Przetestowano inne przypadki brzegowe (np. liczby ujemne, zero w liczniku).
+
+#### Zadanie 3 — `UserValidator` i testy parametryzowane
+- [ ] Testy używają `@ParameterizedTest` z źródłem danych (np. `@ValueSource`, `@CsvSource`).
+- [ ] Osobno przetestowano dane poprawne i błędne.
+
+#### Zadanie 4 — Testy klasy z poprzednich laboratoriów
+- [ ] Wybrana klasa pochodzi z wcześniejszych zajęć (np. `BankAccount`).
+- [ ] Istnieje test pozytywny, negatywny i graniczny.
+
+#### Zadanie 5 — Given-When-Then i nazewnictwo
+- [ ] Każdy test ma wyraźnie wydzielone sekcje Given, When, Then.
+- [ ] Nazwy metod testowych opisują scenariusz i oczekiwany wynik.
+
+#### Zadanie 6 — Uruchomienie testów i notatka
+- [ ] Wszystkie testy przechodzą.
+- [ ] Notatka wskazuje test wykrywający najpoważniejszy błąd biznesowy i uzasadnia wybór.
+
+#### Ogólna weryfikacja końcowa
+- [ ] Cały kod kompiluje się bez błędów i ostrzeżeń.
+- [ ] Program został uruchomiony, a wyniki są zgodne z oczekiwaniami.
+- [ ] Nazwy klas, metod i zmiennych są zgodne z konwencjami Javy.
+- [ ] Odpowiedzi opisowe są zapisane w repozytorium (np. w pliku `README.md` lub komentarzach).
+
 ## Mini-checklista
 
 - Czy testujesz zachowanie, a nie szczegóły implementacji?

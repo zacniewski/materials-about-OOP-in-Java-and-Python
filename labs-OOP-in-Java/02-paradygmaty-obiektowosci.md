@@ -789,3 +789,51 @@ Poniższe zadania ćwiczą cztery filary OOP (abstrakcję, enkapsulację, dziedz
    - Wersja obiektowa: zaimplementuj klasę (np. `Koszyk`) przechowującą listę produktów jako pole oraz metody operujące na własnym stanie obiektu (np. `dodajProdukt()`, `obliczSume()`), podobnie jak `ObiektKolo` w przykładzie 8.
    - W `main` uruchom obie wersje na tych samych danych wejściowych i porównaj wyniki.
    - W opisie (5-7 zdań, w komentarzu lub osobnym pliku tekstowym) odnieś się m.in. do: czytelności kodu, łatwości rozszerzania (np. dodania rabatów), ochrony danych przed niepożądaną modyfikacją (enkapsulacja) oraz tego, który styl lepiej sprawdziłby się przy rozroście projektu.
+
+### Szczegółowa lista kontrolna (checklist)
+
+Poniższa lista kontrolna pomaga zweryfikować, czy każde zadanie zostało wykonane poprawnie i kompletnie.
+
+#### Zadanie 1 — Klasa `Book`
+- [ ] Pola `title`, `author`, `available` są `private` i mają gettery.
+- [ ] Konstruktor ustawia `available` na `true`.
+- [ ] `borrow()` nie pozwala wypożyczyć książki już wypożyczonej i wypisuje komunikat.
+- [ ] `returnBook()` obsługuje zwrot książki, która nie była wypożyczona.
+- [ ] `toString()` prezentuje stan obiektu; w `main` przetestowano wszystkie scenariusze.
+
+#### Zadanie 2 — Klasa `BankAccount`
+- [ ] Pole `balance` jest `private`, odczyt przez `getBalance()`.
+- [ ] Konstruktor odrzuca ujemne saldo początkowe.
+- [ ] `deposit` przyjmuje tylko kwoty dodatnie.
+- [ ] `withdraw` nie pozwala wypłacić więcej niż saldo i nie zmienia salda przy błędzie.
+- [ ] Przetestowano: poprawną wpłatę, zbyt dużą wypłatę i wpłatę ujemną.
+
+#### Zadanie 3 — Hierarchia `Vehicle -> Car`
+- [ ] `Vehicle` ma wspólne pola i metodę `getDescription()`.
+- [ ] `Car` dziedziczy po `Vehicle` (`extends`) i wywołuje `super(...)`.
+- [ ] `Car` dodaje własne pole (np. `liczbaDrzwi`).
+- [ ] W `main` komentarze wskazują elementy odziedziczone i specyficzne dla `Car`.
+
+#### Zadanie 4 — `ElectricCar` i polimorfizm
+- [ ] `ElectricCar` przesłania `getDescription()` z adnotacją `@Override`.
+- [ ] Tablica `Vehicle[]` zawiera obiekty różnych podklas.
+- [ ] W pętli wywoływana jest `getDescription()` i widać różne wyniki.
+- [ ] Komentarz wyjaśnia, dlaczego to polimorfizm.
+
+#### Zadanie 5 — Kompozycja `Computer` – `Processor`
+- [ ] `Processor` ma własne pola i metodę `wykonajObliczenia()`.
+- [ ] `Computer` przechowuje `Processor` w polu `private` i tworzy go w konstruktorze.
+- [ ] `Computer.uruchom()` deleguje pracę do `Processor`.
+- [ ] Komentarz wyjaśnia różnicę między kompozycją a agregacją.
+
+#### Zadanie 6 — Proceduralnie vs obiektowo
+- [ ] Wersja proceduralna używa metod statycznych i danych przekazywanych jako parametry.
+- [ ] Wersja obiektowa (np. `Koszyk`) przechowuje stan w polach i ma metody operujące na nim.
+- [ ] Obie wersje uruchomiono na tych samych danych i dają te same wyniki.
+- [ ] Opis ma 5-7 zdań i porusza czytelność, rozszerzalność i enkapsulację.
+
+#### Ogólna weryfikacja końcowa
+- [ ] Cały kod kompiluje się bez błędów i ostrzeżeń.
+- [ ] Program został uruchomiony, a wyniki są zgodne z oczekiwaniami.
+- [ ] Nazwy klas, metod i zmiennych są zgodne z konwencjami Javy.
+- [ ] Rozwiązania są zatwierdzone (commit) i wypchnięte do repozytorium.

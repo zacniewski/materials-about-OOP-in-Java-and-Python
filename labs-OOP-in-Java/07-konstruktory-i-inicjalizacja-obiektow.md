@@ -573,9 +573,51 @@ public class FabrykaPrzyklad {
 
 ## Zadania laboratoryjne
 
-1. 1. Napisz klasę `Student` z trzema konstruktorami: domyślnym, z samym `name` oraz z `name` i `indexNumber`.
-2. 2. Zastosuj przeciążanie konstruktorów w klasie `Rectangle` i użyj `this(...)` do delegowania między konstruktorami.
-3. 3. Utwórz klasę `Car` z walidacją danych wejściowych w konstruktorze (np. rok produkcji i pojemność silnika).
-4. 4. Przygotuj klasę `Configuration` z blokiem inicjalizacyjnym i porównaj jego działanie z inicjalizacją bezpośrednio przy polu.
-5. 5. Zaimplementuj konstruktor kopiujący w klasie `AddressBookEntry` i pokaż różnicę między kopią a referencją do tego samego obiektu.
-6. 6. Napisz testowy `main`, który tworzy obiekty wszystkimi konstruktorami i wypisuje ich stan po inicjalizacji.
+1. Napisz klasę `Student` z trzema konstruktorami: domyślnym, z samym `name` oraz z `name` i `indexNumber`.
+2. Zastosuj przeciążanie konstruktorów w klasie `Rectangle` i użyj `this(...)` do delegowania między konstruktorami.
+3. Utwórz klasę `Car` z walidacją danych wejściowych w konstruktorze (np. rok produkcji i pojemność silnika).
+4. Przygotuj klasę `Configuration` z blokiem inicjalizacyjnym i porównaj jego działanie z inicjalizacją bezpośrednio przy polu.
+5. Zaimplementuj konstruktor kopiujący w klasie `AddressBookEntry` i pokaż różnicę między kopią a referencją do tego samego obiektu.
+6. Napisz testowy `main`, który tworzy obiekty wszystkimi konstruktorami i wypisuje ich stan po inicjalizacji.
+
+### Szczegółowa lista kontrolna (checklist)
+
+Poniższa lista kontrolna pomaga zweryfikować, czy każde zadanie zostało wykonane poprawnie i kompletnie.
+
+#### Zadanie 1 — Klasa `Student` z trzema konstruktorami
+- [ ] Istnieją konstruktory: bezargumentowy, `Student(String name)` i `Student(String name, String indexNumber)`.
+- [ ] Konstruktor domyślny ustawia sensowne wartości domyślne (bez pozostawiania `null`, jeśli to możliwe).
+- [ ] Każdy konstruktor został użyty w `main`.
+
+#### Zadanie 2 — Klasa `Rectangle` i `this(...)`
+- [ ] Klasa posiada co najmniej dwa przeciążone konstruktory.
+- [ ] Konstruktory delegują do jednego „głównego” konstruktora przez `this(...)`.
+- [ ] Wywołanie `this(...)` jest pierwszą instrukcją w konstruktorze.
+- [ ] Logika inicjalizacji nie jest zduplikowana.
+
+#### Zadanie 3 — Klasa `Car` z walidacją
+- [ ] Konstruktor sprawdza rok produkcji (np. nie z przyszłości i nie sprzed wynalezienia samochodu).
+- [ ] Konstruktor sprawdza pojemność silnika (wartość dodatnia).
+- [ ] Przy błędnych danych rzucany jest wyjątek (np. `IllegalArgumentException`) z czytelnym komunikatem.
+- [ ] Przetestowano zarówno poprawne, jak i niepoprawne dane.
+
+#### Zadanie 4 — Klasa `Configuration` i blok inicjalizacyjny
+- [ ] Klasa zawiera blok inicjalizacyjny `{ ... }` oraz pole inicjalizowane przy deklaracji.
+- [ ] Komunikaty na konsoli pokazują kolejność: inicjalizacja pól/bloków, potem ciało konstruktora.
+- [ ] Zapisano krótki wniosek dotyczący kolejności inicjalizacji.
+
+#### Zadanie 5 — Konstruktor kopiujący w `AddressBookEntry`
+- [ ] Konstruktor przyjmuje obiekt `AddressBookEntry` i kopiuje jego pola.
+- [ ] Pokazano, że zmiana kopii nie zmienia oryginału.
+- [ ] Pokazano, że przypisanie referencji (`b = a`) powoduje współdzielenie tego samego obiektu.
+
+#### Zadanie 6 — Testowy `main`
+- [ ] Utworzono obiekty z użyciem wszystkich zdefiniowanych konstruktorów.
+- [ ] Stan każdego obiektu jest wypisywany (np. przez `toString()`).
+- [ ] Program kompiluje się i uruchamia bez błędów.
+
+#### Ogólna weryfikacja końcowa
+- [ ] Cały kod kompiluje się bez błędów i ostrzeżeń.
+- [ ] Program został uruchomiony, a wyniki są zgodne z oczekiwaniami.
+- [ ] Nazwy klas, metod i zmiennych są zgodne z konwencjami Javy.
+- [ ] Odpowiedzi opisowe są zapisane w repozytorium (np. w pliku `README.md` lub komentarzach).

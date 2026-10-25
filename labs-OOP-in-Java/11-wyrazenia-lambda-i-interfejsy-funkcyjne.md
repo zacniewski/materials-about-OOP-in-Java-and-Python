@@ -567,9 +567,49 @@ public class PraktycznyPrzyklad {
 
 ## Zadania laboratoryjne
 
-1. 1. Zdefiniuj własny interfejs funkcyjny `TextTransformer` i przygotuj dwie lambdy: jedna zamienia tekst na wielkie litery, druga odwraca napis.
-2. 2. Utwórz listę produktów i użyj `forEach` z lambdą do czytelnego wypisania ich nazwy oraz ceny.
-3. 3. Posortuj listę obiektów `Student` według średniej malejąco z użyciem `Comparator` i wyrażeń lambda.
-4. 4. Przefiltruj liczby całkowite tak, by zostały tylko parzyste większe od 10 (lambda + `removeIf` lub Stream API).
-5. 5. Przygotuj przykład użycia referencji do metody (np. `System.out::println` lub `Student::getName`) i porównaj go z równoważną lambdą.
-6. 6. Zaimplementuj prosty pipeline streamów: mapowanie, filtrowanie i redukcję, a na końcu wypisz wynik obliczeń.
+1. Zdefiniuj własny interfejs funkcyjny `TextTransformer` i przygotuj dwie lambdy: jedna zamienia tekst na wielkie litery, druga odwraca napis.
+2. Utwórz listę produktów i użyj `forEach` z lambdą do czytelnego wypisania ich nazwy oraz ceny.
+3. Posortuj listę obiektów `Student` według średniej malejąco z użyciem `Comparator` i wyrażeń lambda.
+4. Przefiltruj liczby całkowite tak, by zostały tylko parzyste większe od 10 (lambda + `removeIf` lub Stream API).
+5. Przygotuj przykład użycia referencji do metody (np. `System.out::println` lub `Student::getName`) i porównaj go z równoważną lambdą.
+6. Zaimplementuj prosty pipeline streamów: mapowanie, filtrowanie i redukcję, a na końcu wypisz wynik obliczeń.
+
+### Szczegółowa lista kontrolna (checklist)
+
+Poniższa lista kontrolna pomaga zweryfikować, czy każde zadanie zostało wykonane poprawnie i kompletnie.
+
+#### Zadanie 1 — Interfejs funkcyjny `TextTransformer`
+- [ ] Interfejs ma dokładnie jedną metodę abstrakcyjną i adnotację `@FunctionalInterface`.
+- [ ] Przygotowano lambdę zamieniającą tekst na wielkie litery.
+- [ ] Przygotowano lambdę odwracającą napis.
+- [ ] Obie lambdy zostały wywołane i wynik wypisany.
+
+#### Zadanie 2 — `forEach` na liście produktów
+- [ ] Lista zawiera co najmniej 3 produkty.
+- [ ] `forEach` z lambdą wypisuje nazwę i cenę w czytelnym formacie.
+
+#### Zadanie 3 — Sortowanie `Student` po średniej
+- [ ] Użyto `Comparator` z lambdą lub `Comparator.comparing(...)`.
+- [ ] Kolejność jest malejąca (np. `reversed()`).
+- [ ] Wynik sortowania został wypisany i jest poprawny.
+
+#### Zadanie 4 — Filtrowanie liczb
+- [ ] W wyniku zostają tylko liczby parzyste większe od 10.
+- [ ] Użyto `removeIf` lub Stream API (`filter`).
+- [ ] Dane testowe zawierają przypadki graniczne (np. 10, 11, 12).
+
+#### Zadanie 5 — Referencja do metody
+- [ ] Użyto co najmniej jednej referencji do metody (np. `System.out::println`).
+- [ ] Pokazano równoważną lambdę.
+- [ ] Krótko porównano czytelność obu zapisów.
+
+#### Zadanie 6 — Pipeline streamów
+- [ ] Pipeline zawiera operacje `map`, `filter` i redukcję (`reduce`, `sum` itp.).
+- [ ] Wynik końcowy jest wypisany i zgodny z oczekiwaniami.
+- [ ] Kod jest czytelny (każda operacja w osobnej linii).
+
+#### Ogólna weryfikacja końcowa
+- [ ] Cały kod kompiluje się bez błędów i ostrzeżeń.
+- [ ] Program został uruchomiony, a wyniki są zgodne z oczekiwaniami.
+- [ ] Nazwy klas, metod i zmiennych są zgodne z konwencjami Javy.
+- [ ] Odpowiedzi opisowe są zapisane w repozytorium (np. w pliku `README.md` lub komentarzach).

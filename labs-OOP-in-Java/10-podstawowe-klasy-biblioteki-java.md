@@ -491,9 +491,51 @@ public class RandomIScannerPrzyklad {
 
 ## Zadania laboratoryjne
 
-1. 1. Napisz program operujący na `String`, który: usuwa nadmiarowe spacje, zamienia tekst na małe litery i zlicza liczbę słów.
-2. 2. Przygotuj klasę `Student` z poprawnie zaimplementowanymi metodami `toString()`, `equals()` i `hashCode()`.
-3. 3. Użyj `ArrayList` do przechowywania obiektów `Student`, a następnie wyszukaj studenta po indeksie i po nazwisku.
-4. 4. Wykorzystaj `HashMap<String, Integer>` do zliczania częstości występowania słów w zdaniu.
-5. 5. Napisz funkcję, która konwertuje `List<Integer>` na `Set<Integer>` i wyjaśnij, co dzieje się z duplikatami.
-6. 6. Zbuduj prosty scenariusz wejścia z `Scanner`: pobierz 5 liczb od użytkownika i wypisz ich średnią oraz maksimum.
+1. Napisz program operujący na `String`, który: usuwa nadmiarowe spacje, zamienia tekst na małe litery i zlicza liczbę słów.
+2. Przygotuj klasę `Student` z poprawnie zaimplementowanymi metodami `toString()`, `equals()` i `hashCode()`.
+3. Użyj `ArrayList` do przechowywania obiektów `Student`, a następnie wyszukaj studenta po indeksie i po nazwisku.
+4. Wykorzystaj `HashMap<String, Integer>` do zliczania częstości występowania słów w zdaniu.
+5. Napisz funkcję, która konwertuje `List<Integer>` na `Set<Integer>` i wyjaśnij, co dzieje się z duplikatami.
+6. Zbuduj prosty scenariusz wejścia z `Scanner`: pobierz 5 liczb od użytkownika i wypisz ich średnią oraz maksimum.
+
+### Szczegółowa lista kontrolna (checklist)
+
+Poniższa lista kontrolna pomaga zweryfikować, czy każde zadanie zostało wykonane poprawnie i kompletnie.
+
+#### Zadanie 1 — Operacje na `String`
+- [ ] Nadmiarowe spacje są usuwane (`trim()` oraz np. `replaceAll("\\s+", " ")`).
+- [ ] Tekst jest zamieniany na małe litery (`toLowerCase()`).
+- [ ] Liczba słów jest liczona poprawnie, także dla pustego tekstu.
+
+#### Zadanie 2 — `toString()`, `equals()`, `hashCode()` w `Student`
+- [ ] Wszystkie trzy metody są oznaczone `@Override`.
+- [ ] `equals()` sprawdza `null`, typ obiektu i porównuje istotne pola.
+- [ ] `hashCode()` jest spójny z `equals()` (np. `Objects.hash(...)`).
+- [ ] Przetestowano równość dwóch różnych obiektów o tych samych danych.
+
+#### Zadanie 3 — `ArrayList<Student>`
+- [ ] Lista zawiera kilka obiektów `Student`.
+- [ ] Wyszukiwanie po indeksie obsługuje indeks spoza zakresu.
+- [ ] Wyszukiwanie po nazwisku obsługuje sytuację braku wyniku.
+
+#### Zadanie 4 — Zliczanie słów w `HashMap<String, Integer>`
+- [ ] Zdanie jest dzielone na słowa (np. `split("\\s+")`).
+- [ ] Częstości są zliczane poprawnie (np. `merge` lub `getOrDefault`).
+- [ ] Wynik jest wypisany dla przykładowego zdania z powtórzeniami.
+
+#### Zadanie 5 — Konwersja `List<Integer>` na `Set<Integer>`
+- [ ] Funkcja zwraca `Set<Integer>` utworzony z listy.
+- [ ] Przykład zawiera duplikaty, które znikają w wyniku.
+- [ ] Wyjaśniono, dlaczego zbiór nie przechowuje duplikatów i czy zachowuje kolejność.
+
+#### Zadanie 6 — Wejście z `Scanner`
+- [ ] Program pobiera dokładnie 5 liczb.
+- [ ] Wypisuje poprawną średnią i maksimum.
+- [ ] Obsłużono błędne dane wejściowe (np. tekst zamiast liczby).
+- [ ] `Scanner` jest zamykany po zakończeniu pracy.
+
+#### Ogólna weryfikacja końcowa
+- [ ] Cały kod kompiluje się bez błędów i ostrzeżeń.
+- [ ] Program został uruchomiony, a wyniki są zgodne z oczekiwaniami.
+- [ ] Nazwy klas, metod i zmiennych są zgodne z konwencjami Javy.
+- [ ] Odpowiedzi opisowe są zapisane w repozytorium (np. w pliku `README.md` lub komentarzach).

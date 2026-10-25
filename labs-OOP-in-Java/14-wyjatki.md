@@ -697,9 +697,49 @@ public class WalidacjaFormularza {
 
 ## Zadania laboratoryjne
 
-1. 1. Napisz metodę `parseAge(String text)`, która rzuca własny wyjątek `InvalidAgeException` dla danych spoza zakresu 0-120.
-2. 2. Utwórz klasę `FileLoader` i obsłuż wyjątki związane z odczytem pliku, zapewniając czytelny komunikat dla użytkownika.
-3. 3. Zaimplementuj scenariusz z `try-catch-finally`, który pokazuje, że blok `finally` wykonuje się niezależnie od błędu.
-4. 4. Dodaj przykład `try-with-resources` dla `Scanner` lub `BufferedReader` i wyjaśnij, jak działa automatyczne zamykanie zasobów.
-5. 5. Zaprojektuj własny wyjątek biznesowy (np. `InsufficientFundsException`) i użyj go w klasie `BankAccount`.
-6. 6. Przygotuj mini-ćwiczenie: rozpoznaj, które wyjątki w Twoim kodzie powinny być obsłużone lokalnie, a które propagowane wyżej.
+1. Napisz metodę `parseAge(String text)`, która rzuca własny wyjątek `InvalidAgeException` dla danych spoza zakresu 0-120.
+2. Utwórz klasę `FileLoader` i obsłuż wyjątki związane z odczytem pliku, zapewniając czytelny komunikat dla użytkownika.
+3. Zaimplementuj scenariusz z `try-catch-finally`, który pokazuje, że blok `finally` wykonuje się niezależnie od błędu.
+4. Dodaj przykład `try-with-resources` dla `Scanner` lub `BufferedReader` i wyjaśnij, jak działa automatyczne zamykanie zasobów.
+5. Zaprojektuj własny wyjątek biznesowy (np. `InsufficientFundsException`) i użyj go w klasie `BankAccount`.
+6. Przygotuj mini-ćwiczenie: rozpoznaj, które wyjątki w Twoim kodzie powinny być obsłużone lokalnie, a które propagowane wyżej.
+
+### Szczegółowa lista kontrolna (checklist)
+
+Poniższa lista kontrolna pomaga zweryfikować, czy każde zadanie zostało wykonane poprawnie i kompletnie.
+
+#### Zadanie 1 — `parseAge` i `InvalidAgeException`
+- [ ] Klasa `InvalidAgeException` dziedziczy po `Exception` lub `RuntimeException` (wybór uzasadniony).
+- [ ] Wyjątek jest rzucany dla wartości spoza 0-120.
+- [ ] Obsłużono również tekst niebędący liczbą (`NumberFormatException`).
+- [ ] Przetestowano wartości graniczne: -1, 0, 120, 121.
+
+#### Zadanie 2 — Klasa `FileLoader`
+- [ ] Obsłużono brak pliku i błędy odczytu (`IOException`).
+- [ ] Użytkownik otrzymuje czytelny komunikat, a nie surowy stack trace.
+
+#### Zadanie 3 — `try-catch-finally`
+- [ ] Scenariusz uruchomiono z błędem i bez błędu.
+- [ ] W obu przypadkach widać komunikat z bloku `finally`.
+
+#### Zadanie 4 — `try-with-resources`
+- [ ] Zasób (`Scanner` lub `BufferedReader`) jest deklarowany w nawiasach `try (...)`.
+- [ ] Nie ma ręcznego wywołania `close()`.
+- [ ] Wyjaśniono rolę interfejsu `AutoCloseable`.
+
+#### Zadanie 5 — Wyjątek biznesowy w `BankAccount`
+- [ ] Zdefiniowano własny wyjątek (np. `InsufficientFundsException`) z czytelnym komunikatem.
+- [ ] Wyjątek jest rzucany przy próbie wypłaty większej niż saldo.
+- [ ] Saldo nie zmienia się po nieudanej operacji.
+- [ ] Wyjątek jest obsłużony w kodzie wywołującym.
+
+#### Zadanie 6 — Obsługa lokalna vs propagacja
+- [ ] Wskazano wyjątki obsługiwane lokalnie i propagowane wyżej (`throws`).
+- [ ] Każda decyzja jest krótko uzasadniona.
+- [ ] Nie ma pustych bloków `catch`.
+
+#### Ogólna weryfikacja końcowa
+- [ ] Cały kod kompiluje się bez błędów i ostrzeżeń.
+- [ ] Program został uruchomiony, a wyniki są zgodne z oczekiwaniami.
+- [ ] Nazwy klas, metod i zmiennych są zgodne z konwencjami Javy.
+- [ ] Odpowiedzi opisowe są zapisane w repozytorium (np. w pliku `README.md` lub komentarzach).

@@ -942,9 +942,50 @@ class Circle extends Shape {
 
 ## Zadania laboratoryjne
 
-1. 1. Zdefiniuj interfejs `Payable` z metodą `pay(double amount)` oraz przygotuj dwie implementacje: `CashPayment` i `CardPayment`.
-2. 2. Utwórz interfejs `Reportable` z metodą `generateReport()` i zaimplementuj go w dwóch różnych klasach domenowych.
-3. 3. Zbuduj abstrakcyjną klasę `Vehicle` z polami `brand`, `year` i abstrakcyjną metodą `start()`, a następnie klasy `Car` i `Bike`.
-4. 4. Pokaż w `main`, jak przechowywać obiekty różnych klas implementujących ten sam interfejs w jednej kolekcji.
-5. 5. Dodaj do interfejsu jedną metodę domyślną (`default`) i jedną statyczną, a następnie wykorzystaj je w przykładzie.
-6. 6. Napisz krótkie porównanie: kiedy w Twoim projekcie lepiej użyć interfejsu, a kiedy klasy abstrakcyjnej (minimum 5 zdań).
+1. Zdefiniuj interfejs `Payable` z metodą `pay(double amount)` oraz przygotuj dwie implementacje: `CashPayment` i `CardPayment`.
+2. Utwórz interfejs `Reportable` z metodą `generateReport()` i zaimplementuj go w dwóch różnych klasach domenowych.
+3. Zbuduj abstrakcyjną klasę `Vehicle` z polami `brand`, `year` i abstrakcyjną metodą `start()`, a następnie klasy `Car` i `Bike`.
+4. Pokaż w `main`, jak przechowywać obiekty różnych klas implementujących ten sam interfejs w jednej kolekcji.
+5. Dodaj do interfejsu jedną metodę domyślną (`default`) i jedną statyczną, a następnie wykorzystaj je w przykładzie.
+6. Napisz krótkie porównanie: kiedy w Twoim projekcie lepiej użyć interfejsu, a kiedy klasy abstrakcyjnej (minimum 5 zdań).
+
+### Szczegółowa lista kontrolna (checklist)
+
+Poniższa lista kontrolna pomaga zweryfikować, czy każde zadanie zostało wykonane poprawnie i kompletnie.
+
+#### Zadanie 1 — Interfejs `Payable`
+- [ ] Interfejs deklaruje metodę `pay(double amount)`.
+- [ ] Klasy `CashPayment` i `CardPayment` implementują interfejs (`implements Payable`) z adnotacją `@Override`.
+- [ ] Implementacje różnią się zachowaniem (np. inny komunikat lub prowizja).
+
+#### Zadanie 2 — Interfejs `Reportable`
+- [ ] Interfejs deklaruje metodę `generateReport()`.
+- [ ] Zaimplementowano go w dwóch niezwiązanych klasach domenowych.
+- [ ] Raporty zwracają/wypisują dane specyficzne dla danej klasy.
+
+#### Zadanie 3 — Klasa abstrakcyjna `Vehicle`
+- [ ] Klasa jest zadeklarowana jako `abstract` i posiada pola `brand`, `year` oraz konstruktor.
+- [ ] Metoda `start()` jest abstrakcyjna.
+- [ ] Klasy `Car` i `Bike` dziedziczą po `Vehicle` i implementują `start()`.
+- [ ] Próba utworzenia `new Vehicle(...)` kończy się błędem kompilacji (sprawdzone).
+
+#### Zadanie 4 — Kolekcja obiektów wspólnego interfejsu
+- [ ] Kolekcja ma typ interfejsu (np. `List<Payable>`).
+- [ ] Zawiera obiekty różnych klas implementujących.
+- [ ] W pętli wywoływana jest metoda interfejsu na każdym elemencie.
+
+#### Zadanie 5 — Metody `default` i `static` w interfejsie
+- [ ] Interfejs zawiera metodę `default` z implementacją.
+- [ ] Interfejs zawiera metodę `static` wywoływaną przez nazwę interfejsu.
+- [ ] Obie metody zostały użyte w przykładzie; opcjonalnie metoda `default` została przesłonięta w jednej klasie.
+
+#### Zadanie 6 — Porównanie interfejs vs klasa abstrakcyjna
+- [ ] Tekst ma minimum 5 zdań.
+- [ ] Uwzględniono różnice: wielokrotna implementacja, stan (pola), konstruktory.
+- [ ] Odniesiono się do własnego projektu.
+
+#### Ogólna weryfikacja końcowa
+- [ ] Cały kod kompiluje się bez błędów i ostrzeżeń.
+- [ ] Program został uruchomiony, a wyniki są zgodne z oczekiwaniami.
+- [ ] Nazwy klas, metod i zmiennych są zgodne z konwencjami Javy.
+- [ ] Odpowiedzi opisowe są zapisane w repozytorium (np. w pliku `README.md` lub komentarzach).

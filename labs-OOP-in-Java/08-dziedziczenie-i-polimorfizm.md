@@ -759,9 +759,50 @@ flowchart LR
 
 ## Zadania laboratoryjne
 
-1. 1. Zaimplementuj hierarchię `Employee -> Manager -> Director` z metodą `getDescription()` i odpowiednimi polami charakterystycznymi dla każdej klasy.
-2. 2. Przesłoń metodę `calculateBonus()` w klasach potomnych i porównaj wyniki dla tego samego wynagrodzenia bazowego.
-3. 3. Napisz metodę `printTeam(Employee[] team)`, która demonstruje polimorfizm podczas wywołań metod na typie bazowym.
-4. 4. Dodaj przykład bezpiecznego rzutowania z użyciem `instanceof` i osobno przykład, który prowadzi do `ClassCastException`.
-5. 5. Rozszerz projekt o klasę `Contractor`, a następnie zdecyduj, czy lepsze będzie dziedziczenie czy kompozycja i uzasadnij to w 4-6 zdaniach.
-6. 6. Narysuj prosty diagram hierarchii klas (tekstowo lub w Mermaid) i zaznacz, które metody są przesłaniane.
+1. Zaimplementuj hierarchię `Employee -> Manager -> Director` z metodą `getDescription()` i odpowiednimi polami charakterystycznymi dla każdej klasy.
+2. Przesłoń metodę `calculateBonus()` w klasach potomnych i porównaj wyniki dla tego samego wynagrodzenia bazowego.
+3. Napisz metodę `printTeam(Employee[] team)`, która demonstruje polimorfizm podczas wywołań metod na typie bazowym.
+4. Dodaj przykład bezpiecznego rzutowania z użyciem `instanceof` i osobno przykład, który prowadzi do `ClassCastException`.
+5. Rozszerz projekt o klasę `Contractor`, a następnie zdecyduj, czy lepsze będzie dziedziczenie czy kompozycja i uzasadnij to w 4-6 zdaniach.
+6. Narysuj prosty diagram hierarchii klas (tekstowo lub w Mermaid) i zaznacz, które metody są przesłaniane.
+
+### Szczegółowa lista kontrolna (checklist)
+
+Poniższa lista kontrolna pomaga zweryfikować, czy każde zadanie zostało wykonane poprawnie i kompletnie.
+
+#### Zadanie 1 — Hierarchia `Employee -> Manager -> Director`
+- [ ] `Manager` dziedziczy po `Employee`, a `Director` po `Manager`.
+- [ ] Każda klasa ma co najmniej jedno charakterystyczne pole.
+- [ ] Konstruktory podklas wywołują konstruktor nadklasy przez `super(...)`.
+- [ ] Metoda `getDescription()` jest przesłonięta i oznaczona `@Override`.
+
+#### Zadanie 2 — Metoda `calculateBonus()`
+- [ ] Metoda jest zdefiniowana w `Employee` i przesłonięta w podklasach z `@Override`.
+- [ ] Każda klasa wylicza premię w inny sposób.
+- [ ] Porównano wyniki dla tego samego wynagrodzenia bazowego.
+
+#### Zadanie 3 — Metoda `printTeam(Employee[] team)`
+- [ ] Tablica zawiera obiekty różnych typów z hierarchii.
+- [ ] Metoda wywołuje metody wyłącznie na typie `Employee`.
+- [ ] Wynik pokazuje, że wywoływana jest wersja metody z rzeczywistego typu obiektu (polimorfizm).
+
+#### Zadanie 4 — Rzutowanie i `instanceof`
+- [ ] Przykład bezpiecznego rzutowania sprawdza typ przez `instanceof` przed rzutowaniem.
+- [ ] Osobny przykład wywołuje `ClassCastException` i jest to zademonstrowane (np. obsłużone w `try-catch`).
+- [ ] Wyjaśniono, dlaczego drugi przykład kończy się błędem.
+
+#### Zadanie 5 — Klasa `Contractor` — dziedziczenie czy kompozycja
+- [ ] Klasa `Contractor` została zaimplementowana.
+- [ ] Podjęto decyzję: dziedziczenie lub kompozycja.
+- [ ] Uzasadnienie ma 4-6 zdań i odwołuje się do relacji „jest” vs „ma”.
+
+#### Zadanie 6 — Diagram hierarchii
+- [ ] Diagram (tekstowy lub Mermaid) przedstawia wszystkie klasy i relacje dziedziczenia.
+- [ ] Zaznaczono metody przesłaniane w każdej klasie.
+- [ ] Diagram jest zgodny z kodem.
+
+#### Ogólna weryfikacja końcowa
+- [ ] Cały kod kompiluje się bez błędów i ostrzeżeń.
+- [ ] Program został uruchomiony, a wyniki są zgodne z oczekiwaniami.
+- [ ] Nazwy klas, metod i zmiennych są zgodne z konwencjami Javy.
+- [ ] Odpowiedzi opisowe są zapisane w repozytorium (np. w pliku `README.md` lub komentarzach).
