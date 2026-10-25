@@ -1,5 +1,7 @@
-# Referencje do obiektów
-> źródło - https://kursjava.com/klasy/referencje-do-obiektow/  
+# Wykład 15: Referencje do obiektów
+
+Źródło: https://kursjava.com/klasy/referencje-do-obiektow/
+
  
 - [Referencje do obiektów](#referencje-do-obiektów)
 - [Przesyłanie i modyfikowanie obiektów w metodach](#przesyłanie-i-modyfikowanie-obiektów-w-metodach)
@@ -1122,3 +1124,90 @@ Obiekty niemutowalne mogą być współdzielone przez różne obiekty – będzi
 | **Porównywanie** | porównywane są wartości | porównywane są wartości, którymi są adresy obiektów, a nie obiekty, więc użycie operatora `==` zwróci `true` tylko wtedy, gdy dwie zmienne będą wskazywały na dokładnie ten sam obiekt w pamięci – do porównywania obiektów złożonych powinniśmy stosować metodę `equals` |
 | **Pamięć** | tworzone są na stosie | tworzone są na stercie |
 | **Przesyłanie do metod** | przez wartość | przez wartość – wysyłana jest referencja do obiektu, a nie kopia obiektu – obiekt źródłowy może zostać zmieniony, jeżeli wykonujemy na nim operacje |
+
+---
+
+## Uzupełnienia
+
+### Kopia płytka a kopia głęboka — diagram
+
+```java
+class Adres { String miasto; Adres(String m) { miasto = m; } }
+class Osoba {
+    String imie; Adres adres;
+    Osoba(String imie, Adres adres) { this.imie = imie; this.adres = adres; }
+    Osoba kopiaPlytka()  { return new Osoba(imie, adres); }
+    Osoba kopiaGleboka() { return new Osoba(imie, new Adres(adres.miasto)); }
+}
+```
+
+```mermaid
+flowchart LR
+    subgraph Kopia płytka
+        O1["oryginal: Osoba"] --> A1["Adres 'Gdańsk'"]
+        K1["kopia: Osoba"] --> A1
+    end
+    subgraph Kopia głęboka
+        O2["oryginal: Osoba"] --> A2["Adres 'Gdańsk'"]
+        K2["kopia: Osoba"] --> A3["Adres 'Gdańsk' (nowy obiekt)"]
+    end
+```
+
+W kopii płytkiej zmiana `kopia.adres.miasto` zmienia także adres oryginału; w kopii głębokiej obiekty są niezależne.
+
+### Kopia defensywna i `List.copyOf`
+
+```java
+public final class Koszyk {
+    private final List<String> produkty;
+
+    public Koszyk(List<String> produkty) {
+        this.produkty = List.copyOf(produkty);   // kopia na wejściu, niemodyfikowalna
+    }
+    public List<String> getProdukty() {
+        return produkty;                          // bezpieczne — listy nie da się zmienić
+    }
+}
+```
+
+| Sposób | Kopiuje? | Modyfikowalna? | Uwagi |
+|---|---|---|---|
+| `this.lista = lista` | nie | tak | współdzielenie — zmiany z zewnątrz widoczne w obiekcie |
+| `new ArrayList<>(lista)` | tak (płytko) | tak | niezależna lista |
+| `Collections.unmodifiableList(lista)` | nie (widok) | nie | zmiany oryginału nadal widoczne |
+| `List.copyOf(lista)` | tak (płytko) | nie | Java 10+, nie przyjmuje `null` |
+
+### Rekordy a niemutowalność
+
+Rekord (`record`) ma pola `private final`, więc referencji nie można podmienić. Jeżeli komponent jest mutowalny (np. lista), trzeba go skopiować w konstruktorze kompaktowym:
+
+```java
+public record Zespol(String nazwa, List<String> czlonkowie) {
+    public Zespol {
+        czlonkowie = List.copyOf(czlonkowie);
+    }
+}
+```
+
+---
+
+## Podsumowanie
+
+| Pojęcie | Znaczenie |
+|---|---|
+| referencja | „adres” obiektu na stercie |
+| `==` vs `equals` | ta sama referencja vs równość logiczna |
+| `null` | brak obiektu |
+| kopia płytka / głęboka | współdzielone / skopiowane obiekty zagnieżdżone |
+| garbage collector | usuwa obiekty bez referencji |
+
+## Pytania kontrolne
+
+1. Co porównuje operator `==` dla obiektów?
+2. Co jest przekazywane do metody: obiekt czy referencja?
+3. Czym różni się kopia płytka od głębokiej?
+4. Kiedy obiekt może zostać usunięty przez GC?
+
+## Laboratorium
+
+Zadania praktyczne do tego wykładu: [Laboratorium 15](../labs-OOP-in-Java/15-referencje-do-obiektow.md)

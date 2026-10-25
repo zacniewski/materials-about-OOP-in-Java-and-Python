@@ -1,4 +1,19 @@
-# Wykład 1: Środowisko języka Java
+# Wykład 1: Środowisko języka Java oraz system kontroli wersji Git
+
+## Spis treści
+
+- [1. Architektura platformy Java (JDK vs JRE vs JVM)](#1-architektura-platformy-java-jdk-vs-jre-vs-jvm)
+- [2. Proces kompilacji i uruchamiania](#2-proces-kompilacji-i-uruchamiania)
+- [3. Podstawy składni Javy](#3-podstawy-składni-javy)
+- [4. Zarządzanie pamięcią i Garbage Collector](#4-zarządzanie-pamięcią-i-garbage-collector)
+- [5. Konfiguracja środowiska](#5-konfiguracja-środowiska)
+- [6. Współczesne narzędzia (Ecosystem)](#6-współczesne-narzędzia-ecosystem)
+- [7. System kontroli wersji Git i platforma GitHub](#7-system-kontroli-wersji-git-i-platforma-github)
+- [8. Dlaczego warto wybrać Javę?](#8-dlaczego-warto-wybrać-javę)
+- [Uzupełnienia](#uzupełnienia)
+- [Podsumowanie](#podsumowanie)
+- [Pytania kontrolne](#pytania-kontrolne)
+- [Laboratorium](#laboratorium)
 
 Java to nie tylko język programowania, ale cała platforma technologiczna. Aby zrozumieć, jak działa Java, należy zapoznać się z jej trzema głównymi komponentami: JVM, JRE oraz JDK.
 
@@ -473,3 +488,42 @@ build/
 -   **Wielowątkowość**: Java ma natywne wsparcie dla procesów równoległych.
 -   **Ogromna społeczność**: Miliardy urządzeń i miliony programistów.
 -   **Wsteczna kompatybilność**: Stary kod zazwyczaj działa bez zmian na nowych wersjach JVM.
+
+---
+
+## Uzupełnienia
+
+### Aktualne wersje Javy (LTS)
+
+| Wersja | Rok wydania | Status | Najważniejsze nowości |
+|---|---|---|---|
+| Java 8 | 2014 | LTS (starsza) | lambdy, Stream API, `Optional` |
+| Java 11 | 2018 | LTS | `var` w lambdach, `HttpClient`, uruchamianie `java Plik.java` |
+| Java 17 | 2021 | LTS | `record`, klasy `sealed`, text blocks, dopasowanie wzorca w `instanceof` |
+| Java 21 | 2023 | LTS (zalecana na zajęcia) | wątki wirtualne, wzorce w `switch`, record patterns |
+| Java 25 | 2025 | LTS (najnowsza) | uproszczona metoda `main`, dalszy rozwój wzorców |
+
+> Na laboratoriach zalecamy JDK 21 lub JDK 25 (np. Eclipse Temurin). Sprawdzenie wersji: `java -version` oraz `javac -version`.
+
+---
+
+## Podsumowanie
+
+| Pojęcie | Znaczenie |
+|---|---|
+| JDK | zestaw narzędzi do tworzenia programów (kompilator `javac`, JVM) |
+| JVM | maszyna wirtualna wykonująca kod bajtowy |
+| kod bajtowy | wynik kompilacji — pliki `.class` |
+| Git | rozproszony system kontroli wersji |
+| commit / branch / merge | migawka zmian / gałąź / scalanie gałęzi |
+
+## Pytania kontrolne
+
+1. Czym różni się JDK od JRE i JVM?
+2. Co oznacza „write once, run anywhere”?
+3. Jaka jest różnica między `git commit` a `git push`?
+4. Do czego służą gałęzie w Git?
+
+## Laboratorium
+
+Zadania praktyczne do tego wykładu: [Laboratorium 1](../labs-OOP-in-Java/01-srodowisko-jezyka-java-oraz-system-kontroli-wersji-git.md)

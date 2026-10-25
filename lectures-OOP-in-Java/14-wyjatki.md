@@ -1,7 +1,11 @@
-# Wykład 11: Wyjątki w Java
-## Żródło - https://kursjava.com/wyjatki/  
+# Wykład 14: Wyjątki
+
+Źródło: https://kursjava.com/wyjatki/
+
 
 ## Spis treści
+
+- [Uzupełnienia: hierarchia wyjątków, multi-catch, try-with-resources](#uzupełnienia)
 - [Stack trace](#stack-trace)
 - [Zakres zmiennych definiowanych w bloku try](#zakres-zmiennych-definiowanych-w-bloku-try)
 - [Metoda getInt i obsługa wyjątków](#metoda-getint-i-obsługa-wyjątków)
@@ -2018,7 +2022,6 @@ Error: java: exception NieprawidlowyWiekException has already been caught
 ```
 Sekcje catch muszą zawierać najbardziej szczegółowe (najniżej w hierarchii dziedziczenia) wyjątki na początku, a najbardziej ogólne na końcu.
 Od wersja Java 1.7 możemy korzystać z nowego mechanizmu try-with-resources, który ułatwia pracę z zasobami poprzez ich automatyczne zamykanie po zakończeniu bloku try. Klasy, które możemy używać w try-with-resources to te klasy, które implementują interfejs AutoCloseable lub Closeable. Przykład użycia:
-```
 
 ```java
 File f = new File("C:/programowanie/powitanie.txt");
@@ -2121,3 +2124,123 @@ java.lang.Object
             java.lang.RuntimeException
                 java.lang.IllegalArgumentException
 ```
+
+---
+
+## Uzupełnienia
+
+### Hierarchia wyjątków
+
+```mermaid
+classDiagram
+    Throwable <|-- Error
+    Throwable <|-- Exception
+    Exception <|-- RuntimeException
+    Exception <|-- IOException
+    Exception <|-- SQLException
+    IOException <|-- FileNotFoundException
+    RuntimeException <|-- NullPointerException
+    RuntimeException <|-- IllegalArgumentException
+    IllegalArgumentException <|-- NumberFormatException
+    RuntimeException <|-- ArithmeticException
+    RuntimeException <|-- IndexOutOfBoundsException
+    RuntimeException <|-- ClassCastException
+    Error <|-- OutOfMemoryError
+    Error <|-- StackOverflowError
+    class Throwable
+    class Error { <<niesprawdzane - błędy JVM>> }
+    class Exception { <<sprawdzane - checked>> }
+    class RuntimeException { <<niesprawdzane - unchecked>> }
+```
+
+- **Sprawdzane (checked)** — `Exception` i podklasy poza `RuntimeException`; kompilator wymaga `try-catch` lub `throws`.
+- **Niesprawdzane (unchecked)** — `RuntimeException` i podklasy oraz `Error`; zwykle oznaczają błąd programisty.
+
+### Najczęstsze wyjątki
+
+| Wyjątek | Rodzaj | Typowa przyczyna |
+|---|---|---|
+| `NullPointerException` | unchecked | wywołanie metody na `null` |
+| `ArrayIndexOutOfBoundsException` | unchecked | indeks spoza tablicy |
+| `IndexOutOfBoundsException` | unchecked | indeks spoza listy (`list.get(10)`) |
+| `ArithmeticException` | unchecked | dzielenie całkowite przez zero |
+| `NumberFormatException` | unchecked | `Integer.parseInt("abc")` |
+| `IllegalArgumentException` | unchecked | niepoprawny argument metody (walidacja) |
+| `IllegalStateException` | unchecked | operacja w niewłaściwym stanie obiektu |
+| `ClassCastException` | unchecked | błędne rzutowanie |
+| `UnsupportedOperationException` | unchecked | modyfikacja `List.of(...)` |
+| `ConcurrentModificationException` | unchecked | modyfikacja kolekcji w pętli for-each |
+| `InputMismatchException` | unchecked | `Scanner.nextInt()` dla tekstu |
+| `IOException` / `FileNotFoundException` | checked | błąd wejścia-wyjścia / brak pliku |
+| `InterruptedException` | checked | przerwanie wątku |
+
+### Multi-catch (Java 7+)
+
+Kilka niezwiązanych wyjątków obsługiwanych tak samo można złapać w jednym bloku:
+
+```java
+try {
+    int liczba = Integer.parseInt(tekst);
+    int wynik = 100 / liczba;
+} catch (NumberFormatException | ArithmeticException e) {
+    System.out.println("Niepoprawne dane: " + e.getMessage());
+}
+```
+
+Typy w multi-catch nie mogą być ze sobą w relacji dziedziczenia, a zmienna `e` jest niejawnie `final`.
+
+### `try-with-resources` i `AutoCloseable`
+
+Każdy obiekt implementujący `AutoCloseable` (lub `Closeable`) zadeklarowany w nawiasach `try (...)` zostanie automatycznie zamknięty — także gdy wystąpi wyjątek. Zasoby są zamykane w kolejności odwrotnej do otwarcia.
+
+```java
+try (BufferedReader reader = new BufferedReader(new FileReader("dane.txt"));
+     PrintWriter writer = new PrintWriter("wynik.txt")) {
+    String linia;
+    while ((linia = reader.readLine()) != null) {
+        writer.println(linia.toUpperCase());
+    }
+} catch (IOException e) {
+    System.out.println("Błąd pliku: " + e.getMessage());
+}
+```
+
+Własny zasób:
+
+```java
+class Polaczenie implements AutoCloseable {
+    Polaczenie() { System.out.println("Otwieram połączenie"); }
+    void wyslij(String s) { System.out.println("Wysyłam: " + s); }
+    @Override
+    public void close() { System.out.println("Zamykam połączenie"); }
+}
+
+try (Polaczenie p = new Polaczenie()) {
+    p.wyslij("dane");
+}   // close() wywołane automatycznie
+```
+
+Jeżeli zarówno blok `try`, jak i `close()` rzucą wyjątek, wyjątek z `close()` jest dołączany jako *suppressed* (`e.getSuppressed()`).
+
+---
+
+## Podsumowanie
+
+| Pojęcie | Znaczenie |
+|---|---|
+| wyjątek | obiekt sygnalizujący błąd |
+| checked / unchecked | wymagana / niewymagana obsługa |
+| `try-catch-finally` | obsługa i sprzątanie |
+| `throw` / `throws` | rzucenie / deklaracja wyjątku |
+| try-with-resources | automatyczne zamykanie zasobów |
+
+## Pytania kontrolne
+
+1. Czym różnią się wyjątki checked od unchecked?
+2. Kiedy wykonuje się blok `finally`?
+3. Jakie warunki musi spełnić zasób w try-with-resources?
+4. Dlaczego puste `catch` jest złą praktyką?
+
+## Laboratorium
+
+Zadania praktyczne do tego wykładu: [Laboratorium 14](../labs-OOP-in-Java/14-wyjatki.md)

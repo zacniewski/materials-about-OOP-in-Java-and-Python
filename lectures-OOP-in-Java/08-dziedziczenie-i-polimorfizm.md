@@ -1,4 +1,14 @@
+# Wykład 8: Dziedziczenie i polimorfizm
+
 Źródło: https://kursjava.com/dziedziczenie-i-polimorfizm/
+
+## Spis treści
+
+- [Uzupełnienia](#uzupełnienia)
+- [Podsumowanie](#podsumowanie)
+- [Pytania kontrolne](#pytania-kontrolne)
+- [Laboratorium](#laboratorium)
+
 
 ### 1. Dziedziczenie – wprowadzenie
 
@@ -782,132 +792,18 @@ classDiagram
   Figura <|-- Kolo
 ```
 
-#### 8.12a. Interfejsy w Javie – definicja i zastosowanie
-Interfejs definiuje kontrakt (zestaw metod), który klasy mogą implementować. Słowa kluczowe: `interface` do definiowania interfejsu i `implements` do jego implementacji przez klasę. Klasa może implementować wiele interfejsów (w przeciwieństwie do dziedziczenia klas, które jest pojedyncze).
+#### 8.12a. Interfejsy w Javie – krótko
 
-Przykład – podstawowy interfejs i implementacja:
-
-```java
-interface Drukowalne {
-  String drukuj(); // domyślnie public abstract
-}
-class Raport implements Drukowalne {
-  private final String tytul;
-  public Raport(String tytul) { this.tytul = tytul; }
-  @Override public String drukuj() { return "Raport: " + tytul; }
-  public static void main(String[] args) {
-    Drukowalne d = new Raport("Sprzedaż Q3"); // polimorfizm przez interfejs
-    System.out.println(d.drukuj());
-  }
-}
-```
-
-Diagram UML (Mermaid):
-
-```mermaid
-classDiagram
-  class Drukowalne {
-    <<interface>>
-    +String drukuj()
-  }
-  class Raport {
-    +Raport(String)
-    +String drukuj()
-  }
-  Drukowalne <|.. Raport
-```
-
-Interfejsy a wielokrotna implementacja przez klasę:
+Interfejs to kontrakt: zbiór metod, które klasa zobowiązuje się zaimplementować (`implements`). Klasa może rozszerzać tylko jedną klasę, ale implementować wiele interfejsów.
 
 ```java
-interface Latajace { void lec(); }
-interface Plywajace { void plywaj(); }
-class Kaczka implements Latajace, Plywajace {
-  @Override public void lec() { System.out.println("Kaczka leci"); }
-  @Override public void plywaj() { System.out.println("Kaczka plywa"); }
+interface Jezdny { void jedz(); }
+class Rower implements Jezdny {
+    @Override public void jedz() { System.out.println("Pedałuję"); }
 }
 ```
 
-Diagram:
-```mermaid
-classDiagram
-  class Latajace { <<interface>> +void lec() }
-  class Plywajace { <<interface>> +void plywaj() }
-  class Kaczka { +void lec() +void plywaj() }
-  Latajace <|.. Kaczka
-  Plywajace <|.. Kaczka
-```
-
-Metody `default` i `static` w interfejsach:
-- `default` dostarcza domyślną implementację metody w interfejsie; klasa może ją nadpisać.
-- `static` to metoda statyczna interfejsu, wywoływana przez nazwę interfejsu.
-
-```java
-interface Nazewalne {
-  default String pelnaNazwa(String imie, String nazwisko) {
-    return imie + " " + nazwisko;
-  }
-  static boolean niePuste(String s) { return s != null && !s.isBlank(); }
-}
-class OsobaNazwana implements Nazewalne {
-  @Override public String pelnaNazwa(String imie, String nazwisko) {
-    return (Nazewalne.niePuste(imie) ? imie : "?") + " " + nazwisko;
-  }
-}
-```
-
-Uwaga: przy konflikcie dwóch takich samych metod `default` pochodzących z różnych interfejsów, klasa musi jednoznacznie wskazać implementację lub dostarczyć własną. Można też użyć `NazwaInterfejsu.super.metoda()`:
-
-```java
-interface A { default void f(){ System.out.println("A"); } }
-interface B { default void f(){ System.out.println("B"); } }
-class C implements A, B {
-  @Override public void f() {
-    A.super.f(); // jawny wybór lub własna implementacja
-    B.super.f();
-  }
-}
-```
-
-Stałe w interfejsie:
-- Pola w interfejsie są niejawnie `public static final` (stałe), a metody – `public abstract` (chyba że `default`/`static`).
-
-```java
-interface Statusy {
-  int OK = 200;        // public static final
-  int NOT_FOUND = 404; // public static final
-}
-class HttpDemo implements Statusy {
-  int status = OK; // odwołanie do stałej z interfejsu
-}
-```
-
-Dziedziczenie interfejsów i implementacja przez klasę:
-
-```java
-interface Rysowalne { void rysuj(); }
-interface Skalowalne extends Rysowalne { void skaluj(double factor); }
-class Prostokat implements Skalowalne {
-  @Override public void rysuj() { System.out.println("rysuje prostokat"); }
-  @Override public void skaluj(double f) { System.out.println("skaluje x"+f); }
-}
-```
-
-Diagram:
-```mermaid
-classDiagram
-  class Rysowalne { <<interface>> +void rysuj() }
-  class Skalowalne { <<interface>> +void skaluj(double) }
-  Rysowalne <|-- Skalowalne
-  class Prostokat { +void rysuj() +void skaluj(double) }
-  Skalowalne <|.. Prostokat
-```
-
-Interfejs vs klasa abstrakcyjna – kiedy używać?
-- Użyj interfejsu, gdy chcesz zdefiniować czysty kontrakt zachowań, który może być współdzielony przez klasy z różnych hierarchii (wielokrotna implementacja, brak pól stanu – poza stałymi).
-- Użyj klasy abstrakcyjnej, gdy chcesz współdzielić część implementacji i stanu oraz narzucić wspólną bazę w jednej hierarchii (pojedyncze dziedziczenie klas).
-
-> Praktyka: często łączymy oba podejścia – interfejs definiuje kontrakt (`List`), a abstrakcyjna klasa bazowa dostarcza część domyślnej implementacji (`AbstractList`).
+Szczegółowe omówienie (metody `default` i `static`, porównanie z klasami abstrakcyjnymi, interfejsy `sealed`) znajduje się w [wykładzie 9](09-interfejsy-i-klasy-abstrakcyjne.md).
 
 #### 8.13. `final` – właściwości klas i metod
 - `final` klasa: nie można jej rozszerzyć.
@@ -949,3 +845,86 @@ Wady:
 - Zmiany w klasie bazowej mogą mieć nieoczywisty wpływ na wiele podklas.
 
 Wskazówka projektowa: preferuj kompozycję nad dziedziczeniem, jeśli relacja nie jest naturalnym „jest‑tym” (is‑a), lecz raczej „ma‑to” (has‑a).
+
+---
+
+## Uzupełnienia
+
+### Nowsze konstrukcje Javy związane z dziedziczeniem
+
+#### Dopasowanie wzorca w `instanceof` (Java 16+)
+
+Zamiast sprawdzenia typu i osobnego rzutowania:
+
+```java
+if (pojazd instanceof Samochod) {
+    Samochod s = (Samochod) pojazd;
+    s.otworzBagaznik();
+}
+```
+
+można napisać:
+
+```java
+if (pojazd instanceof Samochod s) {
+    s.otworzBagaznik();          // s ma już typ Samochod
+}
+if (pojazd instanceof Samochod s && s.getLiczbaDrzwi() > 3) { ... }
+```
+
+#### Klasy zapieczętowane: `sealed` / `permits` (Java 17+)
+
+Klasa `sealed` jawnie określa, które klasy mogą ją rozszerzać. Każda podklasa musi być `final`, `sealed` lub `non-sealed`.
+
+```java
+public sealed abstract class Figura permits Kolo, Prostokat, Kwadrat { }
+
+public final class Kolo extends Figura { double r; }
+public non-sealed class Prostokat extends Figura { double a, b; }
+public final class Kwadrat extends Figura { double a; }
+```
+
+```mermaid
+classDiagram
+    class Figura {
+        <<sealed, abstract>>
+    }
+    Figura <|-- Kolo : final
+    Figura <|-- Prostokat : non-sealed
+    Figura <|-- Kwadrat : final
+```
+
+Dzięki temu kompilator zna wszystkie podtypy i może sprawdzić kompletność `switch`:
+
+```java
+static double pole(Figura f) {
+    return switch (f) {
+        case Kolo k      -> Math.PI * k.r * k.r;
+        case Prostokat p -> p.a * p.b;
+        case Kwadrat q   -> q.a * q.a;
+    };   // brak default — kompilator wie, że to wszystkie przypadki (Java 21+)
+}
+```
+
+---
+
+## Podsumowanie
+
+| Pojęcie | Znaczenie |
+|---|---|
+| dziedziczenie (`extends`) | relacja „jest” |
+| przesłanianie (`@Override`) | nowa implementacja metody nadklasy |
+| polimorfizm | wybór metody wg rzeczywistego typu obiektu |
+| `super` | odwołanie do nadklasy |
+| `sealed` | ograniczenie listy podklas |
+
+## Pytania kontrolne
+
+1. Czym różni się przeciążanie od przesłaniania?
+2. Które składowe nie są dziedziczone?
+3. Co daje dopasowanie wzorca w `instanceof`?
+4. Do czego służy `sealed`?
+
+## Laboratorium
+
+Zadania praktyczne do tego wykładu: [Laboratorium 8](../labs-OOP-in-Java/08-dziedziczenie-i-polimorfizm.md)

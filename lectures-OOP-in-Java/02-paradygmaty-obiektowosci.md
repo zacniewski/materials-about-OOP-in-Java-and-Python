@@ -1,5 +1,16 @@
 # Wykład 2: Paradygmaty programowania obiektowego (OOP)
 
+## Spis treści
+
+- [I. Dlaczego potrzebujemy OOP? (Analogie i Teoria)](#i-dlaczego-potrzebujemy-oop-analogie-i-teoria)
+- [II. Cztery filary OOP](#ii-cztery-filary-oop)
+- [III. Kluczowe pojęcia: Klasa vs Obiekt](#iii-kluczowe-pojęcia-klasa-vs-obiekt)
+- [IV. Podsumowanie - Jak to wszystko łączy się w całość?](#iv-podsumowanie---jak-to-wszystko-łączy-się-w-całość)
+- [V. Korzyści z zastosowania OOP](#v-korzyści-z-zastosowania-oop)
+- [Podsumowanie](#podsumowanie)
+- [Pytania kontrolne](#pytania-kontrolne)
+- [Laboratorium](#laboratorium)
+
 Programowanie obiektowe (Object-Oriented Programming, OOP) to paradygmat programowania, który opiera się na koncepcji "obiektów" – bytów, które łączą w sobie dane (**stan**) oraz funkcjonalność (**zachowanie**).
 
 ---
@@ -331,3 +342,26 @@ graph TD
 2. **Utrzymanie**: Zmiana implementacji wewnątrz klasy nie psuje reszty programu (dzięki enkapsulacji).
 3. **Rozszerzalność**: Nowe funkcjonalności dodajemy tworząc podklasy, zamiast modyfikować istniejący, działający kod.
 4. **Czytelność**: Kod odzwierciedla realny świat (modelowanie dziedzinowe).
+
+---
+
+## Podsumowanie
+
+| Pojęcie | Znaczenie |
+|---|---|
+| klasa | szablon obiektów |
+| obiekt | instancja klasy ze stanem i zachowaniem |
+| enkapsulacja | ukrywanie stanu za interfejsem |
+| dziedziczenie | rozszerzanie istniejącej klasy |
+| polimorfizm | jedno wywołanie — różne zachowania |
+| abstrakcja | wyodrębnienie istotnych cech |
+
+## Pytania kontrolne
+
+1. Wymień cztery filary OOP i opisz je jednym zdaniem.
+2. Czym różni się klasa od obiektu?
+3. Podaj przykład polimorfizmu z życia codziennego.
+
+## Laboratorium
+
+Zadania praktyczne do tego wykładu: [Laboratorium 2](../labs-OOP-in-Java/02-paradygmaty-obiektowosci.md)

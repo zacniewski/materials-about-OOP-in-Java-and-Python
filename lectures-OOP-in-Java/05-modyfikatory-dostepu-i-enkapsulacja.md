@@ -1,4 +1,14 @@
+# Wykład 5: Modyfikatory dostępu i enkapsulacja
+
 Źródło: https://kursjava.com/klasy/modyfikatory-dostepu/
+
+## Spis treści
+
+- [Uzupełnienia](#uzupełnienia)
+- [Podsumowanie](#podsumowanie)
+- [Pytania kontrolne](#pytania-kontrolne)
+- [Laboratorium](#laboratorium)
+
 
 Od samego początku nauki języka Java używaliśmy słowa kluczowego `public` – poprzedzało one nazwy naszych klas oraz metod.  
 W rozdziale o klasach zaczęliśmy także używać słowa kluczowego `private`.   
@@ -255,3 +265,125 @@ Powinno nam zależeć, by nasze klasy udostępniały tak mało ze swoich pól (c
 Takie podejście do tworzenia klas, w którym ukrywamy przed użytkownikami tych klas ich wewnętrzną implementację i udostępniamy zestaw metod, z których użytkownicy tych klas mają korzystać, nazywamy **enkapsulacją**.  
 Jest to powszechny sposób projektowania klas (nie tylko w języku Java) i na rozmowach kwalifikacyjnych często pada pytanie "Czym jest enkapsulacja?". 
 Wyjątkiem od zdefiniowanej powyżej pierwszej reguły są pola i metody statyczne, które już po części znamy.
+
+---
+
+## Uzupełnienia
+
+### Cztery poziomy dostępu w Javie
+
+Dotychczas korzystaliśmy z `public` i `private`. Java ma jednak cztery poziomy dostępu:
+
+| Modyfikator | Ta sama klasa | Ten sam pakiet | Podklasa (inny pakiet) | Pozostałe klasy |
+|---|:---:|:---:|:---:|:---:|
+| `private` | ✅ | ❌ | ❌ | ❌ |
+| *(brak — package-private)* | ✅ | ✅ | ❌ | ❌ |
+| `protected` | ✅ | ✅ | ✅ | ❌ |
+| `public` | ✅ | ✅ | ✅ | ✅ |
+
+#### Dostęp domyślny (package-private)
+
+Jeżeli nie podamy żadnego modyfikatora, element jest widoczny tylko w obrębie **tego samego pakietu**:
+
+```java
+package sklep.model;
+
+class Magazyn {            // klasa widoczna tylko w pakiecie sklep.model
+    int liczbaProduktow;   // pole package-private
+    void uzupelnij() { liczbaProduktow += 10; }
+}
+```
+
+#### Modyfikator `protected`
+
+Element `protected` jest widoczny w pakiecie oraz w klasach dziedziczących (także z innych pakietów):
+
+```java
+package zoo;
+public class Zwierze {
+    protected String imie;
+    protected void przedstawSie() { System.out.println("Jestem " + imie); }
+}
+```
+
+```java
+package zoo.ssaki;
+import zoo.Zwierze;
+
+public class Pies extends Zwierze {
+    public Pies(String imie) { this.imie = imie; }   // OK — dostęp przez dziedziczenie
+    public void szczekaj() { przedstawSie(); System.out.println("Hau!"); }
+}
+```
+
+#### Diagram pakietów
+
+```mermaid
+flowchart LR
+    subgraph zoo
+        Z[Zwierze<br/>protected imie]
+        O[Opiekun<br/>widzi: public, protected, domyślne]
+    end
+    subgraph zoo.ssaki
+        P[Pies extends Zwierze<br/>widzi: public, protected]
+    end
+    subgraph aplikacja
+        A[Main<br/>widzi: tylko public]
+    end
+    O --> Z
+    P --> Z
+    A --> Z
+```
+
+### Klasy niemutowalne (immutable)
+
+Najsilniejszą formą enkapsulacji jest obiekt, którego stanu nie da się zmienić po utworzeniu:
+
+1. klasa jest `final` (nie można jej rozszerzyć),
+2. wszystkie pola są `private final`,
+3. brak setterów — „zmiana” tworzy nowy obiekt,
+4. pola mutowalne (np. listy) są kopiowane defensywnie.
+
+```java
+import java.util.List;
+
+public final class Zamowienie {
+    private final String klient;
+    private final List<String> pozycje;
+
+    public Zamowienie(String klient, List<String> pozycje) {
+        this.klient = klient;
+        this.pozycje = List.copyOf(pozycje);   // kopia defensywna
+    }
+
+    public String getKlient() { return klient; }
+    public List<String> getPozycje() { return pozycje; }   // lista niemodyfikowalna
+
+    public Zamowienie zmienKlienta(String nowyKlient) {
+        return new Zamowienie(nowyKlient, pozycje);
+    }
+}
+```
+
+Od Javy 16 prostą klasę niemutowalną można zapisać jako rekord: `public record Punkt(int x, int y) {}`.
+
+---
+
+## Podsumowanie
+
+| Pojęcie | Znaczenie |
+|---|---|
+| enkapsulacja | ukrycie pól i kontrolowany dostęp |
+| `private` / domyślny / `protected` / `public` | cztery poziomy dostępu |
+| getter / setter | metody dostępowe z walidacją |
+| klasa niemutowalna | stan nie zmienia się po utworzeniu |
+
+## Pytania kontrolne
+
+1. Jaką widoczność ma element bez modyfikatora dostępu?
+2. Czym różni się `protected` od dostępu domyślnego?
+3. Jak stworzyć klasę niemutowalną?
+
+## Laboratorium
+
+Zadania praktyczne do tego wykładu: [Laboratorium 5](../labs-OOP-in-Java/05-modyfikatory-dostepu-i-enkapsulacja.md)

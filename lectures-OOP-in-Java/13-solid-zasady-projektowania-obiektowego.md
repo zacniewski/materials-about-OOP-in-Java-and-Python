@@ -1,5 +1,26 @@
 # Wykład 13: SOLID - zasady projektowania obiektowego
 
+## Spis treści
+
+- [1. Czym jest SOLID?](#1-czym-jest-solid)
+- [2. S - Single Responsibility Principle](#2-s---single-responsibility-principle)
+- [3. O - Open/Closed Principle](#3-o---openclosed-principle)
+- [4. L - Liskov Substitution Principle](#4-l---liskov-substitution-principle)
+- [5. I - Interface Segregation Principle](#5-i---interface-segregation-principle)
+- [6. D - Dependency Inversion Principle](#6-d---dependency-inversion-principle)
+- [7. SOLID a testowalność](#7-solid-a-testowalność)
+- [8. Najczęstsze nieporozumienia](#8-najczęstsze-nieporozumienia)
+- [9. Zasady uzupełniające: DRY, KISS, YAGNI](#9-zasady-uzupełniające-dry-kiss-yagni)
+- [10. Krótki przewodnik decyzyjny](#10-krótki-przewodnik-decyzyjny)
+- [11. Mini-case study](#11-mini-case-study)
+- [12. Pytania kontrolne](#12-pytania-kontrolne)
+- [13. Zadania dla studentów](#13-zadania-dla-studentów)
+- [14. Podsumowanie](#14-podsumowanie)
+- [Uzupełnienia](#uzupełnienia)
+- [Podsumowanie](#podsumowanie)
+- [Pytania kontrolne](#pytania-kontrolne)
+- [Laboratorium](#laboratorium)
+
 Ten materiał scala trzy wcześniejsze warianty wykładu o SOLID: skrótowy, rozszerzony oraz diagramowy. Zawiera krótkie definicje, pogłębienie teoretyczne, przykłady w Javie, kilka porównań z Pythonem, diagramy Mermaid oraz zadania do przećwiczenia.
 
 ## 1. Czym jest SOLID?
@@ -544,3 +565,39 @@ SOLID nie służy do "upiększania" kodu, tylko do zarządzania zmianą. Dobrze 
 - poprawiają czytelność architektury.
 
 Najlepszy efekt daje pragmatyczne użycie: najpierw prosty model, potem świadoma refaktoryzacja tam, gdzie kod zaczyna boleć.
+
+---
+
+## Uzupełnienia
+
+### Tabela zbiorcza SOLID
+
+| Zasada | Objaw naruszenia | Typowa poprawka |
+|---|---|---|
+| **S**RP — pojedyncza odpowiedzialność | klasa „robi wszystko” (logika, zapis do pliku, wydruk), zmienia się z wielu powodów | wydzielenie osobnych klas (np. `Raport`, `RaportRepository`, `RaportPrinter`) |
+| **O**CP — otwarte/zamknięte | długie `if/else` lub `switch` po typie, każda nowość wymaga edycji istniejącej klasy | polimorfizm: interfejs + nowa implementacja (wzorzec Strategia) |
+| **L**SP — podstawienie Liskov | podklasa rzuca `UnsupportedOperationException`, osłabia warunki, `instanceof` w kodzie klienta | zmiana hierarchii, wydzielenie wspólnego interfejsu, kompozycja zamiast dziedziczenia |
+| **I**SP — segregacja interfejsów | puste implementacje metod, „gruby” interfejs | podział na mniejsze, spójne interfejsy |
+| **D**IP — odwrócenie zależności | `new KonkretnaKlasa()` wewnątrz logiki biznesowej, trudne testy | zależność od abstrakcji, wstrzykiwanie przez konstruktor |
+
+---
+
+## Podsumowanie
+
+| Pojęcie | Znaczenie |
+|---|---|
+| SRP | jedna odpowiedzialność |
+| OCP | otwarte na rozszerzenia, zamknięte na modyfikacje |
+| LSP | podklasa zastępuje nadklasę |
+| ISP | małe, spójne interfejsy |
+| DIP | zależność od abstrakcji |
+
+## Pytania kontrolne
+
+1. Jak rozpoznać naruszenie SRP?
+2. W jaki sposób polimorfizm pomaga spełnić OCP?
+3. Jak DIP ułatwia testowanie?
+
+## Laboratorium
+
+Zadania praktyczne do tego wykładu: [Laboratorium 13](../labs-OOP-in-Java/13-solid-zasady-projektowania-obiektowego.md)

@@ -1,13 +1,29 @@
+# Wykład 6: Pola klas i stan obiektu
+
 Źródło: https://kursjava.com/klasy/pola-klas/
+
+## Spis treści
+
+- [Pola klas a zmienne definiowane w metodach](#pola-klas-a-zmienne-definiowane-w-metodach)
+- [Gettery i settery oraz enkapsulacja](#gettery-i-settery-oraz-enkapsulacja)
+- [Konwencje dotyczące pisania setterów i getterów](#konwencje-dotyczące-pisania-setterów-i-getterów)
+- [Podsumowanie](#podsumowanie)
+- [Uzupełnienia](#uzupełnienia)
+- [Podsumowanie](#podsumowanie)
+- [Pytania kontrolne](#pytania-kontrolne)
+- [Laboratorium](#laboratorium)
+
 
 Jak już wiemy, pola klas to pewne właściwości, które opisują obiekty danej klasy. Dla przykładu, klasa `Ksiazka` miała pola tytul, autor, oraz cena, a klasa Samochod – pola kolor i predkosc.
 
 Każdy obiekt klasy (tzn. każda jej instancja, czyli egzemplarz) posiada własny zestaw zdefiniowanych w tej klasie pól – ustawienie koloru obiektu `czerwonySamochod` nie ma wpływu na kolor samochodu `zielonySamochod`:
 
-    Samochod zielonySamochod = new Samochod();
-    zielonySamochod.ustawKolor("Zielony");
-    Samochod czerwonySamochod = new Samochod();
-    czerwonySamochod.ustawKolor("Czerwony");
+```java
+Samochod zielonySamochod = new Samochod();
+zielonySamochod.ustawKolor("Zielony");
+Samochod czerwonySamochod = new Samochod();
+czerwonySamochod.ustawKolor("Czerwony");
+```
 
 Pola klas to po prostu zmienne – mają one swój typ oraz nazwę, oraz mogą mieć różnego rodzaju modyfikatory. Przykładem są modyfikatory dostępu public oraz private, które poznaliśmy w poprzednim podrozdziale.  
 Wyznaczają one, czy pole klasy jest publiczne (dostępne dla całego zewnętrznego świata), czy prywatne (dostępne tylko wewnątrz klasy).
@@ -78,12 +94,14 @@ Jak widać, pomimo że nie ustawiliśmy pól `liczbaZagli` obu obiektów po ich 
 
 Z rozdziału o zmiennych wiemy, że w metodach nie możemy korzystać ze zmiennych, którym nie nadamy wstępnej wartości:
 
-    public class UzycieNiezainicjalizowanejZmiennej {
-      public static void main(String[] args) {
-        int x;
-        System.out.println("Wartosc x wynosi: " + x);
-      }
-    }
+```java
+public class UzycieNiezainicjalizowanejZmiennej {
+  public static void main(String[] args) {
+    int x;
+    System.out.println("Wartosc x wynosi: " + x);
+  }
+}
+```
 
 Próba kompilacji powyższego programu kończy się następującym błędem:
 ```sh
@@ -433,7 +451,9 @@ Nazwa pliku: WypiszSume.java
 ```
 Kompilator nie protestuje widząc linię:
 
-    wypiszSume(100, 200);
+```java
+wypiszSume(100, 200);
+```
 
 ponieważ, po analizie całego pliku, wie, że `wypiszSume` jest metodą z dwoma argumentami, która nie zwraca żadnej wartości.
 
@@ -587,7 +607,9 @@ Produkt o nazwie Herbata czarna kosztuje 12.0
 ```
 Zauważmy, że nasze settery to jedyny sposób na ustawienie wartości w polach cena oraz nazwa – próba bezpośredniego odniesienia się do któregoś z tych pól zakończyłaby się błędem kompilacji:
 
-    czeresnie.cena = -20;
+```java
+czeresnie.cena = -20;
+```
 
 ```shell
 Sklep.java:6: error: cena has private access in Produkt
@@ -663,7 +685,9 @@ Spójrzmy jeszcze raz na setter `setCena`:
 Zmieniliśmy nazwę argumentu metody `setCena` na `cena`.  
 W związku z tym, argument cena zasłania pole klasy Produkt o tej samej nazwie – powoduje to, że linia:
 
-    cena = cena;
+```java
+cena = cena;
+```
 
 przypisuje argumentowi `cena` wartość ... argumentu `cena`!  
 Nie ma to sensu – nie to chcieliśmy osiągnąć.  
@@ -944,4 +968,59 @@ Gettery powinny:
 
 Od drugiej reguły getterów istnieje jeden wyjątek – gettery pól typu `boolean` powinny zaczynać się od słowa `is`, na przykład `isZamowienieWyslane`.  
 Dozwolone są także zamienniki słowa `is` dla tych przypadków, gdy użycie któregoś z nich lepiej oddaje cel pobieranego pola.  
-Te zamienniki to `has`, `should`, oraz `can`, na przykład, dla pola `boolean` `activeAccount`, getter mógłby nazywać się `hasActiveAccount`.  
+Te zamienniki to `has`, `should`, oraz `can`, na przykład, dla pola `boolean` `activeAccount`, getter mógłby nazywać się `hasActiveAccount`.
+
+---
+
+## Uzupełnienia
+
+### Diagram: pola instancyjne a pole `static`
+
+Każdy obiekt ma własną kopię pól instancyjnych, natomiast pole `static` istnieje w jednym egzemplarzu i jest współdzielone przez wszystkie obiekty klasy.
+
+```java
+class Produkt {
+    static int liczbaProduktow = 0;   // wspólne dla klasy
+    String nazwa;                     // osobne dla każdego obiektu
+    Produkt(String nazwa) { this.nazwa = nazwa; liczbaProduktow++; }
+}
+```
+
+```mermaid
+flowchart TB
+    K["Klasa Produkt<br/>static liczbaProduktow = 3"]
+    A["obiekt p1<br/>nazwa = 'Mleko'"]
+    B["obiekt p2<br/>nazwa = 'Chleb'"]
+    C["obiekt p3<br/>nazwa = 'Masło'"]
+    A -. współdzieli .-> K
+    B -. współdzieli .-> K
+    C -. współdzieli .-> K
+```
+
+| Rodzaj zmiennej | Gdzie deklarowana | Czas życia | Wartość domyślna |
+|---|---|---|---|
+| pole instancyjne | w klasie | jak obiekt | tak (`0`, `false`, `null`) |
+| pole statyczne | w klasie, ze `static` | jak klasa | tak |
+| zmienna lokalna | w metodzie/bloku | do końca bloku | **nie** — trzeba zainicjalizować |
+
+---
+
+## Podsumowanie
+
+| Pojęcie | Znaczenie |
+|---|---|
+| pole instancyjne | osobne dla każdego obiektu |
+| pole `static` | wspólne dla klasy |
+| pole `final` | przypisywane tylko raz |
+| zmienna lokalna | istnieje w bloku, brak wartości domyślnej |
+| stan obiektu | aktualne wartości pól |
+
+## Pytania kontrolne
+
+1. Czym różni się pole statyczne od instancyjnego?
+2. Dlaczego zmienna lokalna nie ma wartości domyślnej?
+3. Kiedy inicjalizowane jest pole `final`?
+
+## Laboratorium
+
+Zadania praktyczne do tego wykładu: [Laboratorium 6](../labs-OOP-in-Java/06-pola-klas-i-stan-obiektu.md)

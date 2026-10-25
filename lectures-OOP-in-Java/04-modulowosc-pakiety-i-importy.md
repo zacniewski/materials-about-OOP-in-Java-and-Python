@@ -1,4 +1,17 @@
-# Modułowość. Pakiety. Mechanizm importowania klas (Java)
+# Wykład 4: Modułowość. Pakiety. Mechanizm importowania klas
+
+## Spis treści
+
+- [1. Pakiety (packages)](#1-pakiety-packages)
+- [2. Mechanizm importowania klas](#2-mechanizm-importowania-klas)
+- [3. Modułowość (JPMS — Java Platform Module System)](#3-modułowość-jpms--java-platform-module-system)
+- [4. Przykłady (na bazie folderu laboratoria/lab2)](#4-przykłady-na-bazie-folderu-laboratorialab2)
+- [5. Dobre praktyki](#5-dobre-praktyki)
+- [6. Szybkie FAQ](#6-szybkie-faq)
+- [7. Materiał uzupełniający: notatki praktyczne do pakietów i importów](#7-materiał-uzupełniający-notatki-praktyczne-do-pakietów-i-importów)
+- [Podsumowanie](#podsumowanie)
+- [Pytania kontrolne](#pytania-kontrolne)
+- [Laboratorium](#laboratorium)
 
 Dokument stanowi krótkie kompendium wiedzy potrzebnej do pracy z większymi projektami w Javie. Zawiera teorię, praktyczne wskazówki oraz przykłady oparte na kodzie z folderu `laboratoria/lab2`.
 
@@ -565,3 +578,24 @@ import laboratoria.lab2.a.utils.Utils;
 
 ---
 Notatki powstały na podstawie materiału z kursjava.com; zachęcam do lektury źródła dla szerszego kontekstu i dodatkowych przykładów.
+
+---
+
+## Podsumowanie
+
+| Pojęcie | Znaczenie |
+|---|---|
+| pakiet | przestrzeń nazw grupująca klasy |
+| `import` | skrócone odwołanie do klasy z innego pakietu |
+| classpath | ścieżka wyszukiwania klas |
+| moduł (`module-info.java`) | jednostka wyższego poziomu niż pakiet (JPMS) |
+
+## Pytania kontrolne
+
+1. Jaki jest związek nazwy pakietu ze strukturą katalogów?
+2. Kiedy trzeba użyć pełnej nazwy klasy zamiast `import`?
+3. Czym jest `import static`?
+
+## Laboratorium
+
+Zadania praktyczne do tego wykładu: [Laboratorium 4](../labs-OOP-in-Java/04-modulowosc-pakiety-i-importy.md)

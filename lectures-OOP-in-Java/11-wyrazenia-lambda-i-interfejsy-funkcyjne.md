@@ -1,5 +1,27 @@
 # Wykład 11: Wyrażenia lambda i interfejsy funkcyjne
 
+## Spis treści
+
+- [1. Po co w ogóle lambda?](#1-po-co-w-ogóle-lambda)
+- [2. Interfejs funkcyjny](#2-interfejs-funkcyjny)
+- [3. Składnia lambd](#3-składnia-lambd)
+- [4. Wbudowane interfejsy funkcyjne z `java.util.function`](#4-wbudowane-interfejsy-funkcyjne-z-javautilfunction)
+- [5. Lambda jako argument metody](#5-lambda-jako-argument-metody)
+- [6. `Comparator` i sortowanie](#6-comparator-i-sortowanie)
+- [7. Referencje do metod](#7-referencje-do-metod)
+- [8. Zasięg zmiennych i "effectively final"](#8-zasięg-zmiennych-i-effectively-final)
+- [9. Lambdy a programowanie obiektowe](#9-lambdy-a-programowanie-obiektowe)
+- [10. Lambdy i Stream API - krótki wstęp](#10-lambdy-i-stream-api---krótki-wstęp)
+- [11. Dobre praktyki](#11-dobre-praktyki)
+- [12. Typowe błędy](#12-typowe-błędy)
+- [13. Przykłady zadań](#13-przykłady-zadań)
+- [14. Mini-quiz](#14-mini-quiz)
+- [15. Podsumowanie](#15-podsumowanie)
+- [Uzupełnienia](#uzupełnienia)
+- [Podsumowanie](#podsumowanie)
+- [Pytania kontrolne](#pytania-kontrolne)
+- [Laboratorium](#laboratorium)
+
 Wyrażenia lambda są naturalnym rozwinięciem programowania obiektowego w Javie. Pozwalają przekazywać zachowania jako argumenty, upraszczają kod oparty o interfejsy jednomeetodowe i dobrze łączą się z kolekcjami, komparatorami oraz strumieniami.
 
 ## 1. Po co w ogóle lambda?
@@ -326,3 +348,53 @@ Po tym module student powinien:
 - korzystać z podstawowych interfejsów z `java.util.function`,
 - stosować lambdy do sortowania, filtrowania i przekazywania zachowań,
 - rozumieć związek lambd z nowoczesnym stylem programowania w Javie.
+
+---
+
+## Uzupełnienia
+
+### Wbudowane interfejsy funkcyjne (`java.util.function`)
+
+| Interfejs | Metoda | Sygnatura | Przykład |
+|---|---|---|---|
+| `Function<T,R>` | `apply` | `T -> R` | `Function<String,Integer> len = String::length;` |
+| `BiFunction<T,U,R>` | `apply` | `(T,U) -> R` | `BiFunction<Integer,Integer,Integer> add = (a, b) -> a + b;` |
+| `UnaryOperator<T>` | `apply` | `T -> T` | `UnaryOperator<String> up = String::toUpperCase;` |
+| `BinaryOperator<T>` | `apply` | `(T,T) -> T` | `BinaryOperator<Integer> max = Math::max;` |
+| `Predicate<T>` | `test` | `T -> boolean` | `Predicate<String> pusty = String::isEmpty;` |
+| `BiPredicate<T,U>` | `test` | `(T,U) -> boolean` | `BiPredicate<String,Integer> dl = (s, n) -> s.length() == n;` |
+| `Consumer<T>` | `accept` | `T -> void` | `Consumer<String> print = System.out::println;` |
+| `BiConsumer<T,U>` | `accept` | `(T,U) -> void` | `map.forEach((k, v) -> System.out.println(k + "=" + v));` |
+| `Supplier<T>` | `get` | `() -> T` | `Supplier<List<String>> s = ArrayList::new;` |
+
+Istnieją też wersje dla typów prostych (bez autoboxingu): `IntPredicate`, `IntFunction<R>`, `ToIntFunction<T>`, `IntUnaryOperator` itd.
+
+### Cztery rodzaje referencji do metod
+
+| Rodzaj | Składnia | Przykład | Równoważna lambda |
+|---|---|---|---|
+| Metoda statyczna | `Klasa::metodaStatyczna` | `Integer::parseInt` | `s -> Integer.parseInt(s)` |
+| Metoda konkretnego obiektu | `obiekt::metoda` | `System.out::println` | `x -> System.out.println(x)` |
+| Metoda dowolnego obiektu danego typu | `Klasa::metodaInstancyjna` | `String::toUpperCase` | `s -> s.toUpperCase()` |
+| Konstruktor | `Klasa::new` | `ArrayList::new` | `() -> new ArrayList<>()` |
+
+---
+
+## Podsumowanie
+
+| Pojęcie | Znaczenie |
+|---|---|
+| lambda | anonimowa funkcja `(x) -> ...` |
+| interfejs funkcyjny | interfejs z jedną metodą abstrakcyjną |
+| referencja do metody | skrót `Klasa::metoda` |
+| Stream API | potok operacji `filter`/`map`/`reduce` |
+
+## Pytania kontrolne
+
+1. Czym jest interfejs funkcyjny?
+2. Jakie zmienne lokalne można użyć w lambdzie?
+3. Wymień cztery rodzaje referencji do metod.
+
+## Laboratorium
+
+Zadania praktyczne do tego wykładu: [Laboratorium 11](../labs-OOP-in-Java/11-wyrazenia-lambda-i-interfejsy-funkcyjne.md)

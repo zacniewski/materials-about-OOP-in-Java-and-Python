@@ -1,3 +1,14 @@
+# Wykład 3: Klasy i metody
+
+## Spis treści
+
+- [Czym są klasy i do czego służą?](#czym-są-klasy-i-do-czego-służą)
+- [Podsumowanie](#podsumowanie)
+- [Uzupełnienia](#uzupełnienia)
+- [Podsumowanie](#podsumowanie)
+- [Pytania kontrolne](#pytania-kontrolne)
+- [Laboratorium](#laboratorium)
+
 W tym rozdziale rozpoczniemy poznawanie klas i programowania zorientowanego obiektowo (OOP – Object-Oriented Programming). 
 > Materiał pochodzi z [Kursu Javy](https://kursjava.com/). 
 
@@ -648,3 +659,61 @@ Metoda toString musi spełniać następujące wymagania:
   - Musi zwracać `String`.  
   - Nie może przyjmować żadnych argumentów.  
   - Musi być publiczna (tzn. należy użyć modyfikatora `public`) i nie może być statyczna (nie może mieć modyfikatora `static`).
+
+---
+
+## Uzupełnienia
+
+### Klasa a obiekt — podsumowanie
+
+| Cecha | Klasa | Obiekt |
+|---|---|---|
+| Czym jest | szablon (definicja typu) | konkretna instancja klasy |
+| Kiedy powstaje | podczas kompilacji (plik `.class`) | w czasie działania programu (`new`) |
+| Ile ich jest | jedna definicja | dowolnie wiele |
+| Gdzie żyje | kod programu / metaspace | sterta (heap) |
+| Przechowuje | opis pól i metod | konkretne wartości pól (stan) |
+
+### Diagram klasy UML
+
+```mermaid
+classDiagram
+    class Ksiazka {
+        -String tytul
+        -String autor
+        -int liczbaStron
+        +Ksiazka(String tytul, String autor, int liczbaStron)
+        +getTytul() String
+        +wyswietlInformacje() void
+    }
+    class Biblioteka {
+        -List~Ksiazka~ ksiazki
+        +dodaj(Ksiazka k) void
+        +main(String[] args)$ void
+    }
+    Biblioteka "1" o-- "*" Ksiazka : zawiera
+```
+
+Oznaczenia: `-` pole/metoda prywatna, `+` publiczna, `$` statyczna.
+
+---
+
+## Podsumowanie
+
+| Pojęcie | Znaczenie |
+|---|---|
+| klasa | definicja typu: pola + metody |
+| obiekt | instancja tworzona przez `new` |
+| metoda | nazwany blok kodu z parametrami i typem zwracanym |
+| `main` | punkt wejścia programu |
+| `this` | referencja do bieżącego obiektu |
+
+## Pytania kontrolne
+
+1. Czym różni się metoda statyczna od instancyjnej?
+2. Co się dzieje w pamięci po wykonaniu `new Ksiazka(...)`?
+3. Dlaczego `main` musi być `static`?
+
+## Laboratorium
+
+Zadania praktyczne do tego wykładu: [Laboratorium 3](../labs-OOP-in-Java/03-klasy-i-metody.md)

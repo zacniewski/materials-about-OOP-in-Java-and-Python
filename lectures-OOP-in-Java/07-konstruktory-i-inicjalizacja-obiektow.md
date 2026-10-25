@@ -1,6 +1,15 @@
-# Wykład 6: Konstruktory i inicjalizacja obiektów
+# Wykład 7: Konstruktory i inicjalizacja obiektów
 
 Źródło: https://kursjava.com/klasy/konstruktory/
+
+## Spis treści
+
+- [7. Materiał rozszerzający: dodatkowe notatki i praktyka](#7-materiał-rozszerzający-dodatkowe-notatki-i-praktyka)
+- [Uzupełnienia](#uzupełnienia)
+- [Podsumowanie](#podsumowanie)
+- [Pytania kontrolne](#pytania-kontrolne)
+- [Laboratorium](#laboratorium)
+
 
 ### 1. Konstruktory
 
@@ -1009,7 +1018,7 @@ public record Point(int x, int y) {
 - Czy można przeciążać konstruktory? Tak, to powszechny wzorzec.
 - Czy można mieć prywatny konstruktor? Tak, np. w Singletonie, klasach narzędziowych i metodach fabrycznych.
 
-### 7.17. Cwiczenia
+### 7.17. Ćwiczenia
 1) Napisz klasę `Person` z konstruktorami: no-arg (ustawia domyślne wartości) i parametrycznym (`name`, `age`). Dodaj walidację.
 ```java
 public class Person {
@@ -1062,3 +1071,90 @@ public class Course {
     }
 }
 ```
+
+---
+
+## Uzupełnienia
+
+> **Uwaga:** sekcja 7 to materiał rozszerzający i powtórzeniowy — omawia te same zagadnienia co sekcje 1–6 w skróconej formie z dodatkowymi przykładami. Można ją traktować jako ściągę przed laboratorium.
+
+### Kolejność inicjalizacji obiektu
+
+```mermaid
+flowchart TD
+    A["new Klasa(...)"] --> B["Przydział pamięci, pola = wartości domyślne"]
+    B --> C["Wywołanie this(...) lub super(...)"]
+    C --> D["Konstruktor nadklasy (rekurencyjnie aż do Object)"]
+    D --> E["Inicjalizatory pól i bloki { } w kolejności z kodu"]
+    E --> F["Pozostała część ciała konstruktora"]
+    F --> G["Referencja do gotowego obiektu"]
+```
+
+Bloki `static { }` i pola statyczne są inicjalizowane wcześniej — jednokrotnie, przy pierwszym załadowaniu klasy.
+
+### Rekordy (`record`) — rozwinięcie
+
+Rekord (Java 16+) to zwięzły zapis niemutowalnej klasy danych. Kompilator generuje automatycznie: pola `private final`, **konstruktor kanoniczny**, akcesory (`x()`, a nie `getX()`), `equals()`, `hashCode()` i `toString()`.
+
+```java
+public record Punkt(int x, int y) {
+
+    // konstruktor kompaktowy — walidacja bez powtarzania przypisań
+    public Punkt {
+        if (x < 0 || y < 0) {
+            throw new IllegalArgumentException("Współrzędne muszą być nieujemne");
+        }
+    }
+
+    // dodatkowy konstruktor musi delegować do kanonicznego
+    public Punkt() {
+        this(0, 0);
+    }
+
+    // statyczna metoda wytwórcza
+    public static Punkt naOsiX(int x) {
+        return new Punkt(x, 0);
+    }
+
+    public double odleglosc() {
+        return Math.sqrt(x * x + y * y);
+    }
+}
+```
+
+```java
+Punkt p = new Punkt(3, 4);
+System.out.println(p);              // Punkt[x=3, y=4]
+System.out.println(p.x());          // 3
+System.out.println(p.equals(new Punkt(3, 4)));  // true
+```
+
+| Klasa zwykła | Rekord |
+|---|---|
+| pola dowolne, także mutowalne | pola zawsze `private final` |
+| ręczne `equals`/`hashCode`/`toString` | generowane automatycznie |
+| może dziedziczyć po klasie | niejawnie `final`, dziedziczy po `java.lang.Record` |
+| dowolne konstruktory | konstruktor kanoniczny + kompaktowy + delegujące |
+
+---
+
+## Podsumowanie
+
+| Pojęcie | Znaczenie |
+|---|---|
+| konstruktor | specjalna metoda inicjalizująca obiekt |
+| konstruktor domyślny | generowany, gdy nie zdefiniujemy żadnego |
+| `this(...)` / `super(...)` | delegowanie do innego konstruktora / nadklasy |
+| blok inicjalizacyjny | kod wykonywany przy każdym tworzeniu obiektu |
+| `record` | zwięzła niemutowalna klasa danych |
+
+## Pytania kontrolne
+
+1. Kiedy kompilator generuje konstruktor domyślny?
+2. Dlaczego `this(...)` musi być pierwszą instrukcją?
+3. W jakiej kolejności inicjalizowany jest obiekt?
+4. Co generuje kompilator dla rekordu?
+
+## Laboratorium
+
+Zadania praktyczne do tego wykładu: [Laboratorium 7](../labs-OOP-in-Java/07-konstruktory-i-inicjalizacja-obiektow.md)

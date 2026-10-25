@@ -1,4 +1,4 @@
-## 09. Testowanie kodu
+# Wykład 12: Testowanie kodu
 
 Źródło: https://kursjava.com/testowanie-kodu/
 
@@ -14,6 +14,10 @@
 - [4. Przykłady testów](#4-przykłady-testów)
   - [Wartość bezwzględna](#wartość-bezwzględna)
   - [Metoda sprawdzająca, czy tablica zawiera element](#metoda-sprawdzająca-czy-tablica-zawiera-element)
+- [5. JUnit 5 — profesjonalne testy jednostkowe](#5-junit-5--profesjonalne-testy-jednostkowe)
+- [6. TDD — Test-Driven Development](#6-tdd--test-driven-development)
+- [7. Atrapy obiektów (mocki) — wzmianka](#7-atrapy-obiektów-mocki--wzmianka)
+- [Podsumowanie](#podsumowanie)
 
 ### 1. Wstęp do testowania
 Pisząc kod naszych programów, powinniśmy upewnić się, że działa on prawidłowo – w tym celu przeprowadzamy testy.
@@ -31,25 +35,29 @@ W związku z tym, że pisanie testów jest umiejętnością, która wymaga prakt
 Jak już wcześniej wspomniano, testy to metody, które wywołują testowaną metodę. Spróbujmy w takim razie napisać nasze pierwsze testy jednostkowe – obiektem naszych testów będzie metoda, która podnosi przesłaną do niej liczbę całkowitą do kwadratu i zwraca wynik. Zacznijmy od napisania tej metody:
 Nazwa pliku: TestowanieDoKwadratu.java
 
-    public class TestowanieDoKwadratu {
-      public static int doKwadratu(int x) {
-        return x * x;
-      }
-    }
+```java
+public class TestowanieDoKwadratu {
+  public static int doKwadratu(int x) {
+    return x * x;
+  }
+}
+```
 
 Nasz program jest bardzo prosty – nie ma jeszcze nawet metody main, ale ma za to metodę doKwadratu, która przyjmuje argument typu int i zwraca wartość typu int – w tym przypadku, jest to wartość argumentu x podniesiona do kwadratu.
 
 Jak możemy przetestować, że nasza metoda działa poprawnie? Moglibyśmy dopisać metodę main i w niej wywołać metodę doKwadratu i wypisać jej wynik na ekran:
 Nazwa pliku: TestowanieDoKwadratu.java
 
-    public class TestowanieDoKwadratu {
-      public static void main(String[] args) {
-        System.out.println(doKwadratu(20));
-      }
-      public static int doKwadratu(int x) {
-        return x * x;
-      }
-    }
+```java
+public class TestowanieDoKwadratu {
+  public static void main(String[] args) {
+    System.out.println(doKwadratu(20));
+  }
+  public static int doKwadratu(int x) {
+    return x * x;
+  }
+}
+```
 
 Program uruchamia się i wypisuje poprawną wartość na ekranie: 400. Metoda main testuje naszą metodę, jednak nie jest to rozwiązanie docelowe, ponieważ możemy je ulepszyć na trzy sposoby:
 
@@ -64,18 +72,20 @@ Dostosujmy nasz program krok po kroku zgodnie z powyższymi wytycznymi.
 Przenieśmy test do osobnej metody:
 Nazwa pliku: TestowanieDoKwadratu.java
 
-    public class TestowanieDoKwadratu {
-      public static void main(String[] args) {
-        doKwadratu_wartoscDodatnia_wartoscPodniesionaDoKwadratu(); // (1)
-      }
-      public static int doKwadratu(int x) {
-        return x * x;
-      }
-      // (2)
-      public static void doKwadratu_wartoscDodatnia_wartoscPodniesionaDoKwadratu() {
-        System.out.println(doKwadratu(20));
-      }
-    }
+```java
+public class TestowanieDoKwadratu {
+  public static void main(String[] args) {
+    doKwadratu_wartoscDodatnia_wartoscPodniesionaDoKwadratu(); // (1)
+  }
+  public static int doKwadratu(int x) {
+    return x * x;
+  }
+  // (2)
+  public static void doKwadratu_wartoscDodatnia_wartoscPodniesionaDoKwadratu() {
+    System.out.println(doKwadratu(20));
+  }
+}
+```
 
 Przenieśliśmy test do osobnej metody o bardzo długiej nazwie (2). Istnieją różne konwencje, które definiują, jak powinny być nazywane metody testowe – jedną z nich jest konwencja, wedle której metody powinny być nazywane w następujący sposób:
 
@@ -97,23 +107,25 @@ Test jest już w osobnej metodzie – teraz zajmiemy się drugim opisanym powyż
 Jak możemy to osiągnąć? Wystarczy, że sprawdzimy wynik metody – jeżeli będzie inny, niż się spodziewamy, wtedy wypiszemy na ekran komunikat informujący, że testowana przez nas metoda zwróciła dla danego argumentu inny wynik, niż oczekiwaliśmy:
 Nazwa pliku: TestowanieDoKwadratu.java
 
-    public class TestowanieDoKwadratu {
-      public static void main(String[] args) {
-        doKwadratu_wartoscDodatnia_wartoscPodniesionaDoKwadratu();
-      }
-      public static int doKwadratu(int x) {
-        return x * x;
-      }
-      public static void doKwadratu_wartoscDodatnia_wartoscPodniesionaDoKwadratu() {
-        int wynik = doKwadratu(20); // (1)
-        if (wynik != 400) { // (2)
-          // (3)
-          System.out.println(
-              "Dla liczby 20 wyliczono nieprawidlowy kwadrat: " + wynik
-          );
-        }
-      }
+```java
+public class TestowanieDoKwadratu {
+  public static void main(String[] args) {
+    doKwadratu_wartoscDodatnia_wartoscPodniesionaDoKwadratu();
+  }
+  public static int doKwadratu(int x) {
+    return x * x;
+  }
+  public static void doKwadratu_wartoscDodatnia_wartoscPodniesionaDoKwadratu() {
+    int wynik = doKwadratu(20); // (1)
+    if (wynik != 400) { // (2)
+      // (3)
+      System.out.println(
+          "Dla liczby 20 wyliczono nieprawidlowy kwadrat: " + wynik
+      );
     }
+  }
+}
+```
 
 Nasz program nie wypisuje już po prostu wartości podniesionej do kwadratu. Zamiast tego:
 
@@ -142,42 +154,44 @@ Dopiszmy jeszcze dwa testy do metody doKwadratu:
 
 Nazwa pliku: TestowanieDoKwadratu.java
 
-    public class TestowanieDoKwadratu {
-      public static void main(String[] args) {
-        doKwadratu_wartoscDodatnia_wartoscPodniesionaDoKwadratu();
-        doKwadratu_wartoscUjemna_wartoscPodniesionaDoKwadratu(); // (1)
-        doKwadratu_liczbaZero_zero(); // (2)
-      }
-      public static int doKwadratu(int x) {
-        return x * x;
-      }
-      public static void doKwadratu_wartoscDodatnia_wartoscPodniesionaDoKwadratu() {
-        int wynik = doKwadratu(20);
-        if (wynik != 400) {
-          System.out.println(
-               "Dla liczby 20 wyliczono nieprawidlowy kwadrat: " + wynik
-           );
-        }
-      }
-      // (3)
-      public static void doKwadratu_wartoscUjemna_wartoscPodniesionaDoKwadratu() {
-        int wynik = doKwadratu(-5);
-        if (wynik != 25) {
-          System.out.println(
-              "Dla liczby -5 wyliczono nieprawidlowy kwadrat: " + wynik
-          );
-        }
-      }
-      // (4)
-      public static void doKwadratu_liczbaZero_zero() {
-        int wynik = doKwadratu(0);
-        if (wynik != 0) {
-          System.out.println(
-              "Dla liczby 0 wyliczono nieprawidlowy kwadrat: " + wynik
-          );
-        }
-      }
+```java
+public class TestowanieDoKwadratu {
+  public static void main(String[] args) {
+    doKwadratu_wartoscDodatnia_wartoscPodniesionaDoKwadratu();
+    doKwadratu_wartoscUjemna_wartoscPodniesionaDoKwadratu(); // (1)
+    doKwadratu_liczbaZero_zero(); // (2)
+  }
+  public static int doKwadratu(int x) {
+    return x * x;
+  }
+  public static void doKwadratu_wartoscDodatnia_wartoscPodniesionaDoKwadratu() {
+    int wynik = doKwadratu(20);
+    if (wynik != 400) {
+      System.out.println(
+           "Dla liczby 20 wyliczono nieprawidlowy kwadrat: " + wynik
+       );
     }
+  }
+  // (3)
+  public static void doKwadratu_wartoscUjemna_wartoscPodniesionaDoKwadratu() {
+    int wynik = doKwadratu(-5);
+    if (wynik != 25) {
+      System.out.println(
+          "Dla liczby -5 wyliczono nieprawidlowy kwadrat: " + wynik
+      );
+    }
+  }
+  // (4)
+  public static void doKwadratu_liczbaZero_zero() {
+    int wynik = doKwadratu(0);
+    if (wynik != 0) {
+      System.out.println(
+          "Dla liczby 0 wyliczono nieprawidlowy kwadrat: " + wynik
+      );
+    }
+  }
+}
+```
 
 W ostatecznej wersji naszego programu dodaliśmy dwa nowe testy (3) (4) oraz wywołaliśmy je w metodzie main (1) (2). Po uruchomieniu nasz program nic nie wypisuje – świadczy to o tym, że nasza metoda doKwadratu działa poprawnie!
 Czy możemy być pewni, że faktycznie tak jest? Czy nie zapomnieliśmy o jeszcze jakimś przypadku testowym? Do zastanowienia jako zadanie!
@@ -186,65 +200,69 @@ Czy możemy być pewni, że faktycznie tak jest? Czy nie zapomnieliśmy o jeszcz
 
 Wróćmy jeszcze na chwilę do finalnej wersji kodu z poprzedniego rozdziału – spójrzmy na kod naszych testów:
 
-    public static void doKwadratu_wartoscDodatnia_wartoscPodniesionaDoKwadratu() {
-      int wynik = doKwadratu(20);
-      if (wynik != 400) {
-        System.out.println(
-            "Dla liczby 20 wyliczono nieprawidlowy kwadrat: " + wynik
-        );
-      }
-    }
-    public static void doKwadratu_wartoscUjemna_wartoscPodniesionaDoKwadratu() {
-      int wynik = doKwadratu(-5);
-      if (wynik != 25) {
-        System.out.println(
-            "Dla liczby -5 wyliczono nieprawidlowy kwadrat: " + wynik
-        );
-      }
-    }
-    public static void doKwadratu_liczbaZero_zero() {
-      int wynik = doKwadratu(0);
-      if (wynik != 0) {
-        System.out.println(
-            "Dla liczby 0 wyliczono nieprawidlowy kwadrat: " + wynik
-        );
-      }
-    }
+```java
+public static void doKwadratu_wartoscDodatnia_wartoscPodniesionaDoKwadratu() {
+  int wynik = doKwadratu(20);
+  if (wynik != 400) {
+    System.out.println(
+        "Dla liczby 20 wyliczono nieprawidlowy kwadrat: " + wynik
+    );
+  }
+}
+public static void doKwadratu_wartoscUjemna_wartoscPodniesionaDoKwadratu() {
+  int wynik = doKwadratu(-5);
+  if (wynik != 25) {
+    System.out.println(
+        "Dla liczby -5 wyliczono nieprawidlowy kwadrat: " + wynik
+    );
+  }
+}
+public static void doKwadratu_liczbaZero_zero() {
+  int wynik = doKwadratu(0);
+  if (wynik != 0) {
+    System.out.println(
+        "Dla liczby 0 wyliczono nieprawidlowy kwadrat: " + wynik
+    );
+  }
+}
+```
 
 Widzimy, że każda metoda testowa napisana jest w podobny sposób – najpierw wywołujemy testowaną metodę, a potem sprawdzamy, czy wynik jest poprawny. Czy moglibyśmy w takim razie jakoś uprościć powyższe metody i pozbyć się duplikacji kodu?
 
 Moglibyśmy napisać kolejną metodę, której zadaniem będzie sprawdzenie, czy przesłane do niej argumenty są sobie równe. Jeżeli nie, metoda wypisze na ekran komunikat. Następnie moglibyśmy tej nowej metody użyć w naszych testach. Spójrzmy na kolejną wersję naszego programu:
 Nazwa pliku: TestowanieDoKwadratu2.java
 
-    public class TestowanieDoKwadratu2 {
-      public static void main(String[] args) {
-        doKwadratu_wartoscDodatnia_wartoscPodniesionaDoKwadratu();
-        doKwadratu_wartoscUjemna_wartoscPodniesionaDoKwadratu();
-        doKwadratu_liczbaZero_zero();
-      }
-      public static int doKwadratu(int x) {
-        return x * x;
-      }
-      public static void doKwadratu_wartoscDodatnia_wartoscPodniesionaDoKwadratu() {
-        int wynik = doKwadratu(20);
-        assertEquals(400, wynik); // (1)
-      }
-      public static void doKwadratu_wartoscUjemna_wartoscPodniesionaDoKwadratu() {
-        int wynik = doKwadratu(-5);
-        assertEquals(25, wynik); // (2)
-      }
-      public static void doKwadratu_liczbaZero_zero() {
-        int wynik = doKwadratu(0);
-        assertEquals(0, wynik); // (3)
-      }
-      //                    (4)              (5)          (6)
-      public static void assertEquals(int expected, int actual) {
-        if (expected != actual) { // (7)
-          System.out.println("Spodziewano sie liczby " + actual +
-            ", ale otrzymano: " + expected);
-        }
-      }
+```java
+public class TestowanieDoKwadratu2 {
+  public static void main(String[] args) {
+    doKwadratu_wartoscDodatnia_wartoscPodniesionaDoKwadratu();
+    doKwadratu_wartoscUjemna_wartoscPodniesionaDoKwadratu();
+    doKwadratu_liczbaZero_zero();
+  }
+  public static int doKwadratu(int x) {
+    return x * x;
+  }
+  public static void doKwadratu_wartoscDodatnia_wartoscPodniesionaDoKwadratu() {
+    int wynik = doKwadratu(20);
+    assertEquals(400, wynik); // (1)
+  }
+  public static void doKwadratu_wartoscUjemna_wartoscPodniesionaDoKwadratu() {
+    int wynik = doKwadratu(-5);
+    assertEquals(25, wynik); // (2)
+  }
+  public static void doKwadratu_liczbaZero_zero() {
+    int wynik = doKwadratu(0);
+    assertEquals(0, wynik); // (3)
+  }
+  //                    (4)              (5)          (6)
+  public static void assertEquals(int expected, int actual) {
+    if (expected != actual) { // (7)
+      System.out.println("Spodziewano sie liczby " + actual +
+        ", ale otrzymano: " + expected);
     }
+  }
+}
+```
 
 Nowa metoda assertEquals (4) przyjmuje dwa parametry typu int o nazwach expected (5) oraz actual (6). Jej jedynym zadaniem jest wypisanie komunikatu, gdy liczby przesłane jako argumenty nie są sobie równe (7). Dzięki tej metodzie, mogliśmy znacząco skrócić nasze metody testowe – metody assertEquals używamy teraz do sprawdzenia wyniku działania metody doKwadratu (1) (2) (3).
 
@@ -266,18 +284,20 @@ Konstruując test w ten sposób dostajemy logiczną całość:
 
 Spójrzmy na przykład jednego z testów z poprzedniego programu napisanego w taki właśnie sposób. Dla porównania dodana została także poprzednia wersja tego testu:
 
-    public static void doKwadratu_wartoscDodatnia_wartoscPodniesionaDoKwadratu() {
-      int wynik = doKwadratu(20);
-      assertEquals(400, wynik);
-    }
-    public static void doKwadratu_wartoscDodatnia_wartoscPodniesionaDoKwadratu2() {
-      // given
-      int liczba = 20;
-      // when
-      int wynik = doKwadratu(liczba);
-      // then
-      assertEquals(400, wynik);
-    }
+```java
+public static void doKwadratu_wartoscDodatnia_wartoscPodniesionaDoKwadratu() {
+  int wynik = doKwadratu(20);
+  assertEquals(400, wynik);
+}
+public static void doKwadratu_wartoscDodatnia_wartoscPodniesionaDoKwadratu2() {
+  // given
+  int liczba = 20;
+  // when
+  int wynik = doKwadratu(liczba);
+  // then
+  assertEquals(400, wynik);
+}
+```
 
 Druga metoda stosuje opisaną powyżej konwencję – komentarzami oddzieliliśmy od siebie poszczególne części testu. Ze względu na czytelność, testy są często pisane w ten właśnie sposób.
 
@@ -316,63 +336,67 @@ Spójrzmy na poniższą metodę i zastanówmy się nad następującymi pytaniami
 
 Nazwa pliku: TestowanieCzyParzystaWersja1.java
 
-    import java.util.Scanner;
-    public class TestowanieCzyParzysta {
-      public static void main(String[] args) {
-        czyParzysta();
-      }
-      public static void czyParzysta() {
-        System.out.println(
-            "Prosze podac liczbe - sprawdze, czy jest parzysta."
-        );
-        int liczba = getInt();
-        if (liczba % 2 == 0) {
-          System.out.println("Ta liczba jest parzysta.");
-        } else {
-          System.out.println("Ta liczba jest nieparzysta");
-        }
-      }
-      public static int getInt() {
-        return new Scanner(System.in).nextInt();
-      }
+```java
+import java.util.Scanner;
+public class TestowanieCzyParzysta {
+  public static void main(String[] args) {
+    czyParzysta();
+  }
+  public static void czyParzysta() {
+    System.out.println(
+        "Prosze podac liczbe - sprawdze, czy jest parzysta."
+    );
+    int liczba = getInt();
+    if (liczba % 2 == 0) {
+      System.out.println("Ta liczba jest parzysta.");
+    } else {
+      System.out.println("Ta liczba jest nieparzysta");
     }
+  }
+  public static int getInt() {
+    return new Scanner(System.in).nextInt();
+  }
+}
 
-    Bez interakcji użytkownika metoda ta jest nie do przetestowania. Pyta ona użytkownika o liczbę i czeka na jej podanie. W obecnej formie, aby ją przetestować, musielibyśmy uruchomić powyższy program wielokrotnie, wpisując w oknie konsoli różne liczby i sprawdzić wynik wypisany na ekranie.
-    Metoda ta wykonuje wiele operacji:
-        Wypisuje komunikat z prośbą o podanie liczby.
-        Pobiera od użytkownika liczbę przy użyciu metody getInt.
-        Sprawdza parzystość liczby.
-        Na podstawie parzystości liczby wypisuje komunikat.
-    Zastanówmy się, co moglibyśmy usprawnić w naszej metodzie?
-        Najważniejsze to przenieść pobieranie liczby od użytkownika poza metodę czyParzysta. Dzięki temu nasza metoda nie będzie już uzależniona od użytkownika.
-        Skoro nie będziemy pobierać liczby w metodzie czyParzysta, to musimy jakoś przesłać do tej metody liczbę do sprawdzenia – łatwo możemy to osiągnąć, gdy zmienimy metodę, by przyjmowała jeden argument typu int.
-        Nasza metoda nie powinna wypisywać na ekran wyniku sprawdzenia parzystości – ktokolwiek będzie używał naszej metody powinien sam zadecydować, co chce z tą informacją (czy liczba jest parzysta czy nie) zrobić. Skoro tak, to nasza metoda powinna zwrócić informację o tym, czy liczba jest parzysta czy nie – osiągniemy to poprzez zmianę zwracanego przez metodę typu z void na boolean (prawda / fałsz).
+Bez interakcji użytkownika metoda ta jest nie do przetestowania. Pyta ona użytkownika o liczbę i czeka na jej podanie. W obecnej formie, aby ją przetestować, musielibyśmy uruchomić powyższy program wielokrotnie, wpisując w oknie konsoli różne liczby i sprawdzić wynik wypisany na ekranie.
+Metoda ta wykonuje wiele operacji:
+    Wypisuje komunikat z prośbą o podanie liczby.
+    Pobiera od użytkownika liczbę przy użyciu metody getInt.
+    Sprawdza parzystość liczby.
+    Na podstawie parzystości liczby wypisuje komunikat.
+Zastanówmy się, co moglibyśmy usprawnić w naszej metodzie?
+    Najważniejsze to przenieść pobieranie liczby od użytkownika poza metodę czyParzysta. Dzięki temu nasza metoda nie będzie już uzależniona od użytkownika.
+    Skoro nie będziemy pobierać liczby w metodzie czyParzysta, to musimy jakoś przesłać do tej metody liczbę do sprawdzenia – łatwo możemy to osiągnąć, gdy zmienimy metodę, by przyjmowała jeden argument typu int.
+    Nasza metoda nie powinna wypisywać na ekran wyniku sprawdzenia parzystości – ktokolwiek będzie używał naszej metody powinien sam zadecydować, co chce z tą informacją (czy liczba jest parzysta czy nie) zrobić. Skoro tak, to nasza metoda powinna zwrócić informację o tym, czy liczba jest parzysta czy nie – osiągniemy to poprzez zmianę zwracanego przez metodę typu z void na boolean (prawda / fałsz).
+```
 
 Spójrzmy na usprawnioną wersję powyższego program:
 Nazwa pliku: TestowanieCzyParzystaWersja2.java
 
-    import java.util.Scanner;
-    public class TestowanieCzyParzystaWersja2 {
-      public static void main(String[] args) {
-        // (1)
-        System.out.println(
-            "Prosze podac liczbe - sprawdze, czy jest parzysta."
-        );
-        int liczba = getInt(); // (2)
-        if (czyParzysta(liczba)) {
-          System.out.println("Ta liczba jest parzysta."); // (3)
-        } else {
-          System.out.println("Ta liczba jest nieparzysta"); // (4)
-        }
-      }
-      //        (5)          (6)
-      public static boolean czyParzysta(int x) {
-        return x % 2 == 0; // (7)
-      }
-      public static int getInt() {
-        return new Scanner(System.in).nextInt();
-      }
+```java
+import java.util.Scanner;
+public class TestowanieCzyParzystaWersja2 {
+  public static void main(String[] args) {
+    // (1)
+    System.out.println(
+        "Prosze podac liczbe - sprawdze, czy jest parzysta."
+    );
+    int liczba = getInt(); // (2)
+    if (czyParzysta(liczba)) {
+      System.out.println("Ta liczba jest parzysta."); // (3)
+    } else {
+      System.out.println("Ta liczba jest nieparzysta"); // (4)
     }
+  }
+  //        (5)          (6)
+  public static boolean czyParzysta(int x) {
+    return x % 2 == 0; // (7)
+  }
+  public static int getInt() {
+    return new Scanner(System.in).nextInt();
+  }
+}
+```
 
 Wykonane zmiany:
 
@@ -421,33 +445,35 @@ Dla liczb ujemnych jest to liczba bez minusa. Przykład: wartość bezwzględna 
 Zanim jednak przejdziemy do kodu źródłowego, zastanówmy się jak przetestowalibyśmy taką metodę? Jakie przypadki testowe wzięlibyśmy pod uwagę?
 Nazwa pliku: TestowanieWartoscBezwzgledna.java
 
-    public class TestowanieWartoscBezwzgledna {
-      public static void main(String[] args) {
-        wartoscBezwgledna_liczbaDodatnia_zwrociDodatniaWartosc(); // (1)
-        wartoscBezwgledna_liczbaUjemna_zwrociDodatniaWartosc();   // (2)
-      }
-      public static int wartoscBezwgledna(int x) { // (3)
-        return x < 0 ? -x : x;
-      }
-      public static void
-          wartoscBezwgledna_liczbaDodatnia_zwrociDodatniaWartosc() { // (4)
-        int rezultat = wartoscBezwgledna(20); // (5)
-        if (rezultat != 20) { // (6)
-          System.out.println( // (7)
-            "Dla wartosci 20 otrzymano nieprawidlowa wartosc: " + rezultat
-          );
-        }
-      }
-      public static void
-          wartoscBezwgledna_liczbaUjemna_zwrociDodatniaWartosc() { // (8)
-        int rezultat = wartoscBezwgledna(-1); // (9)
-        if (rezultat != 1) { // (10)
-          System.out.println( // (11)
-            "Dla wartosci -1 otrzymano nieprawidlowa wartosc: " + rezultat
-          );
-        }
-      }
+```java
+public class TestowanieWartoscBezwzgledna {
+  public static void main(String[] args) {
+    wartoscBezwgledna_liczbaDodatnia_zwrociDodatniaWartosc(); // (1)
+    wartoscBezwgledna_liczbaUjemna_zwrociDodatniaWartosc();   // (2)
+  }
+  public static int wartoscBezwgledna(int x) { // (3)
+    return x < 0 ? -x : x;
+  }
+  public static void
+      wartoscBezwgledna_liczbaDodatnia_zwrociDodatniaWartosc() { // (4)
+    int rezultat = wartoscBezwgledna(20); // (5)
+    if (rezultat != 20) { // (6)
+      System.out.println( // (7)
+        "Dla wartosci 20 otrzymano nieprawidlowa wartosc: " + rezultat
+      );
     }
+  }
+  public static void
+      wartoscBezwgledna_liczbaUjemna_zwrociDodatniaWartosc() { // (8)
+    int rezultat = wartoscBezwgledna(-1); // (9)
+    if (rezultat != 1) { // (10)
+      System.out.println( // (11)
+        "Dla wartosci -1 otrzymano nieprawidlowa wartosc: " + rezultat
+      );
+    }
+  }
+}
+```
 
 Przejdźmy krok po kroku przez powyższy kod:
 
@@ -474,100 +500,104 @@ Powinniśmy na pewno sprawdzić następujące przypadki:
 Poniższy kod źródłowy przedstawia, jak moglibyśmy napisać powyższy program wraz z testami:
 Nazwa pliku: TestowanieCzyElementWTablicy.java
 
-    public class TestowanieCzyElementWTablicy {
-      public static void main(String[] args) {
-        czyZawieraElement_pustaTablica_zwrociFalse();
-        czyZawieraElement_brakSzukanegoElementu_zwrociFalse();
-        czyZawieraElement_zawieraSukanyElement_zwrociTrue();
-        czyZawieraElement_zawieraSukanyElementNaPoczatku_zwrociTrue();
-        czyZawieraElement_zawieraSukanyElementNaKoncu_zwrociTrue();
-      }
-      public static boolean czyZawieraElement(int[] tablica, int liczba) {
-        for (int i = 0; i < tablica.length; i++) {
-          if (tablica[i] == liczba) {
-            return true;
-          }
-        }
-        return false;
-      }
-      public static void czyZawieraElement_pustaTablica_zwrociFalse() {
-        // given
-        int[] pustaTablica = {};
-        int liczba = 5;
-        // when
-        boolean czyZawiera = czyZawieraElement(pustaTablica, liczba);
-        // then
-        if (czyZawiera) {
-          System.out.println(
-              "Blad! Pusta tablica nie powinna nic zawierac."
-          );
-        }
-      }
-      public static void czyZawieraElement_brakSzukanegoElementu_zwrociFalse() {
-        // given
-        int[] tablica = {-20, 100, 500};
-        int liczba = 128;
-        // when
-        boolean czyZawiera = czyZawieraElement(tablica, liczba);
-        // then
-        if (czyZawiera) {
-          System.out.println(
-              "Blad! Element 128 nie powinien byc znaleziony."
-          );
-        }
-      }
-      public static void czyZawieraElement_zawieraSukanyElement_zwrociTrue() {
-        // given
-        int[] tablica = {2, 4, 8, 16, 32, 64, 128, 256};
-        int liczba = 128;
-        // when
-        boolean czyZawiera = czyZawieraElement(tablica, liczba);
-        // then
-        if (!czyZawiera) {
-          System.out.println(
-              "Blad! Element 128 powinien byc znaleziony."
-          );
-        }
-      }
-      public static void czyZawieraElement_zawieraSukanyElementNaPoczatku_zwrociTrue() {
-        // given
-        int[] tablica = {100, 200, 300};
-        int liczba = 100;
-        // when
-        boolean czyZawiera = czyZawieraElement(tablica, liczba);
-        // then
-        if (!czyZawiera) {
-          System.out.println(
-              "Blad! Element 100 powinien byc znaleziony."
-          );
-        }
-      }
-      public static void czyZawieraElement_zawieraSukanyElementNaKoncu_zwrociTrue() {
-        // given
-        int[] tablica = {100, 200, 300};
-        int liczba = 300;
-        // when
-        boolean czyZawiera = czyZawieraElement(tablica, liczba);
-        // then
-        if (!czyZawiera) {
-          System.out.println(
-              "Blad! Element 300 powinien byc znaleziony."
-          );
-        }
+```java
+public class TestowanieCzyElementWTablicy {
+  public static void main(String[] args) {
+    czyZawieraElement_pustaTablica_zwrociFalse();
+    czyZawieraElement_brakSzukanegoElementu_zwrociFalse();
+    czyZawieraElement_zawieraSukanyElement_zwrociTrue();
+    czyZawieraElement_zawieraSukanyElementNaPoczatku_zwrociTrue();
+    czyZawieraElement_zawieraSukanyElementNaKoncu_zwrociTrue();
+  }
+  public static boolean czyZawieraElement(int[] tablica, int liczba) {
+    for (int i = 0; i < tablica.length; i++) {
+      if (tablica[i] == liczba) {
+        return true;
       }
     }
+    return false;
+  }
+  public static void czyZawieraElement_pustaTablica_zwrociFalse() {
+    // given
+    int[] pustaTablica = {};
+    int liczba = 5;
+    // when
+    boolean czyZawiera = czyZawieraElement(pustaTablica, liczba);
+    // then
+    if (czyZawiera) {
+      System.out.println(
+          "Blad! Pusta tablica nie powinna nic zawierac."
+      );
+    }
+  }
+  public static void czyZawieraElement_brakSzukanegoElementu_zwrociFalse() {
+    // given
+    int[] tablica = {-20, 100, 500};
+    int liczba = 128;
+    // when
+    boolean czyZawiera = czyZawieraElement(tablica, liczba);
+    // then
+    if (czyZawiera) {
+      System.out.println(
+          "Blad! Element 128 nie powinien byc znaleziony."
+      );
+    }
+  }
+  public static void czyZawieraElement_zawieraSukanyElement_zwrociTrue() {
+    // given
+    int[] tablica = {2, 4, 8, 16, 32, 64, 128, 256};
+    int liczba = 128;
+    // when
+    boolean czyZawiera = czyZawieraElement(tablica, liczba);
+    // then
+    if (!czyZawiera) {
+      System.out.println(
+          "Blad! Element 128 powinien byc znaleziony."
+      );
+    }
+  }
+  public static void czyZawieraElement_zawieraSukanyElementNaPoczatku_zwrociTrue() {
+    // given
+    int[] tablica = {100, 200, 300};
+    int liczba = 100;
+    // when
+    boolean czyZawiera = czyZawieraElement(tablica, liczba);
+    // then
+    if (!czyZawiera) {
+      System.out.println(
+          "Blad! Element 100 powinien byc znaleziony."
+      );
+    }
+  }
+  public static void czyZawieraElement_zawieraSukanyElementNaKoncu_zwrociTrue() {
+    // given
+    int[] tablica = {100, 200, 300};
+    int liczba = 300;
+    // when
+    boolean czyZawiera = czyZawieraElement(tablica, liczba);
+    // then
+    if (!czyZawiera) {
+      System.out.println(
+          "Blad! Element 300 powinien byc znaleziony."
+      );
+    }
+  }
+}
+```
 
 Testy zapisaliśmy zgodnie z notacją given .. when .. then – najpierw przygotowujemy dane, następnie wywołujemy testowaną metodą i zapisujemy jej wynik, a na końcu sprawdzamy wynik.
 
 Powyższe testy są proste – mogłyby również być zapisane w bardziej zwięzły sposób, na przykład:
 
-    public static void czyZawieraElement_zawieraSukanyElementNaKoncu_zwrociTrue() {
-      if (!czyZawieraElement(new int[] {100, 200, 300}, 300)) {
-        System.out.println(
-            "Blad! Element 300 powinien byc znaleziony."
-        );
-      }
-    }
+```java
+public static void czyZawieraElement_zawieraSukanyElementNaKoncu_zwrociTrue() {
+  if (!czyZawieraElement(new int[] {100, 200, 300}, 300)) {
+    System.out.println(
+        "Blad! Element 300 powinien byc znaleziony."
+    );
+  }
+}
+```
 
 Powyższy przykład pomija sekcje "given", "when" oraz "then" i znacząco skraca test – jest on na tyle prosty, że taka postać mogłaby być preferowana, ale w ramach ćwiczenia i przykładu użyta została konwencja given .. when .. then.
 Pamiętajmy! Testy powinny być czytelne, ale krótsze testy to mniej kodu do zrozumienia i utrzymania. Należy zawsze zastanowić się czy napisany przez nas kod testu zyskałby na rozbiciu go na sekcje given .. when .. then, czy może lepiej byłoby napisać krótki i prosty test bez używania tej konwencji.
@@ -579,60 +609,243 @@ Testy kodu produkcyjnego piszemy... przed napisaniem kodu produkcyjnego! Najpier
 Więcej informacji o TDD można znaleźć w internecie.
 
 
-    Testy mają na celu sprawdzenie, czy nasz kod działa zgodnie z założeniami.
-    Testy jednostkowe testują najmniejsze jednostki naszych programów – metody.
-    Testy jednostkowe to także metody – są to metody, które uruchamiają metodę, którą testują, z różnymi parametrami i sprawdzają, czy wynik działania testowanej metody jest taki, jak zakładaliśmy.
-    Musimy tworzyć nasze metody w taki sposób, by były one testowalne. Oznacza to, że nasze metody:
-        powinny być krótkie (kilka do kilkunastu linii kodu) – im mniej metoda robi, tym łatwiej ją przetestować, ponieważ potrzeba mniejszej liczby przypadków testowych,
-        powinny robić jedną, ustaloną rzecz – wtedy przypadki testowe będą łatwiejsze do przygotowania,
-        nie powinny oczekiwać na żadne akcje użytkownika – ponieważ wtedy wykonanie testów będzie za każdym razem oczekiwało działań od użytkownika.
-    Testy jednostkowe są ważne, ponieważ:
-        pozwalają nam na wyizolowanie i przetestowanie najmniejszych części naszego programu,
-        wymuszają styl tworzenia kodu, który jest czytelniejszy i łatwiejszy w utrzymaniu (ponieważ metody są krótsze, a co za tym idzie, łatwiej zrozumieć, co się w nich dzieje),
-        pomagają nam dostarczać działający kod,
-        posiadanie zestawu testów pozwala na wprowadzanie zmian do kodu bez obawy, że coś zepsujemy – po wprowadzeniu zmiany możemy uruchomić testy i upewnić się, że przechodzą one bez błędów
-    Testy testują kod produkcyjny – kod produkcyjny testuje testy.
-    O testy należy dbać niemniej, niż o kod produkcyjny.
-    Dobre testy jednostkowe:
-        sprawdzają wszystkie możliwe ścieżki wykonania metody,
-        są krótkie,
-        są czytelne i schludnie napisane,
-        są szybkie.
-    Różne przypadki testowe powinny być obsługiwane w osobnych metodach testujących.
-    Testy powinny informować jedynie o błędnych przypadkach, tzn. takich, gdzie zakładana wartość była inna, niż faktyczny rezultat wykonania testowanej metody.
-    Powinniśmy przygotowywać wiele przypadków testowych, by mieć pewność, że nasza metoda będzie działała zgodnie z oczekiwaniami niezależnie od danych wejściowych.
-    Nie powinniśmy duplikować przypadków testowych – każdy test powinien testować pewien określony przypadek. Dla przykładu – nie ma sensu testować, czy metoda podnosząca liczbę do kwadratu zwróci poprawną wartość dla liczb 1, 2, 3 itd. – wystarczy test dla liczby np. 5.
-    Istnieje wiele konwencji nazewniczych testów – jedna z nich zakłada, że najpierw podajemy nazwę testowanej metody, następnie dane wejściowe, a na końcu opisujemy spodziewany wynik:
-        nazwaTestowanejMetody_daneWejściowe_spodziewanyWynik
-        na przykład:
-        doKwadratu_wartoscDodatnia_wartoscPodniesionaDoKwadratu
-    Typem zwracanym metod testowych powinien być void.
-    Podczas pisania testów często używa się tzw. asercji. Są to metody, które sprawdzają pewien warunek, na przykład czy dwie liczby są sobie równe. Jeżeli nie, informują o błędzie, a w przeciwnym razie, gdy warunek jest spełniony, nie wykonują żadnych akcji. Przykład:
-        public static void assertEquals(int expected, int actual) {
-          if (expected != actual) {
-            System.out.println("Spodziewano sie liczby " + actual +
-              ", ale otrzymano: " + expected);
-          }
-        }
-    Given .. when .. then to konwencja definiująca, jak testy jednostkowe powinny być ustrukturyzowane. Najpierw przygotowujemy dane wejściowe dla testu (given), następnie wywołujemy testowaną metodę z użyciem przygotowanych danych (when), a na końcu sprawdzamy wynik (then):
-        dla takich a takich danych (given),
-        gdy wykonam taką metodę (when),
-        powinienem otrzymać taki a taki rezultat (then).
+```java
+Testy mają na celu sprawdzenie, czy nasz kod działa zgodnie z założeniami.
+Testy jednostkowe testują najmniejsze jednostki naszych programów – metody.
+Testy jednostkowe to także metody – są to metody, które uruchamiają metodę, którą testują, z różnymi parametrami i sprawdzają, czy wynik działania testowanej metody jest taki, jak zakładaliśmy.
+Musimy tworzyć nasze metody w taki sposób, by były one testowalne. Oznacza to, że nasze metody:
+    powinny być krótkie (kilka do kilkunastu linii kodu) – im mniej metoda robi, tym łatwiej ją przetestować, ponieważ potrzeba mniejszej liczby przypadków testowych,
+    powinny robić jedną, ustaloną rzecz – wtedy przypadki testowe będą łatwiejsze do przygotowania,
+    nie powinny oczekiwać na żadne akcje użytkownika – ponieważ wtedy wykonanie testów będzie za każdym razem oczekiwało działań od użytkownika.
+Testy jednostkowe są ważne, ponieważ:
+    pozwalają nam na wyizolowanie i przetestowanie najmniejszych części naszego programu,
+    wymuszają styl tworzenia kodu, który jest czytelniejszy i łatwiejszy w utrzymaniu (ponieważ metody są krótsze, a co za tym idzie, łatwiej zrozumieć, co się w nich dzieje),
+    pomagają nam dostarczać działający kod,
+    posiadanie zestawu testów pozwala na wprowadzanie zmian do kodu bez obawy, że coś zepsujemy – po wprowadzeniu zmiany możemy uruchomić testy i upewnić się, że przechodzą one bez błędów
+Testy testują kod produkcyjny – kod produkcyjny testuje testy.
+O testy należy dbać niemniej, niż o kod produkcyjny.
+Dobre testy jednostkowe:
+    sprawdzają wszystkie możliwe ścieżki wykonania metody,
+    są krótkie,
+    są czytelne i schludnie napisane,
+    są szybkie.
+Różne przypadki testowe powinny być obsługiwane w osobnych metodach testujących.
+Testy powinny informować jedynie o błędnych przypadkach, tzn. takich, gdzie zakładana wartość była inna, niż faktyczny rezultat wykonania testowanej metody.
+Powinniśmy przygotowywać wiele przypadków testowych, by mieć pewność, że nasza metoda będzie działała zgodnie z oczekiwaniami niezależnie od danych wejściowych.
+Nie powinniśmy duplikować przypadków testowych – każdy test powinien testować pewien określony przypadek. Dla przykładu – nie ma sensu testować, czy metoda podnosząca liczbę do kwadratu zwróci poprawną wartość dla liczb 1, 2, 3 itd. – wystarczy test dla liczby np. 5.
+Istnieje wiele konwencji nazewniczych testów – jedna z nich zakłada, że najpierw podajemy nazwę testowanej metody, następnie dane wejściowe, a na końcu opisujemy spodziewany wynik:
+    nazwaTestowanejMetody_daneWejściowe_spodziewanyWynik
+    na przykład:
+    doKwadratu_wartoscDodatnia_wartoscPodniesionaDoKwadratu
+Typem zwracanym metod testowych powinien być void.
+Podczas pisania testów często używa się tzw. asercji. Są to metody, które sprawdzają pewien warunek, na przykład czy dwie liczby są sobie równe. Jeżeli nie, informują o błędzie, a w przeciwnym razie, gdy warunek jest spełniony, nie wykonują żadnych akcji. Przykład:
+    public static void assertEquals(int expected, int actual) {
+      if (expected != actual) {
+        System.out.println("Spodziewano sie liczby " + actual +
+          ", ale otrzymano: " + expected);
+      }
+    }
+Given .. when .. then to konwencja definiująca, jak testy jednostkowe powinny być ustrukturyzowane. Najpierw przygotowujemy dane wejściowe dla testu (given), następnie wywołujemy testowaną metodę z użyciem przygotowanych danych (when), a na końcu sprawdzamy wynik (then):
+    dla takich a takich danych (given),
+    gdy wykonam taką metodę (when),
+    powinienem otrzymać taki a taki rezultat (then).
+```
 
 Przykład testu o strukturze given .. when .. then:
 
-    public static void czyZawieraElement_brakSzukanegoElementu_zwrociFalse() {
-      // given
-      int[] tablica = {-20, 100, 500};
-      int liczba = 128;
-      // when
-      boolean czyZawiera = czyZawieraElement(tablica, liczba);
-      // then
-      if (czyZawiera) {
-        System.out.println("Blad! Element 128 nie powinien byc znaleziony.");
-      }
+```java
+public static void czyZawieraElement_brakSzukanegoElementu_zwrociFalse() {
+  // given
+  int[] tablica = {-20, 100, 500};
+  int liczba = 128;
+  // when
+  boolean czyZawiera = czyZawieraElement(tablica, liczba);
+  // then
+  if (czyZawiera) {
+    System.out.println("Blad! Element 128 nie powinien byc znaleziony.");
+  }
+}
+
+TDD, czyli Test Driven Development, to metodologia tworzenia oprogramowania, w której najpierw zaczynamy tworzenie kodu od napisania testu, a dopiero potem piszemy kod, które ten test ma spełnić. Działamy w ten sposób aż do momentu, aż nie uznamy kodu produkcyjnego za gotowy.
+```
+
+---
+
+## Uzupełnienia
+
+### 5. JUnit 5 — profesjonalne testy jednostkowe
+
+Ręczne testy w metodzie `main` dobrze pokazują ideę, ale w praktyce używa się biblioteki **JUnit 5 (Jupiter)**. Zapewnia ona automatyczne wykrywanie i uruchamianie testów, czytelne raporty oraz bogaty zestaw asercji. IntelliJ IDEA uruchamia testy JUnit przyciskiem ▶ obok metody lub klasy testowej.
+
+#### Dodanie zależności
+
+Maven (`pom.xml`):
+
+```xml
+<dependency>
+    <groupId>org.junit.jupiter</groupId>
+    <artifactId>junit-jupiter</artifactId>
+    <version>5.11.3</version>
+    <scope>test</scope>
+</dependency>
+```
+
+Gradle (`build.gradle.kts`):
+
+```kotlin
+dependencies {
+    testImplementation("org.junit.jupiter:junit-jupiter:5.11.3")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+}
+tasks.test { useJUnitPlatform() }
+```
+
+Kod produkcyjny umieszczamy w `src/main/java`, a testy w `src/test/java` (w tym samym pakiecie).
+
+#### Pierwsza klasa testowa
+
+```java
+public class Kalkulator {
+    public int dodaj(int a, int b) { return a + b; }
+    public int podziel(int a, int b) {
+        if (b == 0) throw new IllegalArgumentException("Dzielenie przez zero");
+        return a / b;
+    }
+}
+```
+
+```java
+import org.junit.jupiter.api.*;
+import static org.junit.jupiter.api.Assertions.*;
+
+class KalkulatorTest {
+
+    private Kalkulator kalkulator;
+
+    @BeforeEach
+    void setUp() {
+        kalkulator = new Kalkulator();          // świeży obiekt przed każdym testem
     }
 
-    TDD, czyli Test Driven Development, to metodologia tworzenia oprogramowania, w której najpierw zaczynamy tworzenie kodu od napisania testu, a dopiero potem piszemy kod, które ten test ma spełnić. Działamy w ten sposób aż do momentu, aż nie uznamy kodu produkcyjnego za gotowy.
+    @Test
+    @DisplayName("Dodawanie dwóch liczb dodatnich")
+    void dodaj_dwieLiczbyDodatnie_zwracaSume() {
+        // given
+        int a = 2, b = 3;
+        // when
+        int wynik = kalkulator.dodaj(a, b);
+        // then
+        assertEquals(5, wynik);
+    }
 
+    @Test
+    void podziel_przezZero_rzucaWyjatek() {
+        IllegalArgumentException e = assertThrows(IllegalArgumentException.class,
+                () -> kalkulator.podziel(10, 0));
+        assertEquals("Dzielenie przez zero", e.getMessage());
+    }
+}
+```
 
+#### Najważniejsze adnotacje
+
+| Adnotacja | Znaczenie |
+|---|---|
+| `@Test` | metoda testowa |
+| `@DisplayName("...")` | czytelna nazwa testu w raporcie |
+| `@BeforeEach` / `@AfterEach` | wykonywane przed/po **każdym** teście |
+| `@BeforeAll` / `@AfterAll` | wykonywane raz przed/po wszystkich testach (metoda `static`) |
+| `@Disabled("powód")` | tymczasowo wyłącza test |
+| `@ParameterizedTest` | test uruchamiany wielokrotnie z różnymi danymi |
+| `@ValueSource`, `@CsvSource`, `@MethodSource` | źródła danych testu parametryzowanego |
+| `@Nested` | grupowanie testów w klasie wewnętrznej |
+
+#### Najważniejsze asercje (`org.junit.jupiter.api.Assertions`)
+
+| Asercja | Sprawdza |
+|---|---|
+| `assertEquals(oczekiwane, aktualne)` | równość (dla `double`: `assertEquals(1.0, x, 0.001)`) |
+| `assertNotEquals(a, b)` | różność |
+| `assertTrue(warunek)` / `assertFalse(warunek)` | wartość logiczną |
+| `assertNull(x)` / `assertNotNull(x)` | `null` |
+| `assertSame(a, b)` | czy to ta sama referencja |
+| `assertArrayEquals(t1, t2)` | zawartość tablic |
+| `assertThrows(Typ.class, () -> ...)` | rzucenie wyjątku |
+| `assertAll(() -> ..., () -> ...)` | wiele asercji naraz (raportuje wszystkie błędy) |
+
+#### Testy parametryzowane
+
+Wymagają artefaktu `junit-jupiter-params` (jest zawarty w `junit-jupiter`).
+
+```java
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.ValueSource;
+
+class DoKwadratuTest {
+
+    @ParameterizedTest
+    @CsvSource({ "0, 0", "2, 4", "-3, 9", "10, 100" })
+    void doKwadratu_rozneWartosci(int x, int oczekiwane) {
+        assertEquals(oczekiwane, TestowanieDoKwadratu.doKwadratu(x));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = { "", " ", "bez-malpy.pl" })
+    void niepoprawnyEmail_jestOdrzucany(String email) {
+        assertFalse(UserValidator.isValidEmail(email));
+    }
+}
+```
+
+### 6. TDD — Test-Driven Development
+
+W podejściu TDD test piszemy **przed** kodem produkcyjnym, w krótkim cyklu:
+
+```mermaid
+flowchart LR
+    R["🔴 RED<br/>napisz test, który nie przechodzi"] --> G["🟢 GREEN<br/>napisz minimalny kod, by test przeszedł"]
+    G --> F["🔵 REFACTOR<br/>popraw kod, testy nadal zielone"]
+    F --> R
+```
+
+Zalety: kod jest od początku testowalny, testy dokumentują wymagania, refaktoryzacja jest bezpieczna.
+
+### 7. Atrapy obiektów (mocki) — wzmianka
+
+Gdy testowana klasa zależy od bazy danych, sieci czy poczty, w teście podstawiamy **atrapę** (mock). Jest to możliwe dzięki zasadzie odwrócenia zależności (DIP, wykład 13): klasa zależy od interfejsu, a nie od konkretnej implementacji. Popularna biblioteka to **Mockito**:
+
+```java
+@Test
+void rejestracja_wysylaPowitalnegoMaila() {
+    EmailSender sender = Mockito.mock(EmailSender.class);
+    UserService service = new UserService(sender);   // wstrzyknięcie przez konstruktor
+
+    service.zarejestruj("ala@uczelnia.pl");
+
+    Mockito.verify(sender).wyslij("ala@uczelnia.pl", "Witaj!");
+}
+```
+
+---
+
+## Podsumowanie
+
+| Pojęcie | Znaczenie |
+|---|---|
+| test jednostkowy | sprawdza pojedynczą metodę/klasę |
+| given-when-then | struktura testu |
+| asercja | porównanie wyniku z oczekiwaniem |
+| JUnit 5 | biblioteka do testów (`@Test`, `assertEquals`) |
+| TDD | cykl red → green → refactor |
+
+## Pytania kontrolne
+
+1. Co to jest test jednostkowy?
+2. Do czego służy `@BeforeEach`?
+3. Jak przetestować, że metoda rzuca wyjątek?
+4. Opisz cykl TDD.
+
+## Laboratorium
+
+Zadania praktyczne do tego wykładu: [Laboratorium 12](../labs-OOP-in-Java/12-testowanie-kodu.md)
