@@ -675,7 +675,7 @@ public class Pizza {
 3. Zbuduj dwa pakiety: `shop.core` i `shop.ui`. Sprawdź, które elementy są widoczne przy użyciu `public`, `protected` i modyfikatora domyślnego.
 4. Przygotuj klasę bazową `Animal` i klasę potomną `Dog`, a następnie pokaż praktyczny przypadek użycia `protected`.
 5. Wybierz jedną istniejącą klasę z poprzednich laboratoriów i zrefaktoryzuj ją tak, by wszystkie pola były enkapsulowane.
-6. Dopisz 4-5 zdań: jakie problemy może powodować pozostawienie pól jako `public` w większym projekcie.
+6. Dopisz 2-4 zdania: jakie problemy może powodować pozostawienie pól jako `public` w większym projekcie.
 
 ### Szczegółowa lista kontrolna (checklist)
 
@@ -715,7 +715,7 @@ Poniższa lista kontrolna pomaga zweryfikować, czy każde zadanie zostało wyko
 - [ ] Kod korzystający z klasy został zaktualizowany i nadal się kompiluje oraz działa poprawnie.
 
 #### Zadanie 6 — Problemy z polami `public`
-- [ ] Tekst zawiera 4-5 pełnych zdań.
+- [ ] Tekst zawiera 2-4 pełne zdania na wskazany temat.
 - [ ] Wymieniono co najmniej dwa konkretne problemy (np. brak walidacji, niespójny stan, trudność zmiany implementacji).
 - [ ] Odwołano się do pojęcia enkapsulacji.
 
