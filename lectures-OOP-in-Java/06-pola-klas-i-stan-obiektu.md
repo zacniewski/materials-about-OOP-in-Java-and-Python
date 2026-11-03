@@ -7,6 +7,7 @@
 - [Pola klas a zmienne definiowane w metodach](#pola-klas-a-zmienne-definiowane-w-metodach)
 - [Gettery i settery oraz enkapsulacja](#gettery-i-settery-oraz-enkapsulacja)
 - [Konwencje dotyczące pisania setterów i getterów](#konwencje-dotyczące-pisania-setterów-i-getterów)
+- [Modyfikator final](#modyfikator-final)
 - [Podsumowanie](#podsumowanie)
 - [Uzupełnienia](#uzupełnienia)
 - [Podsumowanie](#podsumowanie)
@@ -770,6 +771,133 @@ Te zamienniki to `has`, `should`, oraz `can`, na przykład, dla pola boolean `ac
 
 Od tej pory powinniśmy zawsze pisać gettery i settery w naszych klasach zgodnie z powyższą konwencją.
 
+## Modyfikator `final`
+
+Słowo kluczowe `final` to kolejny modyfikator, który możemy zastosować w Javie – w przeciwieństwie do modyfikatorów dostępu (`public`, `private`), `final` nie decyduje o widoczności, lecz o tym, że coś (zmienna, metoda lub klasa) nie może zostać zmienione po raz drugi. Modyfikatora `final` możemy użyć w trzech różnych kontekstach: dla zmiennej (w tym pola klasy), dla metody oraz dla całej klasy – w każdym z tych przypadków `final` oznacza coś nieco innego.
+
+### `final` dla zmiennej (i pola klasy)
+
+Zmienna (lokalna, parametr metody lub pole klasy) oznaczona jako `final` może zostać zainicjalizowana wartością tylko raz – próba jej ponownego przypisania kończy się błędem kompilacji.
+
+Zacznijmy od zmiennej lokalnej:
+Nazwa pliku: StalaLokalna.java
+```java
+    public class StalaLokalna {
+      public static void main(String[] args) {
+        final double VAT = 0.23; // 1
+        System.out.println("Stawka VAT: " + VAT);
+        VAT = 0.08; // 2 - blad kompilacji!
+      }
+    }
+```
+Zmienną `VAT` deklarujemy jako `final` i od razu ją inicjalizujemy (1). Próba ponownego przypisania jej innej wartości (2) kończy się błędem kompilacji:
+```sh
+StalaLokalna.java:4: error: cannot assign a value to final variable VAT
+    VAT = 0.08;
+    ^
+```
+
+Pola klas oznaczane jako `final` zachowują się podobnie – muszą zostać zainicjalizowane dokładnie raz: albo od razu przy deklaracji, albo w konstruktorze. Jeżeli pole `final` nie zostanie zainicjalizowane w żaden z tych sposobów, kompilator zgłosi błąd:
+Nazwa pliku: Obywatel.java
+```java
+    public class Obywatel {
+      private final String pesel; // 1
+      private String imie;
+
+      public Obywatel(String pesel, String imie) {
+        this.pesel = pesel; // 2
+        this.imie = imie;
+      }
+
+      public void zmienPesel(String nowyPesel) {
+        this.pesel = nowyPesel; // 3 - blad kompilacji!
+      }
+
+      public String getPesel() {
+        return pesel;
+      }
+    }
+```
+Pole `pesel` deklarujemy jako `final` (1) i nadajemy mu wartość w konstruktorze (2) – jest to jedyne miejsce, w którym możemy to zrobić. Próba zmiany wartości tego pola w dowolnej innej metodzie, na przykład w `zmienPesel` (3), skończy się błędem kompilacji:
+```sh
+Obywatel.java:11: error: cannot assign a value to final variable pesel
+    this.pesel = nowyPesel;
+    ^
+```
+
+Pola `final` są bardzo przydatne przy tworzeniu obiektów niezmiennych (ang. *immutable*) – takich, których stanu nie da się zmienić po utworzeniu. Dzięki temu takie obiekty są bezpieczniejsze w użyciu, np. w programach wielowątkowych, oraz łatwiejsze do analizy – wiemy, że wartość pola `final` będzie zawsze taka sama przez cały czas życia obiektu.
+
+Dla parametrów metod `final` oznacza, że wewnątrz metody nie będziemy mogli przypisać parametrowi nowej wartości:
+```java
+    public void ustawCene(final double nowaCena) {
+      // nowaCena = nowaCena * 1.23; // blad kompilacji!
+      cena = nowaCena;
+    }
+```
+
+### `final` dla metody
+
+Metodę możemy oznaczyć jako `final`, co oznacza, że klasy dziedziczące po klasie, w której zdefiniowano taką metodę, nie będą mogły jej nadpisać (nie będą mogły zastosować dla niej mechanizmu zwanego nadpisywaniem metod, ang. *overriding*, który poznamy w rozdziale o dziedziczeniu).
+
+Nazwa pliku: Pojazd.java
+```java
+    public class Pojazd {
+      private int predkosc;
+
+      public final void pokazPredkosc() { // 1
+        System.out.println("Predkosc: " + predkosc + " km/h");
+      }
+    }
+```
+```java
+    public class Samochod extends Pojazd {
+      @Override
+      public void pokazPredkosc() { // 2 - blad kompilacji!
+        System.out.println("Samochod jedzie");
+      }
+    }
+```
+Metodę `pokazPredkosc` w klasie `Pojazd` oznaczyliśmy jako `final` (1) – uniemożliwia to klasie `Samochod`, dziedziczącej po `Pojazd`, nadpisanie tej metody (2):
+```sh
+Samochod.java:3: error: pokazPredkosc() in Samochod cannot override pokazPredkosc() in Pojazd
+  public void pokazPredkosc() {
+              ^
+  overridden method is final
+```
+Modyfikatora `final` dla metod używamy wtedy, gdy chcemy mieć pewność, że sposób działania danej metody nie zostanie zmieniony przez klasy potomne – np. gdy metoda realizuje istotny z punktu widzenia bezpieczeństwa lub poprawności działania algorytm, którego nadpisanie mogłoby prowadzić do błędów.
+
+### `final` dla klasy
+
+Klasę możemy oznaczyć jako `final`, co oznacza, że żadna inna klasa nie będzie mogła po niej dziedziczyć (czyli nie da się utworzyć żadnej jej podklasy).
+
+Nazwa pliku: Kolor.java
+```java
+    public final class Kolor { // 1
+      private final int r;
+      private final int g;
+      private final int b;
+
+      public Kolor(int r, int g, int b) {
+        this.r = r;
+        this.g = g;
+        this.b = b;
+      }
+    }
+```
+```java
+    public class KolorRgba extends Kolor { // 2 - blad kompilacji!
+    }
+```
+Klasę `Kolor` oznaczyliśmy jako `final` (1), przez co próba utworzenia klasy `KolorRgba`, która próbuje po niej dziedziczyć (2), kończy się błędem kompilacji:
+```sh
+KolorRgba.java:1: error: cannot inherit from final Kolor
+public class KolorRgba extends Kolor {
+                                ^
+```
+Klasy oznaczamy jako `final`, gdy chcemy mieć pewność, że ich zachowanie nie zostanie zmienione poprzez dziedziczenie – przykładem klasy `final` z biblioteki standardowej Javy jest klasa `String`, po której nie możemy utworzyć własnej podklasy.
+
+> Zapamiętajmy: `final` zastosowany do zmiennej/pola oznacza "nadaj wartość tylko raz", zastosowany do metody oznacza "nie można nadpisać w podklasie", a zastosowany do klasy oznacza "nie można po niej dziedziczyć".
+
 ## Podsumowanie
 ### Pola klas
 
@@ -1011,7 +1139,9 @@ flowchart TB
 |---|---|
 | pole instancyjne | osobne dla każdego obiektu |
 | pole `static` | wspólne dla klasy |
-| pole `final` | przypisywane tylko raz |
+| pole/zmienna `final` | przypisywane tylko raz |
+| metoda `final` | nie można jej nadpisać w podklasie |
+| klasa `final` | nie można po niej dziedziczyć |
 | zmienna lokalna | istnieje w bloku, brak wartości domyślnej |
 | stan obiektu | aktualne wartości pól |
 
@@ -1020,6 +1150,8 @@ flowchart TB
 1. Czym różni się pole statyczne od instancyjnego?
 2. Dlaczego zmienna lokalna nie ma wartości domyślnej?
 3. Kiedy inicjalizowane jest pole `final`?
+4. Co oznacza modyfikator `final` zastosowany do metody?
+5. Co oznacza modyfikator `final` zastosowany do klasy? Podaj przykład klasy `final` z biblioteki standardowej Javy.
 
 ## Laboratorium
 

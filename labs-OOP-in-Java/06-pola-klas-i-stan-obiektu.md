@@ -35,6 +35,32 @@ Jeżeli utworzymy dwa obiekty `Konto`, każdy będzie miał własny `owner` i w�
 - mogą być przypisane tylko raz,
 - pomagają budować obiekty niezmienne i bezpieczniejsze w użyciu.
 
+### Modyfikator `final` - zmienna, metoda, klasa
+
+Modyfikator `final` można zastosować nie tylko do pola klasy, ale także do zmiennej lokalnej, parametru metody, samej metody oraz całej klasy:
+
+| Gdzie użyto `final`? | Co to oznacza? |
+|---|---|
+| zmienna/pole/parametr | wartość można przypisać tylko raz |
+| metoda | metody nie można nadpisać (zmienić jej implementacji) w podklasie |
+| klasa | po klasie nie można dziedziczyć (nie da się utworzyć podklasy) |
+
+```java
+public final class Kolor {           // final klasa - nie da się po niej dziedziczyć
+    private final int r, g, b;        // final pola - przypisywane tylko raz, w konstruktorze
+
+    public Kolor(int r, int g, int b) {
+        this.r = r;
+        this.g = g;
+        this.b = b;
+    }
+
+    public final String opisz() {     // final metoda - nie można jej nadpisać
+        return r + "," + g + "," + b;
+    }
+}
+```
+
 ### Wartości domyślne pól
 Jeśli pole klasy nie zostanie jawnie zainicjalizowane, Java nada mu wartość domyślną:
 
@@ -161,6 +187,44 @@ public class BankFeeCalculator {
 
 Jeśli jedna część programu zmieni `feeRate`, zmiana wpłynie na wszystkich użytkowników klasy. To bywa zaletą albo źródłem błędów - zależnie od projektu.
 
+### Przykład 5 - `final` metoda i `final` klasa
+
+```java
+public class Vehicle {
+    private int speed;
+
+    public final void printSpeed() { // final metoda - nie da się jej nadpisać
+        System.out.println("Speed: " + speed + " km/h");
+    }
+}
+
+// Próba nadpisania metody printSpeed zakończy się błędem kompilacji:
+// class Car extends Vehicle {
+//     @Override
+//     public void printSpeed() { ... } // error: printSpeed() in Car cannot override printSpeed() in Vehicle
+// }
+
+public final class ImmutablePoint { // final klasa - nie da się po niej dziedziczyć
+    private final int x;
+    private final int y;
+
+    public ImmutablePoint(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    @Override
+    public String toString() {
+        return "(" + x + ", " + y + ")";
+    }
+}
+
+// Próba dziedziczenia po ImmutablePoint zakończy się błędem kompilacji:
+// class Point3D extends ImmutablePoint { ... } // error: cannot inherit from final ImmutablePoint
+```
+
+Klasa `Vehicle` udostępnia metodę `printSpeed` oznaczoną jako `final` - żadna klasa dziedzicząca po `Vehicle` nie będzie mogła jej nadpisać. Klasa `ImmutablePoint` jest oznaczona jako `final` w całości - nie da się po niej w ogóle utworzyć podklasy, co dodatkowo gwarantuje, że jej obiekty pozostaną niezmienne.
+
 ## Diagram: obiekty tej samej klasy, różny stan
 
 ```mermaid
@@ -178,6 +242,7 @@ flowchart LR
 4. Napisz klasę `VisitCounter`, która pokazuje różnicę między zmienną lokalną a polem klasy podczas wielokrotnego wywołania metody.
 5. Zaimplementuj klasę `ScoreBoard`, gdzie pola instancyjne opisują wynik jednego meczu, a pole statyczne liczy wszystkie rozegrane mecze.
 6. Przygotuj krótki eksperyment: utwórz kilka obiektów tej samej klasy i pokaż, że każdy ma własny stan, ale współdzieli pola statyczne.
+7. Napisz klasę `ImmutableColor` oznaczoną jako `final`, z polami `final` `r`, `g`, `b` inicjalizowanymi w konstruktorze oraz metodą `final describe()`. Spróbuj (w komentarzu) utworzyć podklasę tej klasy oraz nadpisać metodę `describe` i zapisz, jaki błąd kompilacji otrzymujesz.
 
 ### Szczegółowa lista kontrolna (checklist)
 
@@ -214,6 +279,12 @@ Poniższa lista kontrolna pomaga zweryfikować, czy każde zadanie zostało wyko
 - [ ] Zmiana pola instancyjnego jednego obiektu nie wpływa na pozostałe.
 - [ ] Zmiana pola statycznego jest widoczna we wszystkich obiektach.
 - [ ] Wynik eksperymentu został krótko opisany.
+
+#### Zadanie 7 — Klasa `ImmutableColor` z `final` metodą i `final` klasą
+- [ ] Klasa `ImmutableColor` jest zadeklarowana jako `final`.
+- [ ] Pola `r`, `g`, `b` są `final` i inicjalizowane w konstruktorze.
+- [ ] Metoda `describe()` jest zadeklarowana jako `final`.
+- [ ] W komentarzu umieszczono próbę utworzenia podklasy `ImmutableColor` oraz treść błędu kompilacji.
 
 #### Ogólna weryfikacja końcowa
 - [ ] Cały kod kompiluje się bez błędów i ostrzeżeń.
