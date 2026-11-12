@@ -48,7 +48,7 @@ Konstruktor może wywoływać inny konstruktor tej samej klasy za pomocą `this(
 ### Pola `final` a konstruktor
 Pole `final`, któremu nie nadano wartości przy deklaracji, **musi** zostać zainicjalizowane w każdym konstruktorze (kompilator to sprawdza). Patrz Przykład 8 (`id`) oraz wykład 7, sekcja 4.
 
-### Kolejność inicjalizacji (potrzebne do Zadania 4)
+### Kolejność inicjalizacji
 1. Pola dostają wartości domyślne (`0`, `false`, `null`).
 2. Wykonuje się `super(...)` (konstruktor nadklasy).
 3. Inicjalizatory pól (`int x = 5;`) i bloki `{ ... }` — w kolejności, w jakiej stoją w kodzie.
@@ -668,7 +668,7 @@ public class FabrykaPrzyklad {
 1. Napisz klasę `Student` z trzema konstruktorami: domyślnym, z samym `name` oraz z `name` i `indexNumber`.
 2. Zastosuj przeciążanie konstruktorów w klasie `Rectangle` i użyj `this(...)` do delegowania między konstruktorami.
 3. Utwórz klasę `Car` z walidacją danych wejściowych w konstruktorze (np. rok produkcji i pojemność silnika).
-4. Przygotuj klasę `Configuration` z blokiem inicjalizacyjnym i porównaj jego działanie z inicjalizacją bezpośrednio przy polu.
+4. Utwórz klasę `Product` z polem `private final int id` oraz polami `name` i `price`. Pole `id` ma być nadawane automatycznie w konstruktorze na podstawie statycznego licznika (`1, 2, 3, ...`), a statyczna metoda `getCount()` ma zwracać liczbę utworzonych produktów (por. Przykład 8).
 5. Zaimplementuj konstruktor kopiujący w klasie `AddressBookEntry` i pokaż różnicę między kopią a referencją do tego samego obiektu.
 6. Napisz testowy `main`, który tworzy obiekty wszystkimi konstruktorami i wypisuje ich stan po inicjalizacji.
 
@@ -693,10 +693,13 @@ Poniższa lista kontrolna pomaga zweryfikować, czy każde zadanie zostało wyko
 - [ ] Przy błędnych danych rzucany jest wyjątek (np. `IllegalArgumentException`) z czytelnym komunikatem.
 - [ ] Przetestowano zarówno poprawne, jak i niepoprawne dane.
 
-#### Zadanie 4 — Klasa `Configuration` i blok inicjalizacyjny
-- [ ] Klasa zawiera blok inicjalizacyjny `{ ... }` oraz pole inicjalizowane przy deklaracji.
-- [ ] Komunikaty na konsoli pokazują kolejność: inicjalizacja pól/bloków, potem ciało konstruktora.
-- [ ] Zapisano krótki wniosek dotyczący kolejności inicjalizacji.
+#### Zadanie 4 — Klasa `Product` z polem `final` i statycznym licznikiem
+- [ ] Pole `id` jest zadeklarowane jako `private final int` i przypisywane wyłącznie w konstruktorze.
+- [ ] Klasa ma pole `static` (np. `nextId` lub `count`) wspólne dla wszystkich obiektów.
+- [ ] Kolejno tworzone produkty otrzymują identyfikatory `1, 2, 3, ...`.
+- [ ] Metoda statyczna `getCount()` zwraca poprawną liczbę utworzonych obiektów (wywołana na klasie: `Product.getCount()`).
+- [ ] Klasa nie ma settera dla `id` (próba `this.id = ...` poza konstruktorem nie kompiluje się).
+- [ ] W `main` utworzono co najmniej trzy produkty i wypisano je przez `toString()`.
 
 #### Zadanie 5 — Konstruktor kopiujący w `AddressBookEntry`
 - [ ] Konstruktor przyjmuje obiekt `AddressBookEntry` i kopiuje jego pola.
