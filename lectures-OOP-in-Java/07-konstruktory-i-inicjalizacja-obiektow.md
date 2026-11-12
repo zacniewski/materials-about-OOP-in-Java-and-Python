@@ -805,7 +805,7 @@ public class Rectangle {
 Uwaga: nie można określić typu zwracanego. Modyfikatory dopuszczalne to m.in. `public`, `protected`, pakietowy (brak słowa kluczowego), `private`.
 
 ### 7.4. Konstruktor domyślny (no-arg)
-Jeśli nie zdefiniujesz żadnego konstruktora, kompilator doda publiczny konstruktor bezargumentowy.
+Jeśli nie zdefiniujesz żadnego konstruktora, kompilator doda konstruktor bezargumentowy o takim samym poziomie dostępu jak klasa (dla klasy `public` będzie on `public`).
 
 - Znika on automatycznie, gdy dodasz jakikolwiek własny konstruktor.
 - Jeśli chcesz mieć i no-arg, i parametryczny, zdefiniuj oba.
@@ -815,6 +815,8 @@ public class BankAccount {
     private String owner;
     private double balance;
 
+    // Konstruktor bezargumentowy napisany ręcznie — potrzebny, bo niżej jest konstruktor
+    // parametryczny, więc kompilator nie wygeneruje już konstruktora domyślnego.
     public BankAccount() {
         this.owner = "Unknown";
         this.balance = 0.0;
@@ -836,6 +838,7 @@ public class Course {
     private final int ects;
     private final String[] tags;
 
+    // Krótszy konstruktor deleguje do pełnego, przekazując pustą tablicę tagów
     public Course(String title, int ects) {
         this(title, ects, new String[0]);
     }
@@ -862,11 +865,12 @@ class Derived extends Base {
     private final int level;
 
     public Derived(String id) {
-        this(id, 0);
+        this(id, 0);       // deleguje do konstruktora tej samej klasy (poziom domyślny 0)
     }
 
     public Derived(String id, int level) {
-        super(id);
+        super(id);         // najpierw inicjalizujemy część z klasy Base (pole id)
+                           // (tu nie można już dodać this(...) — tylko jedno z dwóch)
         this.level = level;
     }
 }
@@ -881,6 +885,8 @@ class Derived extends Base {
 ```java
 public class Utility {
     private Utility() { /* zapobieganie instancjonowaniu */ }
+    // Klasa narzędziowa ma tylko metody statyczne (np. Utility.metoda()),
+    // więc tworzenie jej obiektów nie ma sensu — new Utility() się nie skompiluje.
 }
 ```
 
@@ -893,6 +899,8 @@ public class Employee {
     private final double salary;
 
     public Employee(String name, double salary) {
+        // Walidacja PRZED przypisaniem: jeśli dane są błędne, wyjątek przerywa
+        // tworzenie i obiekt w nieprawidłowym stanie w ogóle nie powstanie.
         if (name == null || name.isBlank()) {
             throw new IllegalArgumentException("name must not be blank");
         }
@@ -919,9 +927,13 @@ public class Course {
     public Course(String title, int ects, String[] tags) {
         this.title = title;
         this.ects = ects;
+        // Defensywna kopia: gdybyśmy zapisali this.tags = tags, to zmiana tablicy
+        // przez wywołującego (tags[0] = "...") zmieniłaby też stan naszego obiektu.
+        // final chroni tylko REFERENCJĘ, a nie zawartość tablicy.
         this.tags = tags != null ? Arrays.copyOf(tags, tags.length) : new String[0];
     }
 
+    // Konstruktor kopiujący — tablicę również kopiujemy, aby oryginał i kopia jej nie współdzieliły
     public Course(Course other) {
         if (other == null) {
             throw new IllegalArgumentException("other must not be null");
@@ -937,6 +949,7 @@ public class Course {
 W klasach niemutowalnych pola są `final`, brak setterów, a konstruktor nadaje ostateczne wartości. Unikaj udostępniania wewnętrznych, modyfikowalnych struktur bez kopii.
 
 ```java
+// final przy klasie — nikt nie może jej rozszerzyć i "popsuć" niemutowalności w podklasie
 public final class ImmutablePoint {
     private final int x;
     private final int y;
@@ -946,6 +959,7 @@ public final class ImmutablePoint {
         this.y = y;
     }
 
+    // Tylko gettery — brak setterów, stan ustala wyłącznie konstruktor
     public int getX() { return x; }
     public int getY() { return y; }
 }
@@ -960,8 +974,10 @@ Czasem lepiej użyć statycznej metody wytwórczej:
 ```java
 public class Color {
     private final int r, g, b;
+    // Prywatny konstruktor — z zewnątrz obiekty tworzymy tylko przez metodę ofRgb
     private Color(int r, int g, int b) { this.r = r; this.g = g; this.b = b; }
 
+    // Użycie: Color c = Color.ofRgb(255, 0, 0); — nazwa metody mówi, co oznaczają argumenty
     public static Color ofRgb(int r, int g, int b) {
         return new Color(r, g, b);
     }
@@ -981,7 +997,8 @@ class Student extends PersonBase {
     private final String indexNo;
 
     public Student(String name, String indexNo) {
-        super(name);
+        super(name); // obowiązkowe: PersonBase nie ma konstruktora bezargumentowego,
+                     // więc niejawne super() nie skompilowałoby się
         this.indexNo = indexNo;
     }
 }
@@ -992,6 +1009,8 @@ class Student extends PersonBase {
 
 ```java
 public record Point(int x, int y) {
+    // Konstruktor kompaktowy (bez listy parametrów) — zawiera tylko walidację;
+    // przypisania this.x = x; this.y = y; kompilator doda automatycznie na końcu.
     public Point {
         if (x < 0 || y < 0) throw new IllegalArgumentException("coords must be >= 0");
     }
@@ -1026,7 +1045,7 @@ public class Person {
     private int age;
 
     public Person() {
-        this("Unknown", 0);
+        this("Unknown", 0); // wartości domyślne przechodzą przez tę samą walidację
     }
 
     public Person(String name, int age) {
@@ -1046,6 +1065,8 @@ public class Rectangle {
         if (w <= 0 || h <= 0) throw new IllegalArgumentException("dims!");
         this.w = w; this.h = h;
     }
+    // Nie można dodać konstruktora Rectangle(double side) i jednocześnie np. Rectangle(double w)
+    // — metoda wytwórcza z opisową nazwą rozwiązuje ten problem
     public static Rectangle square(double side) { return new Rectangle(side, side); }
 }
 ```
