@@ -38,6 +38,7 @@ package prostyprzyklad;
 public class Osoba {
   public String imie;
   public String nazwisko;
+  @Override
   public String toString() {
     return "Osoba " + imie + " " + nazwisko;
   }
@@ -276,6 +277,7 @@ package prostyprzyklad;
 public class Pracownik extends Osoba {
   public int numerIdentyfikatora;
   
+  @Override
   public String toString() {
     return "Pracownik " + imie + " " + nazwisko +
         ", identyfikator: " + numerIdentyfikatora; 
@@ -294,6 +296,7 @@ package prostyprzyklad;
 public class Osoba {
   public String imie;
   public String nazwisko;
+  @Override
   public String toString() {
     return "Osoba " + imie + " " + nazwisko;
   }
