@@ -488,11 +488,19 @@ class Zwierze {
   public String dzwiek() { return "?"; }
 }
 class Pies extends Zwierze {
-  @Override public String dzwiek() { return "hau"; }
-}
+  @Override  
+  public String dzwiek() { 
+      return "hau"; 
+  }
+}  
+
 class Kot extends Zwierze {
-  @Override public String dzwiek() { return "miau"; }
+  @Override 
+  public String dzwiek() { 
+      return "miau"; 
+  }
 }
+
 class Demo {
   static void wydajDzwiek(Zwierze z) { System.out.println(z.dzwiek()); }
   public static void main(String[] args) {
