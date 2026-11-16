@@ -195,6 +195,69 @@ Exception in thread "main" java.lang.ClassCastException: class prostyprzyklad.Os
 
 Problem występuje, ponieważ próbujemy ustawić pole `numerIdentyfikator` rzutując obiekt `kolejnaOsoba` na typ `Pracownik`, jednak jest to niemożliwe – zmienna `kolejnaOsoba` wskazuje na obiekt typu `Osoba`, a nie `Pracownik`.
 
+#### Upcasting i downcasting – podsumowanie
+
+Opisane powyżej mechanizmy mają swoje nazwy, które warto zapamiętać, ponieważ będziemy się nimi posługiwać w dalszej części kursu: **upcasting** (rzutowanie w górę) oraz **downcasting** (rzutowanie w dół). Obie nazwy odnoszą się do kierunku „poruszania się” po hierarchii dziedziczenia – w górę, czyli w stronę klas bardziej ogólnych (nadrzędnych), albo w dół, czyli w stronę klas bardziej szczegółowych (podrzędnych).
+
+Poniższy diagram pokazuje hierarchię klas `Osoba` i `Pracownik` wraz z kierunkami obu rzutowań:
+
+```
+            ┌───────────┐
+            │   Osoba    │   <-- klasa nadrzędna (bazowa), "bardziej ogólna"
+            └───────────┘
+                  ▲
+                  │ extends
+                  │
+            ┌───────────┐
+            │ Pracownik  │   <-- klasa podrzędna (pochodna), "bardziej szczegółowa"
+            └───────────┘
+
+   upcasting   (Osoba o = pracownik;)      – rzutowanie w górę, zawsze bezpieczne,
+                                              odbywa się niejawnie (bez pisania typu w nawiasie)
+
+   downcasting ((Pracownik) o;)            – rzutowanie w dół, wymaga jawnego zapisu typu
+                                              w nawiasie i może rzucić wyjątek ClassCastException
+```
+
+**Upcasting (rzutowanie w górę)**
+
+Upcasting to potraktowanie obiektu klasy podrzędnej jako obiektu klasy nadrzędnej – czyli „ruch w górę” po hierarchii dziedziczenia, od typu bardziej szczegółowego do typu bardziej ogólnego. Jest to operacja zawsze bezpieczna, ponieważ – jak już wiemy – każdy `Pracownik` to `Osoba` (ale niekoniecznie odwrotnie). Z tego powodu Java wykonuje upcasting **niejawnie** (automatycznie), bez konieczności zapisywania typu docelowego w nawiasie:
+
+```java
+Pracownik pracownik = new Pracownik();
+Osoba osoba = pracownik; // upcasting – niejawny, zawsze bezpieczny
+```
+
+Dokładnie z upcastingiem mieliśmy do czynienia w przykładzie z metodą `wejdzDoBudynku(osoba)` oraz `wejdzDoBudynku(pracownik)` – w drugim wywołaniu obiekt `pracownik` został niejawnie potraktowany jako obiekt typu `Osoba`, ponieważ tego oczekiwał parametr metody.
+
+Warto podkreślić, że upcasting **nie zmienia** samego obiektu w pamięci – obiekt cały czas jest obiektem klasy `Pracownik` (z polem `numerIdentyfikatora`), zmienia się jedynie **typ referencji**, przez który na ten obiekt patrzymy. Dlatego, patrząc przez „zwężoną” referencję typu `Osoba`, nie mamy dostępu do pól i metod, które są specyficzne tylko dla klasy `Pracownik` (np. `numerIdentyfikatora`), mimo że fizycznie wciąż są one częścią obiektu.
+
+**Downcasting (rzutowanie w dół)**
+
+Downcasting to operacja odwrotna – potraktowanie obiektu, do którego odnosimy się przez referencję typu nadrzędnego, jako obiektu typu podrzędnego – czyli „ruch w dół” po hierarchii dziedziczenia. Ponieważ nie każda `Osoba` to `Pracownik`, downcasting jest operacją potencjalnie niebezpieczną, dlatego Java wymaga zapisania go **jawnie**, poprzez podanie docelowego typu w nawiasie przed wyrażeniem:
+
+```java
+Osoba osoba = new Pracownik();        // upcasting (niejawny)
+Pracownik pracownik = (Pracownik) osoba; // downcasting (jawny)
+System.out.println(pracownik.numerIdentyfikatora);
+```
+
+Downcasting jest konieczny wtedy, gdy mamy referencję typu bazowego (np. `Osoba`), ale chcemy skorzystać z pól lub metod zdefiniowanych wyłącznie w klasie pochodnej (np. `numerIdentyfikatora` z klasy `Pracownik`) – tak jak w pokazanym wcześniej przykładzie `((Pracownik) innaOsoba).numerIdentyfikatora = 4321;`.
+
+Jak już zaobserwowaliśmy, downcasting kompiluje się zawsze (kompilator ufa nam na słowo), ale **w trakcie działania programu** Java sprawdza, czy obiekt, na który faktycznie wskazuje rzutowana referencja, naprawdę jest (lub dziedziczy po) obiektem docelowego typu. Jeśli nie – zostanie rzucony wyjątek `ClassCastException`, tak jak w przykładzie z `kolejnaOsoba`, która w rzeczywistości była obiektem typu `Osoba`, a nie `Pracownik`.
+
+Podsumowując różnice między oboma mechanizmami:
+
+| Cecha                         | Upcasting                              | Downcasting                                   |
+|-------------------------------|------------------------------------------|------------------------------------------------|
+| Kierunek                      | klasa podrzędna → klasa nadrzędna         | klasa nadrzędna → klasa podrzędna               |
+| Zapis w kodzie                | niejawny (bez nawiasu z typem)            | jawny (`(TypDocelowy) referencja`)              |
+| Bezpieczeństwo                | zawsze bezpieczny                         | może zakończyć się błędem w trakcie działania   |
+| Możliwy błąd                  | brak                                      | `ClassCastException`, jeśli obiekt nie jest tego typu |
+| Przykład                      | `Osoba o = pracownik;`                    | `Pracownik p = (Pracownik) o;`                  |
+
+> Wskazówka: Jeśli nie masz pewności, czy dany obiekt da się bezpiecznie rzutować (zdowncastować) na wybrany typ, możesz to sprawdzić operatorem `instanceof` przed wykonaniem rzutowania, np. `if (osoba instanceof Pracownik) { ... }`. Operator ten poznamy dokładniej w jednym z kolejnych rozdziałów.
+
 ---
 
 ### 4. Przykład method overriding (nadpisywania metod)
