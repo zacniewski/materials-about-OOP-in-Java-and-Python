@@ -754,7 +754,7 @@ a2.sound(); // Dog.sound()
 ```mermaid
 flowchart LR
     A[Referencja typu Animal] --> B[Obiekt Dog]
-    B --> C[Wywolanie Dog.sound()]
+    B --> C["Wywolanie Dog.sound()"]
 ```
 
 ## Zadania laboratoryjne
