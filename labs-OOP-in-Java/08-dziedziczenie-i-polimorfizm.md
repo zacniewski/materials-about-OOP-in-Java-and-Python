@@ -788,7 +788,8 @@ Poniższa lista kontrolna pomaga zweryfikować, czy każde zadanie zostało wyko
 
 #### Zadanie 4 — Rzutowanie i `instanceof`
 - [ ] Przykład bezpiecznego rzutowania sprawdza typ przez `instanceof` przed rzutowaniem.
-- [ ] Osobny przykład wywołuje `ClassCastException` i jest to zademonstrowane (np. obsłużone w `try-catch`).
+- [ ] Osobny przykład wywołuje `ClassCastException` i jest to zademonstrowane (np. obsłużone w `try-catch`).   
+- [ ] Na zrzucie ekranu proszę pokazać błąd `ClassCastException`, jeszcze przed jego obsłużeniem (np. w try-catch`). 
 - [ ] Wyjaśniono, dlaczego drugi przykład kończy się błędem.
 
 #### Zadanie 5 — Klasa `Contractor` — dziedziczenie czy kompozycja
