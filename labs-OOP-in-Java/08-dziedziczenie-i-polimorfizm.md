@@ -51,6 +51,23 @@ Konstruktory są wywoływane **od góry hierarchii w dół**:
 - **Downcasting** (w dół) — wymaga jawnego rzutowania: `Pies p = (Pies) z;`
 - Przed downcastingiem należy sprawdzić typ za pomocą `instanceof`.
 
+### Operator `instanceof`
+Operator `instanceof` sprawdza w trakcie działania programu, czy dany obiekt jest instancją wskazanej klasy (lub jej podklasy). Służy przede wszystkim do bezpiecznego sprawdzenia typu obiektu **przed** downcastingiem, dzięki czemu unikamy `ClassCastException`.
+
+```java
+Zwierze z = new Pies("Burek");
+
+if (z instanceof Pies) {        // sprawdzenie typu
+    Pies p = (Pies) z;          // bezpieczne rzutowanie
+    p.szczekaj();
+}
+
+// od Javy 16 — pattern matching, skraca powyższy zapis:
+if (z instanceof Pies p) {
+    p.szczekaj();
+}
+```
+
 ### Kompozycja vs dziedziczenie
 - **Dziedziczenie** — relacja „jest" (is-a). Pies JEST zwierzęciem.
 - **Kompozycja** — relacja „ma" (has-a). Samochód MA silnik.
@@ -763,7 +780,7 @@ flowchart LR
 2. Przesłoń metodę `calculateBonus()` w klasach potomnych i porównaj wyniki dla tego samego wynagrodzenia bazowego.
 3. Napisz metodę `printTeam(Employee[] team)`, która demonstruje polimorfizm podczas wywołań metod na typie bazowym.
 4. Dodaj przykład bezpiecznego rzutowania z użyciem `instanceof` i osobno przykład, który prowadzi do `ClassCastException`.
-5. Rozszerz projekt o klasę `Contractor`, a następnie zdecyduj, czy lepsze będzie dziedziczenie czy kompozycja i uzasadnij to w 4-6 zdaniach.
+5. Rozbuduj hierarchię `Employee -> Manager -> Director` o dodatkową klasę `Contractor`, która ma dziedziczyć po `Employee` (a nie np. po `Manager`, bo kontraktor nie jest kierownikiem). Dodaj jej pole i metodę charakterystyczną tylko dla kontraktora (np. `contractEndDate` i metodą `isContractExpiring()`), przesłoń w niej `getDescription()` i `calculateBonus()` tak, by pokazać, że dziedziczy strukturę po `Employee`, ale ma własną logikę. Następnie, w osobnym akapicie, rozważ alternatywę: gdyby `Contractor` zamiast dziedziczyć, *zawierał* obiekt `Employee` jako pole (kompozycja) — zaimplementuj też tę wersję i porównaj obie w 4-6 zdaniach, odwołując się do relacji „jest” (is-a) vs „ma” (has-a) oraz do tego, którą wersję łatwiej rozszerzać.
 6. Narysuj prosty diagram hierarchii klas (tekstowo lub w Mermaid) i zaznacz, które metody są przesłaniane.
 
 ### Szczegółowa lista kontrolna (checklist)
@@ -793,9 +810,12 @@ Poniższa lista kontrolna pomaga zweryfikować, czy każde zadanie zostało wyko
 - [ ] Wyjaśniono, dlaczego drugi przykład kończy się błędem.
 
 #### Zadanie 5 — Klasa `Contractor` — dziedziczenie czy kompozycja
-- [ ] Klasa `Contractor` została zaimplementowana.
-- [ ] Podjęto decyzję: dziedziczenie lub kompozycja.
-- [ ] Uzasadnienie ma 4-6 zdań i odwołuje się do relacji „jest” vs „ma”.
+- [ ] Wersja z dziedziczeniem: `Contractor extends Employee`, z własnym polem (np. `contractEndDate`) i metodą (np. `isContractExpiring()`) niedostępną w innych klasach hierarchii.
+- [ ] W wersji z dziedziczeniem przesłonięto `getDescription()` i `calculateBonus()`, pokazując, że `Contractor` wykorzystuje i rozszerza strukturę odziedziczoną po `Employee`.
+- [ ] Wersja z kompozycją: `Contractor` zawiera pole typu `Employee` zamiast po nim dziedziczyć, a potrzebne dane/zachowania udostępnia przez własne metody (delegację).
+- [ ] Obie wersje zostały zaimplementowane i uruchomione (np. w dwóch osobnych klasach lub pakietach, żeby się nie kolidowały).
+- [ ] Porównanie obu wersji ma 4-6 zdań i odwołuje się do relacji „jest” (is-a) vs „ma” (has-a) oraz do tego, którą wersję łatwiej rozszerzać/utrzymywać.
+- [ ] Podjęto i uzasadniono ostateczną decyzję, która wersja lepiej pasuje do modelowanego problemu.
 
 #### Zadanie 6 — Diagram hierarchii
 - [ ] Diagram (tekstowy lub Mermaid) przedstawia wszystkie klasy i relacje dziedziczenia.
