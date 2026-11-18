@@ -781,7 +781,7 @@ flowchart LR
 3. Napisz metodę `printTeam(Employee[] team)`, która demonstruje polimorfizm podczas wywołań metod na typie bazowym.
 4. Dodaj przykład bezpiecznego rzutowania z użyciem `instanceof` i osobno przykład, który prowadzi do `ClassCastException`.
 5. Rozbuduj hierarchię `Employee -> Manager -> Director` o dodatkową klasę `Contractor`, która ma dziedziczyć po `Employee` (a nie np. po `Manager`, bo kontraktor nie jest kierownikiem). Dodaj jej pole i metodę charakterystyczną tylko dla kontraktora (np. `contractEndDate` i metodą `isContractExpiring()`), przesłoń w niej `getDescription()` i `calculateBonus()` tak, by pokazać, że dziedziczy strukturę po `Employee`, ale ma własną logikę. Następnie, w osobnym akapicie, rozważ alternatywę: gdyby `Contractor` zamiast dziedziczyć, *zawierał* obiekt `Employee` jako pole (kompozycja) — zaimplementuj też tę wersję i porównaj obie w 4-6 zdaniach, odwołując się do relacji „jest” (is-a) vs „ma” (has-a) oraz do tego, którą wersję łatwiej rozszerzać.
-6. Narysuj prosty diagram hierarchii klas (tekstowo lub w Mermaid) i zaznacz, które metody są przesłaniane.
+6. Narysuj prosty diagram hierarchii klas (tekstowo lub w [Mermaid](https://mermaid.ai/open-source/syntax/classDiagram.html)) i zaznacz, które metody są przesłaniane.
 
 ### Szczegółowa lista kontrolna (checklist)
 
@@ -818,7 +818,7 @@ Poniższa lista kontrolna pomaga zweryfikować, czy każde zadanie zostało wyko
 - [ ] Podjęto i uzasadniono ostateczną decyzję, która wersja lepiej pasuje do modelowanego problemu.
 
 #### Zadanie 6 — Diagram hierarchii
-- [ ] Diagram (tekstowy lub Mermaid) przedstawia wszystkie klasy i relacje dziedziczenia.
+- [ ] Diagram (tekstowy lub [Mermaid](https://mermaid.ai/open-source/syntax/classDiagram.html)) przedstawia wszystkie klasy i relacje dziedziczenia.
 - [ ] Zaznaczono metody przesłaniane w każdej klasie.
 - [ ] Diagram jest zgodny z kodem.
 
