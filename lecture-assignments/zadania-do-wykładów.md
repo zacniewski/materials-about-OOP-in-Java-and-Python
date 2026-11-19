@@ -168,7 +168,42 @@ public class UzycieWartosci {
 2. Czym jest konstruktor domyślny i kiedy jest dodawany przez kompilator?
 3. Czy klasa może mieć wiele konstruktorów? Jak działa przeciążanie konstruktorów?
 4. Jakie reguły obowiązują przy `this(...)` i `super(...)`?
-5. Przeanalizuj i odpowiedz: wynik kompilacji / uruchomienia dla przykładów z wykładu o konstruktorach.
+5. Przeanalizuj i odpowiedz: wynik kompilacji / uruchomienia dla przykładów z wykładu o konstruktorach (poniżej).  
+Dla każdego przykładu określ, czy kod się skompiluje; jeśli nie — podaj błąd i jego przyczynę, jeśli tak — co zostanie wypisane. Przykłady:
+
+```java
+class Produkt {
+    private double cena;
+    private String nazwa;
+
+    public Produkt(double cena, String nazwa) {
+        this.cena = cena;
+        this.nazwa = nazwa;
+    }
+}
+
+public class Sklep {
+    public static void main(String[] args) {
+        Produkt p = new Produkt();
+        System.out.println(p);
+    }
+}
+```
+
+```java
+public class Film {
+    private String tytul;
+
+    public Film() {
+        System.out.println("Wywolales konstruktor bezargumentowy!");
+        this("<nienazwany film>");
+    }
+
+    public Film(String tytul) {
+        this.tytul = tytul;
+    }
+}
+```
 
 #### Zadanie nr 8 (dziedziczenie i polimorfizm)
 1. Wyjaśnij pojęcia: klasa bazowa, klasa pochodna, `extends`.
