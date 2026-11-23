@@ -168,7 +168,42 @@ public class Kolo extends Figura {
         return Math.PI * r * r;
     }
 }
+
+public class Prostokat extends Figura {
+    private final double a;
+    private final double b;
+
+    public Prostokat(double a, double b) {
+        super("Prostokąt");
+        this.a = a;
+        this.b = b;
+    }
+
+    @Override
+    public double pole() {
+        return a * b;
+    }
+}
 ```
+
+Użycie – polimorfizm przez referencję typu abstrakcyjnego:
+
+```java
+// Figura f = new Figura("X"); // błąd kompilacji: Figura is abstract; cannot be instantiated
+
+Figura[] figury = { new Kolo(1.0), new Prostokat(2.0, 3.0) };
+for (Figura f : figury) {
+    f.wypiszOpis();                      // metoda odziedziczona z klasy abstrakcyjnej
+    System.out.printf("Pole: %.2f%n", f.pole()); // wywołanie wybierane w czasie działania
+}
+```
+
+Ważne reguły:
+
+- Klasa, która ma choć jedną metodę abstrakcyjną, musi być oznaczona `abstract`. Odwrotnie nie – klasa abstrakcyjna może nie mieć żadnej metody abstrakcyjnej (wtedy `abstract` służy tylko do zablokowania tworzenia obiektów).
+- Podklasa, która nie zaimplementuje wszystkich metod abstrakcyjnych, sama musi być abstrakcyjna.
+- Metoda abstrakcyjna nie może być `private`, `static` ani `final` – te modyfikatory uniemożliwiłyby jej nadpisanie.
+- Klasa abstrakcyjna może implementować interfejs i nie dostarczać części jego metod – obowiązek przechodzi na pierwszą konkretną podklasę (zob. punkt 4.1).
 
 ---
 
@@ -185,6 +220,51 @@ Różnice praktyczne:
 - Stan: interfejsy nie mają stanu obiektu (mogą mieć tylko stałe), klasy abstrakcyjne – tak.
 - Konstruktor: interfejs nie ma konstruktora; klasa abstrakcyjna – tak.
 - Ewolucja API: interfejsy od Javy 8 mają metody `default`, co ułatwia rozwój kontraktów bez łamania kompatybilności.
+
+4.1. Łączenie obu mechanizmów: interfejs + szkieletowa klasa abstrakcyjna
+
+W praktyce (także w bibliotece standardowej: `List` + `AbstractList`, `Map` + `AbstractMap`) często stosuje się oba mechanizmy naraz: interfejs jest kontraktem, a klasa abstrakcyjna – wygodną, częściową implementacją tego kontraktu. Kod kliencki zależy wyłącznie od interfejsu.
+
+```java
+public interface Zwierze {
+    String imie();
+    String dzwiek();
+    void przedstawSie();
+}
+
+// Szkielet: implementuje część kontraktu i przechowuje wspólny stan
+public abstract class AbstrakcyjneZwierze implements Zwierze {
+    private final String imie;
+
+    protected AbstrakcyjneZwierze(String imie) {
+        this.imie = imie;
+    }
+
+    @Override
+    public String imie() { return imie; }
+
+    @Override
+    public void przedstawSie() {
+        System.out.println(imie + " mówi: " + dzwiek());
+    }
+    // dzwiek() pozostaje niezaimplementowana – klasa jest abstrakcyjna, więc wolno
+}
+
+public class Pies extends AbstrakcyjneZwierze {
+    public Pies(String imie) { super(imie); }
+    @Override public String dzwiek() { return "Hau!"; }
+}
+
+// Klasa spoza hierarchii też może spełnić kontrakt – bez dziedziczenia po szkielecie
+public class RobotZwierze implements Zwierze {
+    public String imie() { return "RoboKot"; }
+    public String dzwiek() { return "Bip-miau"; }
+    public void przedstawSie() { System.out.println("[ROBOT] " + dzwiek()); }
+}
+
+List<Zwierze> zoo = List.of(new Pies("Burek"), new RobotZwierze());
+zoo.forEach(Zwierze::przedstawSie);
+```
 
 ---
 
@@ -410,11 +490,11 @@ classDiagram
 
 ---
 
-<!-- Sekcja o lambdach przeniesiona do pliku 09-lambda.md -->
+> Interfejsy z jedną metodą abstrakcyjną (interfejsy funkcyjne) i wyrażenia lambda omówiono w [wykładzie 11](11-wyrazenia-lambda-i-interfejsy-funkcyjne.md).
 
 #### 7. Wielodziedziczenie zachowania przez `default` – konflikt metod
 
-Jeśli klasa implementuje dwa interfejsy zawierające metody `default` o tej samej sygnaturze, powstaje konflikt, który należy rozwiązać, nadpisując metodę i wskazując, którą implementację wybrać (lub zapewniając własną).
+Jeśli klasa implementuje dwa interfejsy zawierające metody `default` o tej samej sygnaturze, powstaje konflikt, który należy rozwiązać, nadpisując metodę i wskazując, którą implementację wybrać (lub zapewniając własną). Bez tego kod się nie skompiluje (`class C inherits unrelated defaults for x() from types A and B`).
 
 ```java
 interface A { default void x() { System.out.println("A"); } }
@@ -426,6 +506,20 @@ class C implements A, B {
         A.super.x(); // lub B.super.x(); albo własna implementacja
     }
 }
+```
+
+Reguły wyboru implementacji (w tej kolejności):
+
+1. Klasa wygrywa – metoda zdefiniowana w klasie (lub odziedziczona z nadklasy) ma pierwszeństwo przed metodą `default` z interfejsu.
+2. Bardziej szczegółowy interfejs wygrywa – jeśli `B extends A` i oba definiują `x()`, używana jest wersja z `B`.
+3. W pozostałych przypadkach (konflikt „równorzędny”) programista musi nadpisać metodę ręcznie.
+
+```java
+class Baza { public void x() { System.out.println("Baza"); } }
+
+class D extends Baza implements A { }  // brak konfliktu
+
+new D().x(); // wypisze "Baza" – reguła 1: klasa wygrywa z metodą default
 ```
 
 ---
@@ -530,9 +624,43 @@ public abstract class RaportGenerator {
 
     protected abstract void przygotujDane();
     protected abstract String zbudujTresc();
-    protected void zapisz(String tresc) {
+    protected void zapisz(String tresc) { // „hak” – można nadpisać, ale nie trzeba
         System.out.println("Zapis: " + tresc);
     }
+}
+
+public class RaportSprzedazy extends RaportGenerator {
+    private int suma;
+
+    @Override
+    protected void przygotujDane() { suma = 120 + 80; }
+
+    @Override
+    protected String zbudujTresc() { return "Sprzedaż łącznie: " + suma; }
+}
+
+RaportGenerator g = new RaportSprzedazy();
+g.generuj(); // Zapis: Sprzedaż łącznie: 200
+```
+
+Metoda `generuj()` jest `final`, więc podklasa nie może zmienić kolejności kroków – może jedynie uzupełnić kroki abstrakcyjne i ewentualnie nadpisać „haki”.
+
+Przykład – Strategia (interfejs jako wymienny algorytm):
+
+```java
+public interface StrategiaSortowania {
+    void sortuj(int[] dane);
+}
+
+public class SortowanieWbudowane implements StrategiaSortowania {
+    public void sortuj(int[] dane) { java.util.Arrays.sort(dane); }
+}
+
+public class Sorter {
+    private StrategiaSortowania strategia;
+    public Sorter(StrategiaSortowania strategia) { this.strategia = strategia; }
+    public void ustawStrategie(StrategiaSortowania s) { this.strategia = s; }
+    public void wykonaj(int[] dane) { strategia.sortuj(dane); }
 }
 ```
 
@@ -545,6 +673,24 @@ public abstract class RaportGenerator {
 - Nie nadużywaj metod `default` – to wygodne narzędzie do ewolucji API, ale nadmiar może zaciemnić kontrakt.
 - W klasach abstrakcyjnych rozważ metody `final` tam, gdzie szkielet algorytmu nie powinien być modyfikowany (Template Method).
 - Uważaj na konflikt `default` z wielu interfejsów – zawsze rozstrzygaj świadomie, często implementując własne zachowanie.
+- Nie wywołuj metod abstrakcyjnych (ani nadpisywalnych) w konstruktorze klasy abstrakcyjnej – wykonają się w podklasie, zanim jej pola zostaną zainicjalizowane:
+
+```java
+abstract class Baza {
+    Baza() { opisz(); }          // pułapka!
+    abstract void opisz();
+}
+
+class Pochodna extends Baza {
+    private String nazwa = "Pochodna"; // przypisanie nastąpi dopiero po konstruktorze Baza
+    void opisz() { System.out.println("Jestem: " + nazwa); }
+}
+
+new Pochodna(); // wypisze "Jestem: null"
+```
+
+- Interfejs „znacznikowy” bez metod (np. `Serializable`) to dziś rzadkość – zwykle lepiej użyć adnotacji lub interfejsu z rzeczywistym kontraktem.
+- Metody statyczne interfejsu nie są dziedziczone: `Eksportowalne.walidujSciezke(...)` zadziała, ale `Raport.walidujSciezke(...)` (klasa implementująca) – już nie.
 
 ---
 
@@ -599,7 +745,39 @@ public class KontoOszczednosciowe extends KontoBankowe {
 }
 ```
 
-<!-- Przykład lambdy przeniesiony do 09-lambda.md -->
+Implementacja interfejsu klasą anonimową (bez tworzenia osobnej, nazwanej klasy):
+
+```java
+Drukowalne d = new Drukowalne() {
+    @Override
+    public void drukuj() {
+        System.out.println("Wydruk z klasy anonimowej");
+    }
+};
+d.drukuj();
+```
+
+Jedna klasa – wiele ról (implementacja kilku interfejsów naraz):
+
+```java
+public class Faktura implements Drukowalne, Eksportowalne, Comparable<Faktura> {
+    private final double kwota;
+
+    public Faktura(double kwota) { this.kwota = kwota; }
+
+    @Override public void drukuj() { System.out.println("Faktura: " + kwota); }
+    @Override public String eksportuj() { return "kwota;" + kwota; }
+    @Override public int compareTo(Faktura inna) { return Double.compare(kwota, inna.kwota); }
+}
+
+Faktura f = new Faktura(250.0);
+Drukowalne jakoDruk = f;      // ten sam obiekt widziany przez różne „role”
+Eksportowalne jakoEksport = f;
+jakoEksport.zapiszDoPliku("faktura.csv"); // metoda default z interfejsu
+
+List<Faktura> faktury = new ArrayList<>(List.of(new Faktura(300), f, new Faktura(100)));
+Collections.sort(faktury);    // działa, bo Faktura spełnia kontrakt Comparable
+```
 
 ---
 
@@ -608,9 +786,12 @@ public class KontoOszczednosciowe extends KontoBankowe {
 1) Czy interfejs może mieć pola inne niż stałe? Dlaczego?  
 2) Czy klasa może dziedziczyć po dwóch klasach jednocześnie?  
 3) Jak rozwiążesz konflikt metody `default` o tej samej sygnaturze z dwóch interfejsów?  
-4) Kiedy preferować klasę abstrakcyjną nad interfejsem?
+4) Kiedy preferować klasę abstrakcyjną nad interfejsem?  
+5) Czy klasa abstrakcyjna musi mieć metodę abstrakcyjną?  
+6) Co się stanie, gdy klasa dziedziczy metodę `x()` z nadklasy i jednocześnie dostaje `default x()` z interfejsu?  
+7) Czy metodę statyczną interfejsu można wywołać przez obiekt klasy implementującej?
 
-Odpowiedzi (skrótowo): 1) Nie – pola w interfejsie są `public static final`. 2) Nie – Java ma pojedyncze dziedziczenie klas. 3) Nadpisując metodę w klasie i wybierając `A.super.m()` lub `B.super.m()` (lub własna implementacja). 4) Gdy potrzebny jest wspólny stan/częściowa implementacja i silniejszy związek w hierarchii.
+Odpowiedzi (skrótowo): 1) Nie – pola w interfejsie są `public static final`. 2) Nie – Java ma pojedyncze dziedziczenie klas. 3) Nadpisując metodę w klasie i wybierając `A.super.m()` lub `B.super.m()` (lub własna implementacja). 4) Gdy potrzebny jest wspólny stan/częściowa implementacja i silniejszy związek w hierarchii. 5) Nie – wystarczy, że chcemy zablokować tworzenie jej instancji. 6) Wygrywa metoda z klasy („klasa wygrywa”). 7) Nie – tylko przez nazwę interfejsu, metody statyczne interfejsów nie są dziedziczone.
 
 ---
 

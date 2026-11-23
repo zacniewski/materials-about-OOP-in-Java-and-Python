@@ -481,8 +481,9 @@ abstract class DaneRaportowe implements Eksportowalny {
         return "tytul," + tytul + "\n" + getDaneCSV();
     }
 
-    // Druga metoda pozostaje abstrakcyjna — podklasy muszą ją zaimplementować
-    // eksportujDoJSON() — nie implementujemy tutaj
+    // Druga metoda interfejsu — eksportujDoJSON() — nie jest tu zaimplementowana.
+    // To dozwolone, bo DaneRaportowe jest klasą abstrakcyjną; obowiązek
+    // implementacji przechodzi na pierwszą konkretną podklasę (RaportFinansowy).
 
     abstract String getDaneCSV();
 }
@@ -766,7 +767,7 @@ public class WalidatorPrzyklad {
 }
 ```
 
-### Przykład 10 — Klasa abstrakcyjna z enum
+### Przykład 10 — Klasa abstrakcyjna z metodą wyliczaną z metod abstrakcyjnych
 ```java
 abstract class Platnosc {
     private double kwota;
@@ -931,6 +932,147 @@ class Circle extends Shape {
 }
 ```
 
+### Przykład 11 — Interfejs z metodami `default`, `static` i `private`
+
+```java
+import java.util.List;
+
+interface Powitanie {
+    String imie();                       // metoda abstrakcyjna
+
+    default void przywitaj() {           // metoda domyślna — dziedziczona przez implementacje
+        wypisz("Cześć, " + imie() + "!");
+    }
+
+    static boolean czyPoprawneImie(String imie) { // metoda statyczna — wołana przez nazwę interfejsu
+        return imie != null && !imie.isBlank();
+    }
+
+    private void wypisz(String tekst) {  // metoda prywatna (Java 9+) — pomocnicza dla default
+        System.out.println("[Powitanie] " + tekst);
+    }
+}
+
+class Student implements Powitanie {
+    private final String imie;
+    Student(String imie) { this.imie = imie; }
+
+    @Override
+    public String imie() { return imie; }
+    // przywitaj() odziedziczona bez zmian
+}
+
+class Profesor implements Powitanie {
+    private final String nazwisko;
+    Profesor(String nazwisko) { this.nazwisko = nazwisko; }
+
+    @Override
+    public String imie() { return "prof. " + nazwisko; }
+
+    @Override
+    public void przywitaj() {            // nadpisanie metody domyślnej
+        System.out.println("Dzień dobry, " + imie() + ".");
+    }
+}
+
+public class InterfejsDefaultStatic {
+    public static void main(String[] args) {
+        System.out.println(Powitanie.czyPoprawneImie("Ola")); // true
+        System.out.println(Powitanie.czyPoprawneImie("  "));  // false
+        // new Student("Ola").czyPoprawneImie("x"); // błąd — metody statyczne interfejsu nie są dziedziczone
+
+        List<Powitanie> osoby = List.of(new Student("Ola"), new Profesor("Kowalski"));
+        for (Powitanie p : osoby) {
+            p.przywitaj();
+        }
+    }
+}
+```
+
+### Przykład 12 — Jedna klasa, wiele interfejsów (role) i `Comparable`
+
+```java
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+interface Plywajace { void plyn(); }
+interface Latajace  { void lec(); }
+
+class Kaczka implements Plywajace, Latajace, Comparable<Kaczka> {
+    private final String imie;
+    private final int waga;
+
+    Kaczka(String imie, int waga) { this.imie = imie; this.waga = waga; }
+
+    @Override public void plyn() { System.out.println(imie + " płynie"); }
+    @Override public void lec()  { System.out.println(imie + " leci"); }
+
+    @Override
+    public int compareTo(Kaczka inna) { return Integer.compare(waga, inna.waga); }
+
+    @Override
+    public String toString() { return imie + "(" + waga + " g)"; }
+}
+
+class Ryba implements Plywajace {
+    @Override public void plyn() { System.out.println("Ryba płynie"); }
+}
+
+public class WieleRol {
+    public static void main(String[] args) {
+        // Ta sama lista przechowuje obiekty niezwiązanych klas — łączy je tylko kontrakt
+        List<Plywajace> plywaki = List.of(new Kaczka("Donald", 900), new Ryba());
+        plywaki.forEach(Plywajace::plyn);
+
+        Plywajace p = plywaki.get(0);
+        if (p instanceof Latajace l) {   // sprawdzenie, czy obiekt pełni też inną rolę
+            l.lec();
+        }
+
+        List<Kaczka> kaczki = new ArrayList<>(List.of(
+                new Kaczka("Donald", 900), new Kaczka("Daisy", 700), new Kaczka("Sknerus", 1100)));
+        Collections.sort(kaczki);       // możliwe dzięki Comparable
+        System.out.println(kaczki);     // [Daisy(700 g), Donald(900 g), Sknerus(1100 g)]
+    }
+}
+```
+
+### Przykład 13 — Konflikt metod `default` i reguła „klasa wygrywa”
+
+```java
+interface Kamera {
+    default String opis() { return "Kamera"; }
+}
+
+interface Telefon {
+    default String opis() { return "Telefon"; }
+}
+
+// Bez nadpisania opis() kompilator zgłosi błąd:
+// "inherits unrelated defaults for opis() from types Kamera and Telefon"
+class Smartfon implements Kamera, Telefon {
+    @Override
+    public String opis() {
+        return Telefon.super.opis() + " z funkcją: " + Kamera.super.opis();
+    }
+}
+
+class Urzadzenie {
+    public String opis() { return "Urządzenie"; }
+}
+
+// Metoda z nadklasy ma pierwszeństwo przed metodą default z interfejsu
+class KameraSamochodowa extends Urzadzenie implements Kamera { }
+
+public class KonfliktDefault {
+    public static void main(String[] args) {
+        System.out.println(new Smartfon().opis());          // Telefon z funkcją: Kamera
+        System.out.println(new KameraSamochodowa().opis()); // Urządzenie
+    }
+}
+```
+
 ### Interfejs czy klasa abstrakcyjna?
 
 | Sytuacja | Lepszy wybór |
@@ -948,6 +1090,9 @@ class Circle extends Shape {
 4. Pokaż w `main`, jak przechowywać obiekty różnych klas implementujących ten sam interfejs w jednej kolekcji.
 5. Dodaj do interfejsu jedną metodę domyślną (`default`) i jedną statyczną, a następnie wykorzystaj je w przykładzie.
 6. Napisz krótkie porównanie: kiedy w Twoim projekcie lepiej użyć interfejsu, a kiedy klasy abstrakcyjnej (minimum 5 zdań).
+7. Zdefiniuj interfejs `Shape` (`area()`, `perimeter()`, `describe()`) oraz abstrakcyjną klasę `AbstractShape implements Shape`, która przechowuje nazwę figury i implementuje tylko `describe()`. Utwórz klasy `Circle` i `Rectangle` dziedziczące po `AbstractShape` oraz posortuj listę figur według pola (np. implementując `Comparable<Shape>` w `AbstractShape`).
+8. Utwórz dwa interfejsy z metodą `default` o tej samej sygnaturze (np. `Printer.status()` i `Scanner.status()`) i klasę `MultiFunctionDevice`, która implementuje oba. Rozwiąż konflikt, korzystając z `Printer.super.status()` i `Scanner.super.status()`.
+9. Zaimplementuj wzorzec Template Method: abstrakcyjna klasa `Beverage` z metodą `final void prepare()` (kroki: `boilWater()`, `brew()`, `pourIntoCup()`, `addExtras()`), gdzie `brew()` i `addExtras()` są abstrakcyjne. Przygotuj klasy `Tea` i `Coffee`.
 
 ### Szczegółowa lista kontrolna (checklist)
 
@@ -983,6 +1128,20 @@ Poniższa lista kontrolna pomaga zweryfikować, czy każde zadanie zostało wyko
 - [ ] Tekst ma minimum 5 zdań.
 - [ ] Uwzględniono różnice: wielokrotna implementacja, stan (pola), konstruktory.
 - [ ] Odniesiono się do własnego projektu.
+
+#### Zadanie 7 — Interfejs + szkieletowa klasa abstrakcyjna
+- [ ] `AbstractShape` jest `abstract`, implementuje `Shape` i nie implementuje `area()`/`perimeter()`.
+- [ ] `describe()` w `AbstractShape` korzysta z abstrakcyjnych `area()` i `perimeter()`.
+- [ ] Lista ma typ `List<Shape>`, a sortowanie według pola działa poprawnie.
+
+#### Zadanie 8 — Konflikt metod `default`
+- [ ] Sprawdzono, że bez nadpisania `status()` kod się nie kompiluje.
+- [ ] Nadpisana metoda używa składni `Interfejs.super.metoda()`.
+
+#### Zadanie 9 — Template Method
+- [ ] Metoda `prepare()` jest `final` i wywołuje kroki w ustalonej kolejności.
+- [ ] Wspólne kroki (`boilWater()`, `pourIntoCup()`) są zaimplementowane w klasie bazowej.
+- [ ] `Tea` i `Coffee` implementują tylko kroki zmienne.
 
 #### Ogólna weryfikacja końcowa
 - [ ] Cały kod kompiluje się bez błędów i ostrzeżeń.
