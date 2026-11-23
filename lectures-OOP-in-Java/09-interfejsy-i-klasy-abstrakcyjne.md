@@ -37,6 +37,7 @@ W programowaniu obiektowym często chcemy:
 W Javie rozwiązują to dwa mechanizmy:
 
 - Interfejs (`interface`) – deklaruje „co obiekt potrafi”, definiuje kontrakt metod (od Javy 8 może też zawierać metody domyślne `default` oraz metody statyczne, a od Javy 9 również metody prywatne jako pomocnicze).
+  - Metoda domyślna (`default`) to metoda interfejsu, która ma ciało, czyli gotową implementację. Klasa implementująca interfejs dziedziczy ją automatycznie i nie musi jej definiować, ale może ją nadpisać (`@Override`). Dzięki temu można dodać nową metodę do istniejącego interfejsu bez psucia wszystkich klas, które już go implementują (tak np. w Javie 8 dodano `forEach` do `Iterable`). Metoda domyślna nie ma dostępu do pól obiektu – może korzystać jedynie z innych metod interfejsu.
 - Klasa abstrakcyjna (`abstract class`) – może dostarczać wspólną część zachowania (w tym implementację metod i pól) i wymuszać uzupełnienie brakujących elementów w klasach pochodnych.
 
 Zarówno interfejsy, jak i klasy abstrakcyjne wspierają polimorfizm – pozwalają traktować obiekty różnych klas w jednolity sposób, jeśli te obiekty spełniają dany kontrakt lub dziedziczą po abstrakcji.
@@ -87,6 +88,9 @@ public interface Eksportowalne {
     String eksportuj();
 
     default void zapiszDoPliku(String sciezka) {
+        if (!Eksportowalne.walidujSciezke(sciezka)) {
+            throw new IllegalArgumentException("Niepoprawna ścieżka: " + sciezka);
+        }
         String dane = eksportuj();
         FileUtils.zapisz(sciezka, dane);
     }
@@ -103,6 +107,13 @@ final class FileUtils {
     }
 }
 ```
+
+W tym przykładzie:
+
+- `eksportuj()` to metoda abstrakcyjna – każda klasa implementująca musi ją dostarczyć.
+- `zapiszDoPliku(...)` to metoda domyślna – klasa implementująca otrzymuje ją „za darmo”; metoda najpierw sprawdza ścieżkę za pomocą metody statycznej `walidujSciezke(...)` (dla niepoprawnej rzuca `IllegalArgumentException`), a następnie korzysta z abstrakcyjnej `eksportuj()`, nie wiedząc, jak konkretna klasa ją zaimplementuje.
+- `walidujSciezke(...)` to metoda statyczna – wywołujemy ją przez nazwę interfejsu (`Eksportowalne.walidujSciezke("raport.txt")`), a nie przez obiekt; nie jest dziedziczona przez klasy implementujące. Wewnątrz samego interfejsu można ją wywołać także bez prefiksu, ale zapis z nazwą interfejsu jest czytelniejszy.
+- `FileUtils` to jedynie pomocnicza klasa narzędziowa (zaślepka), dzięki której przykład się kompiluje. Pokazuje, że metoda domyślna może delegować „brudną robotę” (np. faktyczny zapis na dysk) do zewnętrznego kodu, zamiast umieszczać go w interfejsie. Nie jest częścią mechanizmu metod `default`/`static` – w realnym kodzie byłoby tu np. `Files.writeString(Path.of(sciezka), dane)`.
 
 Interfejsy mogą rozszerzać inne interfejsy (wiele naraz):
 
