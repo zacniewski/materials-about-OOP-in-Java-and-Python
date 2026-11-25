@@ -246,10 +246,11 @@ class Pracownik extends Osoba {
    - sortuje alfabetycznie,
    - łączy elementy do jednego napisu z separatorem `, `.
 
-#### Zadanie nr 11 (wyrażenia lambda i interfejsy funkcyjne)
-1. Wyjaśnij, czym jest interfejs funkcyjny i podaj 3 przykłady z `java.util.function`.
-2. Przepisz fragment z klasy anonimowej na lambdę.
-3. Użyj `Predicate`, `Function` i `Consumer` w krótkim przykładzie przetwarzania listy napisów.
+#### Zadanie nr 11 (referencje do obiektów)
+1. Co to jest sterta i stos?
+2. Czym różnią się typy prymitywne i referencyjne?
+3. Co charakteryzuje obiekty niemutowalne?
+4. Oceń mutowalność poniższych klas i uzasadnij.
 
 #### Zadanie nr 12 (testowanie kodu)
 1. Napisz testy i metodę sprawdzającą, czy liczba jest parzysta.
@@ -270,11 +271,11 @@ class Pracownik extends Osoba {
 3. Jak działają `try-catch-finally`, `throw`, `throws` i `try-with-resources`?
 4. Napisz klasę `Adres`, której konstruktor waliduje dane i rzuca checked `NieprawidlowyAdresException` z komunikatem zawierającym wszystkie błędy.
 
-#### Zadanie nr 15 (referencje do obiektów)
-1. Co to jest sterta i stos?
-2. Czym różnią się typy prymitywne i referencyjne?
-3. Co charakteryzuje obiekty niemutowalne?
-4. Oceń mutowalność poniższych klas i uzasadnij.
+#### Zadanie nr 15 (wyrażenia lambda i interfejsy funkcyjne)
+1. Wyjaśnij, czym jest interfejs funkcyjny i podaj 3 przykłady z `java.util.function`.
+2. Przepisz fragment z klasy anonimowej na lambdę.
+3. Użyj `Predicate`, `Function` i `Consumer` w krótkim przykładzie przetwarzania listy napisów.
+
 
 ```java
 public class ZagadkaMutowalne {

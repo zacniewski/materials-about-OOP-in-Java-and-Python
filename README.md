@@ -45,11 +45,11 @@ Po przerobieniu materiału student powinien:
 | 8 | Dziedziczenie i polimorfizm | [08-dziedziczenie-i-polimorfizm.md](lectures-OOP-in-Java/08-dziedziczenie-i-polimorfizm.md) |
 | 9 | Interfejsy i klasy abstrakcyjne | [09-interfejsy-i-klasy-abstrakcyjne.md](lectures-OOP-in-Java/09-interfejsy-i-klasy-abstrakcyjne.md) |
 | 10 | Podstawowe klasy biblioteki Java | [10-podstawowe-klasy-biblioteki-java.md](lectures-OOP-in-Java/10-podstawowe-klasy-biblioteki-java.md) |
-| 11 | Wyrażenia lambda i interfejsy funkcyjne | [11-wyrazenia-lambda-i-interfejsy-funkcyjne.md](lectures-OOP-in-Java/11-wyrazenia-lambda-i-interfejsy-funkcyjne.md) |
+| 11 | Referencje do obiektów i niemutowalność | [11-referencje-do-obiektoww.md](lectures-OOP-in-Java/11-referencje-do-obiektow.md) |
 | 12 | Testowanie kodu | [12-testowanie-kodu.md](lectures-OOP-in-Java/12-testowanie-kodu.md) |
 | 13 | SOLID - zasady projektowania obiektowego | [13-solid-zasady-projektowania-obiektowego.md](lectures-OOP-in-Java/13-solid-zasady-projektowania-obiektowego.md) |
 | 14 | Wyjątki i obsługa błędów | [14-wyjatki.md](lectures-OOP-in-Java/14-wyjatki.md) |
-| 15 | Referencje do obiektów i niemutowalność | [15-referencje-do-obiektow.md](lectures-OOP-in-Java/15-referencje-do-obiektow.md) |
+| 15 | Wyrażenia lambda i interfejsy funkcyjne | [15-wyrazenia-lambda-i-interfejsy-funkcyjne.md](lectures-OOP-in-Java/15-wyrazenia-lambda-i-interfejsy-funkcyjne.md) |
 
 ## Laboratoria Java
 
@@ -65,11 +65,11 @@ Po przerobieniu materiału student powinien:
 | 8 | Dziedziczenie i polimorfizm | [08-dziedziczenie-i-polimorfizm.md](labs-OOP-in-Java/08-dziedziczenie-i-polimorfizm.md) |
 | 9 | Interfejsy i klasy abstrakcyjne | [09-interfejsy-i-klasy-abstrakcyjne.md](labs-OOP-in-Java/09-interfejsy-i-klasy-abstrakcyjne.md) |
 | 10 | Podstawowe klasy biblioteki Java | [10-podstawowe-klasy-biblioteki-java.md](labs-OOP-in-Java/10-podstawowe-klasy-biblioteki-java.md) |
-| 11 | Wyrażenia lambda i interfejsy funkcyjne | [11-wyrazenia-lambda-i-interfejsy-funkcyjne.md](labs-OOP-in-Java/11-wyrazenia-lambda-i-interfejsy-funkcyjne.md) |
+| 11 | Referencje do obiektów | [11-referencje-do-obiektow.md](labs-OOP-in-Java/11-referencje-do-obiektow.md) |
 | 12 | Testowanie kodu | [12-testowanie-kodu.md](labs-OOP-in-Java/12-testowanie-kodu.md) |
 | 13 | SOLID - zasady projektowania obiektowego | [13-solid-zasady-projektowania-obiektowego.md](labs-OOP-in-Java/13-solid-zasady-projektowania-obiektowego.md) |
 | 14 | Wyjątki | [14-wyjatki.md](labs-OOP-in-Java/14-wyjatki.md) |
-| 15 | Referencje do obiektów | [15-referencje-do-obiektow.md](labs-OOP-in-Java/15-referencje-do-obiektow.md) |
+| 15 | Wyrażenia lambda i interfejsy funkcyjne | [15-wyrazenia-lambda-i-interfejsy-funkcyjne.md](labs-OOP-in-Java/15-wyrazenia-lambda-i-interfejsy-funkcyjne.md) |
 
 ## Wykłady Python
 
@@ -85,11 +85,11 @@ Po przerobieniu materiału student powinien:
 | 8 | Dziedziczenie i polimorfizm | [08-dziedziczenie-i-polimorfizm.md](lectures-OOP-in-Python/08-dziedziczenie-i-polimorfizm.md) |
 | 9 | Protokoły, ABC i klasy abstrakcyjne | [09-protokoly-abc-i-klasy-abstrakcyjne.md](lectures-OOP-in-Python/09-protokoly-abc-i-klasy-abstrakcyjne.md) |
 | 10 | Podstawowe moduły standard library | [10-podstawowe-moduly-standard-library.md](lectures-OOP-in-Python/10-podstawowe-moduly-standard-library.md) |
-| 11 | Funkcje lambda i callables | [11-funkcje-lambda-i-callables.md](lectures-OOP-in-Python/11-funkcje-lambda-i-callables.md) |
+| 11 | Referencje, mutowalność i niemutowalność| [11-referencje-mutowalnosc-i-niemutowalnosc.md](lectures-OOP-in-Python/11-referencje-mutowalnosc-i-niemutowalnosc.md) |
 | 12 | Testowanie kodu | [12-testowanie-kodu.md](lectures-OOP-in-Python/12-testowanie-kodu.md) |
 | 13 | SOLID w Pythonie | [13-solid-w-pythonie.md](lectures-OOP-in-Python/13-solid-w-pythonie.md) |
 | 14 | Wyjątki w Pythonie | [14-wyjatki.md](lectures-OOP-in-Python/14-wyjatki.md) |
-| 15 | Referencje, mutowalność i niemutowalność | [15-referencje-mutowalnosc-i-niemutowalnosc.md](lectures-OOP-in-Python/15-referencje-mutowalnosc-i-niemutowalnosc.md) |
+| 15 | Funkcje lambda i callables | [15-funkcje-lambda-i-callables.md](lectures-OOP-in-Python/15-funkcje-lambda-i-callables.md) |
 
 ## Laboratoria Python
 
@@ -105,11 +105,11 @@ Po przerobieniu materiału student powinien:
 | 8 | Dziedziczenie i polimorfizm | [08-dziedziczenie-i-polimorfizm.md](labs-OOP-in-Python/08-dziedziczenie-i-polimorfizm.md) |
 | 9 | Protokoły, ABC i klasy abstrakcyjne | [09-protokoly-abc-i-klasy-abstrakcyjne.md](labs-OOP-in-Python/09-protokoly-abc-i-klasy-abstrakcyjne.md) |
 | 10 | Podstawowe moduły standard library | [10-podstawowe-moduly-standard-library.md](labs-OOP-in-Python/10-podstawowe-moduly-standard-library.md) |
-| 11 | Funkcje lambda i callables | [11-funkcje-lambda-i-callables.md](labs-OOP-in-Python/11-funkcje-lambda-i-callables.md) |
+| 11 | Referencje, mutowalność i niemutowalność | [11-referencje-mutowalnosc-i-niemutowalnosc.md](labs-OOP-in-Python/11-referencje-mutowalnosc-i-niemutowalnosc.md) |
 | 12 | Testowanie kodu | [12-testowanie-kodu.md](labs-OOP-in-Python/12-testowanie-kodu.md) |
 | 13 | SOLID w Pythonie | [13-solid-w-pythonie.md](labs-OOP-in-Python/13-solid-w-pythonie.md) |
 | 14 | Wyjątki | [14-wyjatki.md](labs-OOP-in-Python/14-wyjatki.md) |
-| 15 | Referencje, mutowalność i niemutowalność | [15-referencje-mutowalnosc-i-niemutowalnosc.md](labs-OOP-in-Python/15-referencje-mutowalnosc-i-niemutowalnosc.md) |
+| 15 | Funkcje lambda i callables | [15-funkcje-lambda-i-callables.md](labs-OOP-in-Python/15-funkcje-lambda-i-callables.md) |
 
 ## Proponowana kolejność realizacji
 
